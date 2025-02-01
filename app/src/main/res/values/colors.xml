@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="fantasy_fitness_gray">#70798C</color>
+    <color name="fantasy_fitness_green">#14591D</color>
+    <color name="fantasy_fitness_orange">#F08700</color>
+    <color name="fantasy_fitness_red">#DB3069</color>
+    <color name="fantasy_fitness_white">#FAFAFF</color>
 </resources>

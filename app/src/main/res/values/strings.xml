@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Fantasy Fitness</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="create_account">Create Account</string>
+    <string name="cancel">Cancel</string>
+    <string name="Username">Username</string>
 </resources>
