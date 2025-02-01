@@ -1,4 +1,4 @@
-name: Android
+name: Android CI
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-
+    name: android-ci
     runs-on: ubuntu-latest
 
     steps:
