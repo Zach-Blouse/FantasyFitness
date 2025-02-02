@@ -11,6 +11,7 @@ import com.zblouse.fantasyfitness.core.Repository;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class UserFirestoreDatabase extends FirestoreDatabase {
 
@@ -22,7 +23,7 @@ public class UserFirestoreDatabase extends FirestoreDatabase {
         super();
     }
 
-    public void create(User user, Repository<User> repository){
+    public void create(User user, Repository<User> repository, Map<String, Object> metadata){
         Map<String, Object> newUser = new HashMap<>();
         newUser.put(USER_ID_FIELD,user.getId());
         newUser.put(USERNAME_FIELD,user.getUsername());
@@ -30,24 +31,24 @@ public class UserFirestoreDatabase extends FirestoreDatabase {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    repository.writeCallback(user);
+                    repository.writeCallback(user, metadata);
                 } else {
-                    repository.writeCallback(null);
+                    repository.writeCallback(null, metadata);
                 }
             }
         });
     }
 
-    public void read(int userId, Repository<User> repository){
+    public void read(int userId, Repository<User> repository, Map<String, Object> metadata){
         firestore.collection(COLLECTION).document(String.valueOf(userId)).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
                     DocumentSnapshot result = task.getResult();
                     User returnedUser = new User(result.get(USER_ID_FIELD,String.class), result.get(USERNAME_FIELD,String.class));
-                    repository.readCallback(returnedUser);
+                    repository.readCallback(returnedUser, metadata);
                 } else {
-                    repository.readCallback(null);
+                    repository.readCallback(null, metadata);
                 }
             }
         });

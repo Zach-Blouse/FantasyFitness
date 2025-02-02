@@ -8,15 +8,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.home.UserHomeFragment;
 import com.zblouse.fantasyfitness.settings.SettingsFragment;
 import com.zblouse.fantasyfitness.user.LoginFragment;
 import com.zblouse.fantasyfitness.user.UserService;
+import com.zblouse.fantasyfitness.core.Event;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        userService = new UserService();
+        userService = new UserService(this);
 
         navigationView = findViewById(R.id.bottom_navigation);
         navigationView.setOnItemSelectedListener(navigationListener);
@@ -105,6 +111,25 @@ public class MainActivity extends AppCompatActivity {
 
     public UserService getUserService(){
         return this.userService;
+    }
+
+    public Fragment getVisibleFragment(){
+        FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if(fragments != null){
+            for(Fragment fragment : fragments){
+                if(fragment != null && fragment.isVisible())
+                    return fragment;
+            }
+        }
+        return null;
+    }
+
+    public void publishEvent(Event event){
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if(fragment instanceof EventListener){
+            ((EventListener) fragment).publishEvent(event);
+        }
     }
 
 }
