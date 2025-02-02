@@ -45,9 +45,14 @@ public class UserFirestoreDatabase extends FirestoreDatabase {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
                     DocumentSnapshot result = task.getResult();
-                    User returnedUser = new User(result.get(USER_ID_FIELD,String.class), result.get(USERNAME_FIELD,String.class));
-                    repository.readCallback(returnedUser, metadata);
+                    if(result.exists()) {
+                        User returnedUser = new User(result.get(USER_ID_FIELD, String.class), result.get(USERNAME_FIELD, String.class));
+                        repository.readCallback(returnedUser, metadata);
+                    } else {
+                        repository.readCallback(null, metadata);
+                    }
                 } else {
+                    //TODO handle firebase error states
                     repository.readCallback(null, metadata);
                 }
             }

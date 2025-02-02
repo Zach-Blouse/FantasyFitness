@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +20,17 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 
+import com.zblouse.fantasyfitness.MainActivity;
 import com.zblouse.fantasyfitness.R;
+import com.zblouse.fantasyfitness.core.Event;
+import com.zblouse.fantasyfitness.core.EventListener;
+import com.zblouse.fantasyfitness.core.EventType;
 import com.zblouse.fantasyfitness.home.UserHomeFragment;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements EventListener {
 
     public LoginFragment(){
         super(R.layout.login_fragment);
@@ -38,8 +43,8 @@ public class LoginFragment extends Fragment {
                 @Override
                 public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
                     if (result.getResultCode() == RESULT_OK) {
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container, new UserHomeFragment()).commit();
+                        //check if the user has an account prior to sending them to the user home.
+                        ((MainActivity)getActivity()).getUserService().userExistCheck(((MainActivity)getActivity()).getCurrentUser().getUid());
                     } else {
                         Toast.makeText(getActivity(),"Failed to Authenticate",Toast.LENGTH_SHORT);
                     }
@@ -99,6 +104,22 @@ public class LoginFragment extends Fragment {
             createAccountLauncher.launch(signInIntent);
         } else {
             signInLauncher.launch(signInIntent);
+        }
+    }
+
+    @Override
+    public void publishEvent(Event event) {
+        if(event.getEventType().equals(EventType.USER_EXIST_EVENT)){
+            Log.i(this.getClass().getName(),"USER EXIST RESPONSE");
+            if(((UserExistEvent)(event)).exists()){
+                Toast.makeText(getActivity(),"Account already exists",Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new UserHomeFragment()).commit();
+            } else {
+                Toast.makeText(getActivity(),"You need to register your account",Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new CreateAccountFragment()).commit();
+            }
         }
     }
 
