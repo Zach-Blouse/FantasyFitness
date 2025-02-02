@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public FirebaseUser getCurrentUser(){
-        return this.currentUser;
+        return firebaseAuth.getCurrentUser();
     }
 
 }
