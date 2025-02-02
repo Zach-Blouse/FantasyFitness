@@ -16,12 +16,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.zblouse.fantasyfitness.home.UserHomeFragment;
 import com.zblouse.fantasyfitness.settings.SettingsFragment;
 import com.zblouse.fantasyfitness.user.LoginFragment;
+import com.zblouse.fantasyfitness.user.UserService;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private BottomNavigationView navigationView;
     private FirebaseUser currentUser;
+
+    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        userService = new UserService();
 
         navigationView = findViewById(R.id.bottom_navigation);
         navigationView.setOnItemSelectedListener(navigationListener);
@@ -96,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
 
     public FirebaseUser getCurrentUser(){
         return firebaseAuth.getCurrentUser();
+    }
+
+    public UserService getUserService(){
+        return this.userService;
     }
 
 }

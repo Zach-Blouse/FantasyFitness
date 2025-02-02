@@ -47,6 +47,22 @@ public class LoginFragment extends Fragment {
             }
     );
 
+    //ActivityResultLauncher that is used when the user is creating an account
+    private final ActivityResultLauncher<Intent> createAccountLauncher = registerForActivityResult(
+            new FirebaseAuthUIActivityResultContract(),
+            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
+                @Override
+                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
+                    if (result.getResultCode() == RESULT_OK) {
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container, new CreateAccountFragment()).commit();
+                    } else {
+                        Toast.makeText(getActivity(),"Failed to Authenticate",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+    );
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.login_fragment,container,false);
@@ -55,28 +71,35 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Choose authentication providers
-                List<AuthUI.IdpConfig> providers = Arrays.asList(
-                        new AuthUI.IdpConfig.GoogleBuilder().build());
-
-                // Create and launch sign-in intent
-                Intent signInIntent = AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build();
-                signInLauncher.launch(signInIntent);
+                launchFirebaseAuthentication(false);
             }
         });
         Button createAccountButton = layout.findViewById(R.id.create_account_button);
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new CreateAccountFragment()).commit();
+                launchFirebaseAuthentication(true);
             }
         });
 
         return layout;
+    }
+
+    private void launchFirebaseAuthentication(boolean newAccount){
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.GoogleBuilder().build());
+
+        // Create and launch sign-in intent
+        Intent signInIntent = AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build();
+        if(newAccount){
+            createAccountLauncher.launch(signInIntent);
+        } else {
+            signInLauncher.launch(signInIntent);
+        }
     }
 
 }
