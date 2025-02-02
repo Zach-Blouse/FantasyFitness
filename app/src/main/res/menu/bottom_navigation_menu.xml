@@ -1,0 +1,30 @@
+<!--Sets up the UI for the bottom navigation bar-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--Button to launch the user home fragment-->
+    <item
+        android:id="@+id/action_home"
+        android:icon="@drawable/home"
+        android:title="home"
+        app:showAsAction="ifRoom"/>
+    <!--Button to launch the workout fragment-->
+    <item
+        android:id="@+id/action_workout"
+        android:icon="@drawable/run"
+        android:title="workout"
+        app:showAsAction="ifRoom"/>
+    <!--Button to return to the world map fragment-->
+    <item
+        android:id="@+id/action_map"
+        android:icon="@drawable/map"
+        app:showAsAction="ifRoom"
+        android:title="settings"/>
+    <!--Button to return to the settings fragment-->
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/menu"
+        app:showAsAction="ifRoom"
+        android:title="settings"/>
+
+</menu>
