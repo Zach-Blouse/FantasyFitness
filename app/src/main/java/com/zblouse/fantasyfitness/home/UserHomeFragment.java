@@ -30,6 +30,7 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.OnCreateView();
         ((MainActivity)getActivity()).getUserService().userExistCheck(((MainActivity)getActivity()).getCurrentUser().getUid());
+        ((MainActivity)getActivity()).showNavigation();
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.user_home_fragment,container,false);
 
 

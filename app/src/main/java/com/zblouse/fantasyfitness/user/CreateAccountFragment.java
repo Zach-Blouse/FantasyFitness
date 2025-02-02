@@ -29,6 +29,7 @@ public class CreateAccountFragment extends AuthenticationRequiredFragment implem
         super.OnCreateView();
         //Check if the user already has an account
         ((MainActivity)getActivity()).getUserService().userExistCheck(((MainActivity)getActivity()).getCurrentUser().getUid());
+        ((MainActivity)getActivity()).hideNavigation();
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.create_account_fragment,container,false);
 
         EditText usernameEditText = layout.findViewById(R.id.username_edit_text);

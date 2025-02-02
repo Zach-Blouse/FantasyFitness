@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "987461924781",
+    "project_id": "fantasy-fitness-1f8b3",
+    "storage_bucket": "fantasy-fitness-1f8b3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987461924781:android:72a453dbabd845d8b21324",
+        "android_client_info": {
+          "package_name": "com.zblouse.fantasyfitness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "987461924781-vp8j666ioc75tea5esadetue6e02slbm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zblouse.fantasyfitness",
+            "certificate_hash": "25aafc2c2f3426f843811fcd76897807f0847aa0"
+          }
+        },
+        {
+          "client_id": "987461924781-2fck9971fr05r7audd356ki9fnbq806n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuDludRPhekfEMnSVop66LMfACAi5GciU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "987461924781-2fck9971fr05r7audd356ki9fnbq806n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

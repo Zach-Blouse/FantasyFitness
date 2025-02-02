@@ -28,7 +28,7 @@
         android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
         android:background="@color/fantasy_fitness_white"
-        app:itemIconTint="@android:color/white"
+        app:itemIconTint="@color/fantasy_fitness_orange"
         app:labelVisibilityMode="unlabeled"
         app:itemTextColor="@android:color/white"
         app:menu="@menu/bottom_navigation_menu" />

@@ -71,7 +71,7 @@ public class LoginFragment extends Fragment implements EventListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.login_fragment,container,false);
-
+        ((MainActivity)getActivity()).hideNavigation();
         Button loginButton = layout.findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
