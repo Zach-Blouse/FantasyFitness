@@ -39,8 +39,8 @@ public class UserFirestoreDatabase extends FirestoreDatabase {
         });
     }
 
-    public void read(int userId, Repository<User> repository, Map<String, Object> metadata){
-        firestore.collection(COLLECTION).document(String.valueOf(userId)).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    public void read(String userId, Repository<User> repository, Map<String, Object> metadata){
+        firestore.collection(COLLECTION).document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){

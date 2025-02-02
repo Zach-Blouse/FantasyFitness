@@ -13,7 +13,8 @@ import java.util.function.Function;
 public class UserRepository implements Repository<User> {
 
 
-    public static final String CREATE_USER = "createUser";
+    public static final String WRITE_USER = "writeUser";
+    public static final String READ_USER = "readUser";
     private final UserFirestoreDatabase userFirestoreDatabase;
     private final DomainService<User> domainService;
 
@@ -22,10 +23,15 @@ public class UserRepository implements Repository<User> {
         this.domainService = domainService;
     }
 
-    public void createUser(String userId, String username, Map<String, Object> metadata){
-        metadata.put(REPOSITORY_INTERACTION,CREATE_USER);
+    public void writeUser(String userId, String username, Map<String, Object> metadata){
+        metadata.put(REPOSITORY_INTERACTION,WRITE_USER);
         User newUser = new User(userId, username);
         userFirestoreDatabase.create(newUser, this, metadata);
+    }
+
+    public void readUser(String userId, Map<String, Object> metadata){
+        metadata.put(REPOSITORY_INTERACTION,READ_USER);
+        userFirestoreDatabase.read(userId,this,metadata);
     }
 
     @Override

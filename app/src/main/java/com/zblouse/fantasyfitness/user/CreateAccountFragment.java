@@ -27,6 +27,8 @@ public class CreateAccountFragment extends AuthenticationRequiredFragment implem
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.OnCreateView();
+        //Check if the user already has an account
+        ((MainActivity)getActivity()).getUserService().userExistCheck(((MainActivity)getActivity()).getCurrentUser().getUid());
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.create_account_fragment,container,false);
 
         EditText usernameEditText = layout.findViewById(R.id.username_edit_text);
@@ -63,6 +65,13 @@ public class CreateAccountFragment extends AuthenticationRequiredFragment implem
                         .replace(R.id.fragment_container, new UserHomeFragment()).commit();
             } else {
                 Toast.makeText(getActivity(),"Failed to create account",Toast.LENGTH_SHORT).show();
+            }
+        } else if(event.getEventType().equals(EventType.USER_EXIST_EVENT)){
+            Log.i(this.getClass().getName(),"USER EXIST RESPONSE");
+            if(((UserExistEvent)(event)).exists()){
+                Toast.makeText(getActivity(),"Account already exists",Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new UserHomeFragment()).commit();
             }
         }
     }

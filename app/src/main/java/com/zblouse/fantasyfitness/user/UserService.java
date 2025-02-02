@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.zblouse.fantasyfitness.MainActivity;
 import com.zblouse.fantasyfitness.core.DomainService;
+import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.Repository;
 
 import java.util.HashMap;
@@ -11,6 +12,9 @@ import java.util.Map;
 
 public class UserService implements DomainService<User> {
 
+    private static final String CALLING_FUNCTION_KEY = "callingFunctionKey";
+    private static final String REGISTER_USER = "registerUser";
+    private static final String USER_EXIST_CHECK = "userExistCheck";
     private final UserRepository userRepository;
     private final MainActivity activity;
 
@@ -20,21 +24,35 @@ public class UserService implements DomainService<User> {
     }
 
     public void registerUser(String firebaseUid, String username){
-        //TODO make sure the user does not already exist
         Map<String, Object> metadata = new HashMap<>();
-        userRepository.createUser(firebaseUid, username, metadata);
+        metadata.put(CALLING_FUNCTION_KEY,REGISTER_USER);
+        userRepository.writeUser(firebaseUid, username, metadata);
+    }
+
+    public void userExistCheck(String firebaseUid){
+        Map<String, Object> metadata = new HashMap<>();
+        metadata.put(CALLING_FUNCTION_KEY,USER_EXIST_CHECK);
+        userRepository.readUser(firebaseUid,metadata);
     }
 
     @Override
     public void repositoryResponse(User responseBody, Map<String, Object> metadata) {
-        if(metadata.containsKey(Repository.REPOSITORY_INTERACTION)){
-            if(metadata.get(Repository.REPOSITORY_INTERACTION).equals(UserRepository.CREATE_USER)){
+        if(metadata.containsKey(CALLING_FUNCTION_KEY)){
+            if(metadata.get(CALLING_FUNCTION_KEY).equals(REGISTER_USER)){
                 if(responseBody==null){
                     CreateAccountResponseEvent createAccountResponseEvent = new CreateAccountResponseEvent(false);
                     activity.publishEvent(createAccountResponseEvent);
                 }else {
                     CreateAccountResponseEvent createAccountResponseEvent = new CreateAccountResponseEvent(true);
                     activity.publishEvent(createAccountResponseEvent);
+                }
+            } else if(metadata.get(CALLING_FUNCTION_KEY).equals(USER_EXIST_CHECK)){
+                if(responseBody == null){
+                    UserExistEvent event = new UserExistEvent(false);
+                    activity.publishEvent(event);
+                } else {
+                    UserExistEvent event = new UserExistEvent(true);
+                    activity.publishEvent(event);
                 }
             }
         } else {
