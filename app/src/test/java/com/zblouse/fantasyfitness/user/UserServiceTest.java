@@ -100,4 +100,9 @@ public class UserServiceTest {
         verify(mockActivity).publishEvent((UserExistEvent)userExistEventArgumentCaptor.capture());
         assert(!userExistEventArgumentCaptor.getValue().exists());
     }
+
+    @Test
+    public void failingTest(){
+        assert(false);
+    }
 }
