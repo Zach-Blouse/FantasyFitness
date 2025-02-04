@@ -12,14 +12,19 @@ import java.util.Map;
 
 public class UserService implements DomainService<User> {
 
-    private static final String CALLING_FUNCTION_KEY = "callingFunctionKey";
-    private static final String REGISTER_USER = "registerUser";
-    private static final String USER_EXIST_CHECK = "userExistCheck";
+    public static final String CALLING_FUNCTION_KEY = "callingFunctionKey";
+    public static final String REGISTER_USER = "registerUser";
+    public static final String USER_EXIST_CHECK = "userExistCheck";
     private final UserRepository userRepository;
     private final MainActivity activity;
 
     public UserService(MainActivity activity){
         userRepository = new UserRepository(this);
+        this.activity = activity;
+    }
+
+    public UserService(MainActivity activity, UserRepository userRepository){
+        this.userRepository = userRepository;
         this.activity = activity;
     }
 
