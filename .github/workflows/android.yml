@@ -65,7 +65,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
   test:
-    runs-on: macOS-latest
+    runs-on: macOS-13
     steps:
       - name: checkout
         uses: actions/checkout@v2
