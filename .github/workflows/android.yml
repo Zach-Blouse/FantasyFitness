@@ -69,5 +69,5 @@ jobs:
     - name: Publish Test Report
       uses: ctrf-io/github-test-reporter@v1
       with:
-        report-path: 'file:///home/runner/work/FantasyFitness/FantasyFitness/app/build/reports/tests/test/index.html'
+        report-path: 'file:///home/runner/work/FantasyFitness/FantasyFitness/app/build/reports/tests/testDebugUnitTest/index.html'
       if: always()
