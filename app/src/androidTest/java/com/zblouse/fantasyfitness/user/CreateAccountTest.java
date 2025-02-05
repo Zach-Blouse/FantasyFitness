@@ -52,5 +52,10 @@ public class CreateAccountTest {
         onView(withId(R.id.user_home_title)).check(matches(withText("Fantasy Fitness2")));
     }
 
+    @Test
+    public void createAccountTestFail(){
+        assert(false);
+    }
+
 
 }
