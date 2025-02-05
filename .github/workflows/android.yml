@@ -73,7 +73,11 @@ jobs:
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 31
+          profile: Nexus 6
+          arch: arm64-v8a
+          force-avd-creation: false
+          avd-name: macOS-avd-arm64-v8a-31
           script: ./gradlew connectedCheck
 
   upload_reports:
