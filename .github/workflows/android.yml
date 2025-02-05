@@ -64,21 +64,22 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-  test:
-    runs-on: macOS-13
+    - name: Configure
+      run: |
+        SDKMANAGER=${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager
+        echo "y" | ${SDKMANAGER} "tools"
+
+    - name: run tests
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 29
+        script: ./gradlew connectedCheck
+  android_tests:
+    name: test
+    runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v2
-
-      - name: run tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 31
-          profile: Nexus 6
-          arch: arm64-v8a
-          force-avd-creation: false
-          avd-name: macOS-avd-arm64-v8a-31
-          script: ./gradlew connectedCheck
+        uses: actions/checkout@v4
 
   upload_reports:
      runs-on: ubuntu-latest
