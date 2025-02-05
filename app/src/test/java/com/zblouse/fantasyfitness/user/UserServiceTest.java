@@ -101,8 +101,4 @@ public class UserServiceTest {
         assert(!userExistEventArgumentCaptor.getValue().exists());
     }
 
-    @Test
-    public void failingTest(){
-        assert(false);
-    }
 }

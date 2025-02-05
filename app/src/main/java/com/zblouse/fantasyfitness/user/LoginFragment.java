@@ -93,7 +93,9 @@ public class LoginFragment extends Fragment implements EventListener {
     private void launchFirebaseAuthentication(boolean newAccount){
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.EmailBuilder().build());
+
 
         // Create and launch sign-in intent
         Intent signInIntent = AuthUI.getInstance()
