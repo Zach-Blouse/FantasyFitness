@@ -2,6 +2,7 @@ package com.zblouse.fantasyfitness.user;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.toPackage;
@@ -47,6 +48,8 @@ public class CreateAccountTest {
         onView(withId(R.id.app_title)).check(matches(withText("Fantasy Fitness")));
         onView(withId(R.id.create_account_button)).perform(click());
         onView(withId(R.id.create_account_title)).check(matches(withText("Create Account")));
+        onView(withId(R.id.username_edit_text)).perform(typeText("createAccountTestUsername"));
+        onView(withId(R.id.user_home_title)).check(matches(withText("Fantasy Fitness")));
     }
 
 
