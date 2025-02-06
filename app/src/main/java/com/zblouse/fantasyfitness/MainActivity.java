@@ -113,16 +113,8 @@ public class MainActivity extends AppCompatActivity {
         return this.userService;
     }
 
-    public Fragment getVisibleFragment(){
-        FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
-        List<Fragment> fragments = fragmentManager.getFragments();
-        if(fragments != null){
-            for(Fragment fragment : fragments){
-                if(fragment != null && fragment.isVisible())
-                    return fragment;
-            }
-        }
-        return null;
+    public void setUserService(UserService userService){
+        this.userService = userService;
     }
 
     public void publishEvent(Event event){
@@ -130,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
         if(fragment instanceof EventListener){
             ((EventListener) fragment).publishEvent(event);
         }
+    }
+
+    public void setFirebaseAuth(FirebaseAuth firebaseAuth){
+        this.firebaseAuth = firebaseAuth;
     }
 
 }

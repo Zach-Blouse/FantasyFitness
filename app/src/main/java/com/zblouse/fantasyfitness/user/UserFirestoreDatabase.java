@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.zblouse.fantasyfitness.core.FirestoreDatabase;
 import com.zblouse.fantasyfitness.core.Repository;
 
@@ -21,6 +22,10 @@ public class UserFirestoreDatabase extends FirestoreDatabase {
 
     public UserFirestoreDatabase(){
         super();
+    }
+
+    public UserFirestoreDatabase(FirebaseFirestore firestore){
+        super(firestore);
     }
 
     public void create(User user, Repository<User> repository, Map<String, Object> metadata){

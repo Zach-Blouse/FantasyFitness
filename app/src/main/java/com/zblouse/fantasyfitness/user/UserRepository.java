@@ -23,6 +23,11 @@ public class UserRepository implements Repository<User> {
         this.domainService = domainService;
     }
 
+    public UserRepository(DomainService<User> domainService, UserFirestoreDatabase userFirestoreDatabase){
+        this.userFirestoreDatabase = userFirestoreDatabase;
+        this.domainService = domainService;
+    }
+
     public void writeUser(String userId, String username, Map<String, Object> metadata){
         metadata.put(REPOSITORY_INTERACTION,WRITE_USER);
         User newUser = new User(userId, username);

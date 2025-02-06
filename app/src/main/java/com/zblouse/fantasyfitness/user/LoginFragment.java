@@ -72,6 +72,10 @@ public class LoginFragment extends Fragment implements EventListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.login_fragment,container,false);
         ((MainActivity)getActivity()).hideNavigation();
+        if(((MainActivity)getActivity()).getCurrentUser() != null){
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment()).commit();
+        }
         Button loginButton = layout.findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +97,9 @@ public class LoginFragment extends Fragment implements EventListener {
     private void launchFirebaseAuthentication(boolean newAccount){
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.EmailBuilder().build());
+
 
         // Create and launch sign-in intent
         Intent signInIntent = AuthUI.getInstance()
