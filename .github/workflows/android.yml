@@ -35,6 +35,7 @@ jobs:
   apk:
     name: Generate APK
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - uses: actions/checkout@v4
@@ -48,7 +49,7 @@ jobs:
       - name: Assemble app debug APK
         run: bash ./gradlew assembleDebug --stacktrace
       - name: Upload app APK
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
@@ -57,7 +58,7 @@ jobs:
         run: bash ./gradlew assembleDebugAndroidTest
 
       - name: Upload Android Test APK
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: app-debug-androidTest
           path: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
@@ -68,15 +69,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
 
       - name: Download app APK
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: app-debug
 
       - name: Download Android test APK
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: app-debug-androidTest
 
