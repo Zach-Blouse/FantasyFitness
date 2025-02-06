@@ -9,4 +9,8 @@ public abstract class FirestoreDatabase {
     protected FirestoreDatabase(){
         firestore = FirebaseFirestore.getInstance();
     }
+
+    protected FirestoreDatabase(FirebaseFirestore firestore){
+        this.firestore = firestore;
+    }
 }

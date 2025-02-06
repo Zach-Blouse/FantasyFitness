@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserRepostioryTest {
+public class UserRepositoryTest {
 
     @Test
     public void writeUserTest(){
