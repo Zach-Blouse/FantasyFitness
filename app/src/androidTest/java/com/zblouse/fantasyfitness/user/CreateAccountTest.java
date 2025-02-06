@@ -128,7 +128,9 @@ public class CreateAccountTest {
         onView(withId(R.id.create_account_title)).check(matches(withText("Create Account")));
         onView(withId(R.id.username_edit_text)).perform(typeText("createAccountTestUsername"));
         onView(withId(R.id.create_account_button)).perform(click());
-        Looper.prepare();
+        if(Looper.myLooper() == null) {
+            Looper.prepare();
+        }
         verify(mockWriteTask).addOnCompleteListener(onCompleteListenerArgumentCaptorWrite.capture());
         onCompleteListenerArgumentCaptorWrite.getValue().onComplete(mockWriteTask);
 

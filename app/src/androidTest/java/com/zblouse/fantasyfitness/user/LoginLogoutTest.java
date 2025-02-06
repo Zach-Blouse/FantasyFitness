@@ -115,7 +115,9 @@ public class LoginLogoutTest {
 
         onView(withId(R.id.app_title)).check(matches(withText("Fantasy Fitness")));
         onView(withId(R.id.login_button)).perform(click());
-        Looper.prepare();
+        if(Looper.myLooper() == null) {
+            Looper.prepare();
+        }
         verify(mockReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorRead.capture());
         onCompleteListenerArgumentCaptorRead.getValue().onComplete(mockReadTask);
         onView(withId(R.id.user_home_title)).check(matches(withText("Fantasy Fitness")));
