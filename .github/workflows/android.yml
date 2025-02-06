@@ -33,7 +33,7 @@ jobs:
           **/build/reports/
           **/build/test-results/
   firebase:
-    name: Generate APK
+    name: Firebase Testing
     runs-on: ubuntu-latest
     needs: build
 
