@@ -28,7 +28,7 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.OnCreateView();
         ((MainActivity)getActivity()).showNavigation();
-        layout = (LinearLayout) inflater.inflate(R.layout.create_account_fragment,container,false);
+        layout = (LinearLayout) inflater.inflate(R.layout.workout_fragment,container,false);
         startWorkoutButton = layout.findViewById(R.id.start_workout_button);
         startWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
