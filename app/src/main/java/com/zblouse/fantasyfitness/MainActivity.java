@@ -21,6 +21,7 @@ import com.zblouse.fantasyfitness.settings.SettingsFragment;
 import com.zblouse.fantasyfitness.user.LoginFragment;
 import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.core.Event;
+import com.zblouse.fantasyfitness.workout.WorkoutFragment;
 
 import java.util.List;
 
@@ -74,10 +75,14 @@ public class MainActivity extends AppCompatActivity {
 
         int itemId = item.getItemId();
         if (itemId == R.id.action_home) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment()).commit();
         } else if (itemId == R.id.action_settings) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new SettingsFragment()).commit();
         } else if (itemId == R.id.action_workout){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new WorkoutFragment()).commit();
         } else if (itemId == R.id.action_map){
 
         }
