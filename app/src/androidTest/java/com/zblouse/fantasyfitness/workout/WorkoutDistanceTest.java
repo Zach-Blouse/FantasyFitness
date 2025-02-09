@@ -10,11 +10,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.Manifest;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Looper;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
@@ -33,9 +36,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
+import com.zblouse.fantasyfitness.activity.LocationDeviceService;
+import com.zblouse.fantasyfitness.activity.LocationEvent;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.PermissionDeviceService;
+import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.user.UserFirestoreDatabase;
 import com.zblouse.fantasyfitness.user.UserRepository;
 import com.zblouse.fantasyfitness.user.UserService;
@@ -50,7 +56,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
-public class WorkoutTimerTest {
+public class WorkoutDistanceTest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
@@ -60,7 +66,7 @@ public class WorkoutTimerTest {
             new IntentsTestRule<>(MainActivity.class);
 
     @Test
-    public void workoutTimerTest() throws InterruptedException {
+    public void workoutDistanceTest() throws InterruptedException {
 
         //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
         com.firebase.ui.auth.data.model.User user = new User.Builder("google", "test@test.com")
@@ -73,14 +79,24 @@ public class WorkoutTimerTest {
         FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
         when(mockAuth.getCurrentUser()).thenReturn(mockFirebaseUser);
         UserService userService = new UserService();
-        PermissionDeviceService permissionDeviceService = Mockito.mock(PermissionDeviceService.class);
-        when(permissionDeviceService.hasPermission(any())).thenReturn(true);
+        PermissionDeviceService mockPermissionDeviceService = Mockito.mock(PermissionDeviceService.class);
+        when(mockPermissionDeviceService.hasPermission(any())).thenReturn(true);
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
+        WorkoutService workoutService = new WorkoutService();
+
+        LocationDeviceService mockLocationDeviceService = Mockito.mock(LocationDeviceService.class);
 
         activityRule.getScenario().onActivity(activity -> {
+
             activity.setFirebaseAuth(mockAuth);
             userService.setMainActivity(activity);
+            workoutService.setMainActivity(activity);
             activity.setUserService(userService);
-            activity.setDeviceService(DeviceServiceType.PERMISSION,permissionDeviceService);
+            activity.setWorkoutService(workoutService);
+            activity.setDeviceService(DeviceServiceType.PERMISSION,mockPermissionDeviceService);
+            activity.setDeviceService(DeviceServiceType.LOCATION,mockLocationDeviceService);
         });
 
         //Set up mock firestore
@@ -121,39 +137,31 @@ public class WorkoutTimerTest {
         //FINISH AUTHENTICATION, TEST IS AT USER HOME
         //FOLLOWING THIS LINE IS THE BEGINNING OF THE ACTUAL TEST THIS TEST IS SUPPOSED TO BE TESTING
 
-        //First run through is testing the button logic
         onView(withId(R.id.action_workout)).perform(click());
-        onView(withId(R.id.workout_time)).check(matches(withText("00:00")));
+        onView(withId(R.id.workout_distance)).check(matches(withText("0.00 km")));
         onView(withId(R.id.start_workout_button)).perform(click());
-        onView(withId(R.id.pause_workout_button)).check(matches(withText(R.string.pause_workout)));
-        onView(withId(R.id.stop_workout_button)).check(matches(withText(R.string.stop_workout)));
-        onView(withId(R.id.pause_workout_button)).perform(click());
-        onView(withId(R.id.pause_workout_button)).check(matches(withText(R.string.resume_workout)));
-        onView(withId(R.id.pause_workout_button)).perform(click());
-        onView(withId(R.id.pause_workout_button)).check(matches(withText(R.string.pause_workout)));
-        onView(withId(R.id.stop_workout_button)).check(matches(withText(R.string.stop_workout)));
-        onView(withId(R.id.stop_workout_button)).perform(click());
-        onView(withId(R.id.pause_workout_button)).check(matches(withText(R.string.resume_workout)));
-        onView(withId(R.id.stop_workout_button)).check(matches(withText(R.string.complete_workout)));
-        onView(withId(R.id.pause_workout_button)).perform(click());
-        onView(withId(R.id.pause_workout_button)).check(matches(withText(R.string.pause_workout)));
-        onView(withId(R.id.stop_workout_button)).check(matches(withText(R.string.stop_workout)));
-        onView(withId(R.id.stop_workout_button)).perform(click());
-        onView(withId(R.id.pause_workout_button)).check(matches(withText(R.string.resume_workout)));
-        onView(withId(R.id.stop_workout_button)).check(matches(withText(R.string.complete_workout)));
-        onView(withId(R.id.stop_workout_button)).perform(click());
-        onView(withId(R.id.start_workout_button)).check(matches(withText(R.string.start_workout)));
-        //Now actually checking the timing
-        onView(withId(R.id.start_workout_button)).perform(click());
-        onView(withId(R.id.workout_time)).check(matches(withText("00:00")));
-        Thread.sleep(5000);
-        onView(withId(R.id.stop_workout_button)).perform(click());
-        onView(withId(R.id.workout_time)).check(matches(withText("00:05")));
-
+        verify(mockPermissionDeviceService).hasPermission(eq(Manifest.permission.ACCESS_FINE_LOCATION));
+        Location location1 = new Location("provider");
+        location1.setLatitude(10.10);
+        location1.setLongitude(10.10);
+        Location location2 = new Location("provider");
+        location2.setLatitude(10.11);
+        location2.setLongitude(10.11);
+        Location location3 = new Location("provider");
+        location3.setLatitude(10.12);
+        location3.setLongitude(10.15);
+        LocationEvent firstLocationEvent = new LocationEvent(location1);
+        LocationEvent secondLocationEvent = new LocationEvent(location2);
+        LocationEvent thirdLocationEvent = new LocationEvent(location3);
+        workoutService.publishEvent(firstLocationEvent);
+        onView(withId(R.id.workout_distance)).check(matches(withText("0.00 km")));
+        workoutService.publishEvent(secondLocationEvent);
+        onView(withId(R.id.workout_distance)).check(matches(withText("1.56 km")));
+        workoutService.publishEvent(thirdLocationEvent);
+        onView(withId(R.id.workout_distance)).check(matches(withText("6.08 km")));
     }
-
     @Test
-    public void workoutTimerPauseTest() throws InterruptedException {
+    public void workoutDistanceWithPauseTest() throws InterruptedException {
 
         //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
         com.firebase.ui.auth.data.model.User user = new User.Builder("google", "test@test.com")
@@ -166,11 +174,24 @@ public class WorkoutTimerTest {
         FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
         when(mockAuth.getCurrentUser()).thenReturn(mockFirebaseUser);
         UserService userService = new UserService();
+        PermissionDeviceService mockPermissionDeviceService = Mockito.mock(PermissionDeviceService.class);
+        when(mockPermissionDeviceService.hasPermission(any())).thenReturn(true);
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
+        WorkoutService workoutService = new WorkoutService();
+
+        LocationDeviceService mockLocationDeviceService = Mockito.mock(LocationDeviceService.class);
 
         activityRule.getScenario().onActivity(activity -> {
+
             activity.setFirebaseAuth(mockAuth);
             userService.setMainActivity(activity);
+            workoutService.setMainActivity(activity);
             activity.setUserService(userService);
+            activity.setWorkoutService(workoutService);
+            activity.setDeviceService(DeviceServiceType.PERMISSION,mockPermissionDeviceService);
+            activity.setDeviceService(DeviceServiceType.LOCATION,mockLocationDeviceService);
         });
 
         //Set up mock firestore
@@ -212,20 +233,38 @@ public class WorkoutTimerTest {
         //FOLLOWING THIS LINE IS THE BEGINNING OF THE ACTUAL TEST THIS TEST IS SUPPOSED TO BE TESTING
 
         onView(withId(R.id.action_workout)).perform(click());
-        onView(withId(R.id.workout_time)).check(matches(withText("00:00")));
+        onView(withId(R.id.workout_distance)).check(matches(withText("0.00 km")));
         onView(withId(R.id.start_workout_button)).perform(click());
-        onView(withId(R.id.workout_time)).check(matches(withText("00:00")));
-        Thread.sleep(5000);
+        verify(mockPermissionDeviceService).hasPermission(eq(Manifest.permission.ACCESS_FINE_LOCATION));
+        Location location1 = new Location("provider");
+        location1.setLatitude(10.10);
+        location1.setLongitude(10.10);
+        Location location2 = new Location("provider");
+        location2.setLatitude(10.11);
+        location2.setLongitude(10.11);
+        Location location3 = new Location("provider");
+        location3.setLatitude(10.12);
+        location3.setLongitude(10.15);
+        Location pauseLocation = new Location("provider");
+        pauseLocation.setLatitude(11.0);
+        pauseLocation.setLongitude(11.0);
+        LocationEvent firstLocationEvent = new LocationEvent(location1);
+        LocationEvent secondLocationEvent = new LocationEvent(location2);
+        LocationEvent thirdLocationEvent = new LocationEvent(location3);
+        LocationEvent pauseLocationEvent = new LocationEvent(pauseLocation);
+        workoutService.publishEvent(firstLocationEvent);
+        onView(withId(R.id.workout_distance)).check(matches(withText("0.00 km")));
+        workoutService.publishEvent(secondLocationEvent);
+        onView(withId(R.id.workout_distance)).check(matches(withText("1.56 km")));
         onView(withId(R.id.pause_workout_button)).perform(click());
-        onView(withId(R.id.workout_time)).check(matches(withText("00:05")));
-        Thread.sleep(5000);
-        onView(withId(R.id.workout_time)).check(matches(withText("00:05")));
+        workoutService.publishEvent(pauseLocationEvent);
+        onView(withId(R.id.workout_distance)).check(matches(withText("1.56 km")));
         onView(withId(R.id.pause_workout_button)).perform(click());
-        Thread.sleep(5000);
-        onView(withId(R.id.workout_time)).check(matches(withText("00:10")));
-        onView(withId(R.id.stop_workout_button)).perform(click());
-        Thread.sleep(5000);
-        onView(withId(R.id.workout_time)).check(matches(withText("00:10")));
+        workoutService.publishEvent(secondLocationEvent);
+        onView(withId(R.id.workout_distance)).check(matches(withText("1.56 km")));
+        workoutService.publishEvent(thirdLocationEvent);
+        onView(withId(R.id.workout_distance)).check(matches(withText("6.08 km")));
     }
+
 
 }

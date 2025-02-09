@@ -1,5 +1,7 @@
 package com.zblouse.fantasyfitness.activity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,7 +11,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.zblouse.fantasyfitness.core.EventListener;
-import com.zblouse.fantasyfitness.workout.TimeUpdateEvent;
 
 public class LocationDeviceService extends DeviceService{
 
@@ -54,19 +55,22 @@ public class LocationDeviceService extends DeviceService{
         }
     }
 
+    @SuppressLint("MissingPermission")
     private void requestLocation(){
-        fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener(mainActivity, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                // Got last known location. In some rare situations this can be null.
-                if (location != null) {
-                    //send the location updates to the subscribers
-                    LocationEvent locationEvent = new LocationEvent(location);
-                    sendEvent(locationEvent);
+        if(((PermissionDeviceService)mainActivity.getDeviceService(DeviceServiceType.PERMISSION)).hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener(mainActivity, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        //send the location updates to the subscribers
+                        LocationEvent locationEvent = new LocationEvent(location);
+                        sendEvent(locationEvent);
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            ((PermissionDeviceService)mainActivity.getDeviceService(DeviceServiceType.PERMISSION)).requestPermission(Manifest.permission.ACCESS_FINE_LOCATION,5);
+        }
     }
-
-
 }

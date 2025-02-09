@@ -24,6 +24,9 @@ import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.workout.WorkoutFragment;
 import com.zblouse.fantasyfitness.workout.WorkoutService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private UserService userService;
     private WorkoutService workoutService;
+    private Map<DeviceServiceType, DeviceService> deviceServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        deviceServices = new HashMap<>();
+        deviceServices.put(DeviceServiceType.LOCATION, new LocationDeviceService(this));
+        deviceServices.put(DeviceServiceType.PERMISSION, new PermissionDeviceService(this));
 
         userService = new UserService(this);
         workoutService = new WorkoutService(this);
@@ -140,6 +147,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void setFirebaseAuth(FirebaseAuth firebaseAuth){
         this.firebaseAuth = firebaseAuth;
+    }
+
+    public DeviceService getDeviceService(DeviceServiceType deviceServiceType){
+        if(deviceServices != null){
+            return deviceServices.get(deviceServiceType);
+        }
+        return null;
+    }
+
+    public void setDeviceService(DeviceServiceType type, DeviceService deviceService){
+        deviceServices.remove(type);
+        deviceServices.put(type,deviceService);
     }
 
 }

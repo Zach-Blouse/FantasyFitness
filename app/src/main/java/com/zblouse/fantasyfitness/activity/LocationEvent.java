@@ -2,7 +2,6 @@ package com.zblouse.fantasyfitness.activity;
 
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventType;
-import com.zblouse.fantasyfitness.workout.TimeUpdateEvent;
 
 import android.location.Location;
 
