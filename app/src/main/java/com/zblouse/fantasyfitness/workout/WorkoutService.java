@@ -7,15 +7,21 @@ import com.zblouse.fantasyfitness.MainActivity;
 
 public class WorkoutService {
 
-    Handler handler;
+    private final Handler handler;
     private boolean paused;
-    private TimeTracker timeTracker;
-    private MainActivity mainActivity;
+    private final TimeTracker timeTracker;
+    private final MainActivity mainActivity;
 
     public WorkoutService(MainActivity mainActivity){
         this.mainActivity = mainActivity;
-        handler = new Handler(Looper.myLooper());
-        timeTracker  = new TimeTracker();
+        this.handler = new Handler(Looper.myLooper());
+        this.timeTracker  = new TimeTracker();
+    }
+
+    public WorkoutService(MainActivity mainActivity, Handler handler, TimeTracker timeTracker){
+        this.mainActivity = mainActivity;
+        this.handler = handler;
+        this.timeTracker = timeTracker;
     }
 
     private final Runnable workoutRunnable = new Runnable() {
