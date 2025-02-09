@@ -1,4 +1,4 @@
-package com.zblouse.fantasyfitness;
+package com.zblouse.fantasyfitness.activity;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,12 +9,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.home.UserHomeFragment;
 import com.zblouse.fantasyfitness.settings.SettingsFragment;
@@ -24,7 +24,8 @@ import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.workout.WorkoutFragment;
 import com.zblouse.fantasyfitness.workout.WorkoutService;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private UserService userService;
     private WorkoutService workoutService;
+    private Map<DeviceServiceType, DeviceService> deviceServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        deviceServices = new HashMap<>();
+        deviceServices.put(DeviceServiceType.LOCATION, new LocationDeviceService(this));
+        deviceServices.put(DeviceServiceType.PERMISSION, new PermissionDeviceService(this));
 
         userService = new UserService(this);
         workoutService = new WorkoutService(this);
@@ -142,6 +147,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void setFirebaseAuth(FirebaseAuth firebaseAuth){
         this.firebaseAuth = firebaseAuth;
+    }
+
+    public DeviceService getDeviceService(DeviceServiceType deviceServiceType){
+        if(deviceServices != null){
+            return deviceServices.get(deviceServiceType);
+        }
+        return null;
+    }
+
+    public void setDeviceService(DeviceServiceType type, DeviceService deviceService){
+        deviceServices.remove(type);
+        deviceServices.put(type,deviceService);
     }
 
 }

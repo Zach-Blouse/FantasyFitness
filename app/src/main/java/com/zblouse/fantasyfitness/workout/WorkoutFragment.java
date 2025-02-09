@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.zblouse.fantasyfitness.MainActivity;
+import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 import com.zblouse.fantasyfitness.core.Event;
@@ -24,6 +24,7 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     private Button pauseWorkoutButton;
     private Button stopWorkoutButton;
     private TextView workoutTimeTextView;
+    private TextView workoutDistanceTextView;
 
     private static final int MILLIS_IN_HOUR = 3600000;
     private static final int MILLIS_IN_MINUTE = 60000;
@@ -39,6 +40,7 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
         ((MainActivity)getActivity()).showNavigation();
         layout = (LinearLayout) inflater.inflate(R.layout.workout_fragment,container,false);
         workoutTimeTextView = layout.findViewById(R.id.workout_time);
+        workoutDistanceTextView = layout.findViewById(R.id.workout_distance);
         startWorkoutButton = layout.findViewById(R.id.start_workout_button);
         pauseWorkoutButton = layout.findViewById(R.id.pause_workout_button);
         stopWorkoutButton = layout.findViewById(R.id.stop_workout_button);
@@ -52,18 +54,31 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     @Override
     public void publishEvent(Event event) {
         if(event.getEventType().equals(EventType.TIME_UPDATE_EVENT)){
-            workoutTimeTextView.setText(formatTimeDisplay(((TimeUpdateEvent)event).getTime()));
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    workoutTimeTextView.setText(formatTimeDisplay(((WorkoutTimeUpdateEvent)event).getTime()));
+                }
+            });
+
+        } else if(event.getEventType().equals(EventType.WORKOUT_DISTANCE_UPDATE_EVENT)){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    workoutDistanceTextView.setText(formatDistanceDisplay(((WorkoutDistanceUpdateEvent)event).getDistanceMeters()));
+                }
+            });
         }
     }
 
     private void startWorkout(){
-        ((MainActivity)getActivity()).hideNavigation();
+        if(((MainActivity)getActivity()).getWorkoutService().startWorkout()) {
+            ((MainActivity) getActivity()).hideNavigation();
 
-        ((ViewGroup)layout).removeView(startWorkoutButton);
-        ((ViewGroup)layout).addView(pauseWorkoutButton);
-        ((ViewGroup)layout).addView(stopWorkoutButton);
-
-        ((MainActivity)getActivity()).getWorkoutService().startWorkout();
+            ((ViewGroup) layout).removeView(startWorkoutButton);
+            ((ViewGroup) layout).addView(pauseWorkoutButton);
+            ((ViewGroup) layout).addView(stopWorkoutButton);
+        }
     }
 
     private void pauseWorkout(){
@@ -133,10 +148,15 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
         remainingMillis = remainingMillis - (minutes*MILLIS_IN_MINUTE);
         long seconds = remainingMillis/MILLIS_IN_SECOND;
         if (hours > 0) {
-            return String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds);
+            return String.format(Locale.US, "%d:%02d:%02d", hours, minutes, seconds);
         } else {
-            return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+            return String.format(Locale.US, "%02d:%02d", minutes, seconds);
         }
+    }
+
+    private String formatDistanceDisplay(double distanceMeters){
+        double distanceKm = distanceMeters/1000;
+        return String.format(Locale.US, "%.2f",distanceKm) + " km";
     }
 
     private void initialButtonSetup(){

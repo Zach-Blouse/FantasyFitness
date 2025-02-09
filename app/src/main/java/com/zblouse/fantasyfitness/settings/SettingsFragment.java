@@ -9,9 +9,8 @@ import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 
-import com.zblouse.fantasyfitness.MainActivity;
+import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
-import com.zblouse.fantasyfitness.user.LoginFragment;
 
 public class SettingsFragment extends Fragment {
 
