@@ -1,14 +1,9 @@
 package com.zblouse.fantasyfitness.core;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.zblouse.fantasyfitness.MainActivity;
+import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.user.LoginFragment;
 

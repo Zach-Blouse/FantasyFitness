@@ -5,19 +5,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
-
-import com.zblouse.fantasyfitness.MainActivity;
+import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
-import com.zblouse.fantasyfitness.user.CreateAccountFragment;
 import com.zblouse.fantasyfitness.user.UserExistEvent;
 
 public class UserHomeFragment extends AuthenticationRequiredFragment implements EventListener {

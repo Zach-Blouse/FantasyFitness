@@ -1,4 +1,4 @@
-package com.zblouse.fantasyfitness;
+package com.zblouse.fantasyfitness.activity;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,12 +9,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.home.UserHomeFragment;
 import com.zblouse.fantasyfitness.settings.SettingsFragment;
@@ -23,8 +23,6 @@ import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.workout.WorkoutFragment;
 import com.zblouse.fantasyfitness.workout.WorkoutService;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 

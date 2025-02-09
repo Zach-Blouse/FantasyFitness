@@ -2,10 +2,8 @@ package com.zblouse.fantasyfitness.user;
 
 import android.util.Log;
 
-import com.zblouse.fantasyfitness.MainActivity;
+import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.core.DomainService;
-import com.zblouse.fantasyfitness.core.Event;
-import com.zblouse.fantasyfitness.core.Repository;
 
 import java.util.HashMap;
 import java.util.Map;

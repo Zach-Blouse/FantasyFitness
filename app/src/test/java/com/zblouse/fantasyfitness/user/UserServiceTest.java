@@ -3,7 +3,7 @@ package com.zblouse.fantasyfitness.user;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
-import com.zblouse.fantasyfitness.MainActivity;
+import com.zblouse.fantasyfitness.activity.MainActivity;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

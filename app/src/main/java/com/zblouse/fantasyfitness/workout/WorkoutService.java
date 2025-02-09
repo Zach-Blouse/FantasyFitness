@@ -3,7 +3,7 @@ package com.zblouse.fantasyfitness.workout;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.zblouse.fantasyfitness.MainActivity;
+import com.zblouse.fantasyfitness.activity.MainActivity;
 
 public class WorkoutService {
 

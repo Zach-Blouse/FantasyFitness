@@ -7,8 +7,7 @@ import static org.mockito.Mockito.when;
 
 import android.os.Handler;
 
-import com.zblouse.fantasyfitness.MainActivity;
-import com.zblouse.fantasyfitness.user.CreateAccountResponseEvent;
+import com.zblouse.fantasyfitness.activity.MainActivity;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
