@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fantasy_fitness_gray"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+    <TextView
+        android:id="@+id/workout_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textColor="@color/fantasy_fitness_white"
+        android:textSize="96sp"
+        android:layout_gravity="center"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+    <TextView
+        android:id="@+id/workout_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 Miles"
+        android:textColor="@color/fantasy_fitness_white"
+        android:textSize="48sp"
+        android:layout_gravity="center"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+    <Button
+        android:id="@+id/start_workout_button"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:text="@string/start_workout"
+        android:textSize="25sp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/fantasy_fitness_green"
+        android:textColor="@color/fantasy_fitness_white"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+    <Button
+        android:id="@+id/pause_workout_button"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:text="@string/pause_workout"
+        android:textSize="25sp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/fantasy_fitness_green"
+        android:textColor="@color/fantasy_fitness_white"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+    <Button
+        android:id="@+id/stop_workout_button"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:text="@string/stop_workout"
+        android:textSize="25sp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/fantasy_fitness_green"
+        android:textColor="@color/fantasy_fitness_white"/>
+
+</LinearLayout>

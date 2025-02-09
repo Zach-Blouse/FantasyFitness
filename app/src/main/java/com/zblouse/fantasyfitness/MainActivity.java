@@ -21,6 +21,8 @@ import com.zblouse.fantasyfitness.settings.SettingsFragment;
 import com.zblouse.fantasyfitness.user.LoginFragment;
 import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.core.Event;
+import com.zblouse.fantasyfitness.workout.WorkoutFragment;
+import com.zblouse.fantasyfitness.workout.WorkoutService;
 
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
 
     private UserService userService;
+    private WorkoutService workoutService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         userService = new UserService(this);
+        workoutService = new WorkoutService(this);
 
         navigationView = findViewById(R.id.bottom_navigation);
         navigationView.setOnItemSelectedListener(navigationListener);
@@ -74,10 +78,14 @@ public class MainActivity extends AppCompatActivity {
 
         int itemId = item.getItemId();
         if (itemId == R.id.action_home) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment()).commit();
         } else if (itemId == R.id.action_settings) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new SettingsFragment()).commit();
         } else if (itemId == R.id.action_workout){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new WorkoutFragment()).commit();
         } else if (itemId == R.id.action_map){
 
         }
@@ -115,6 +123,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUserService(UserService userService){
         this.userService = userService;
+    }
+
+    public WorkoutService getWorkoutService(){
+        return this.workoutService;
+    }
+
+    public void setWorkoutService(WorkoutService workoutService){
+        this.workoutService = workoutService;
     }
 
     public void publishEvent(Event event){
