@@ -22,6 +22,7 @@ import com.zblouse.fantasyfitness.user.LoginFragment;
 import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.workout.WorkoutFragment;
+import com.zblouse.fantasyfitness.workout.WorkoutService;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
 
     private UserService userService;
+    private WorkoutService workoutService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         userService = new UserService(this);
+        workoutService = new WorkoutService(this);
 
         navigationView = findViewById(R.id.bottom_navigation);
         navigationView.setOnItemSelectedListener(navigationListener);
@@ -120,6 +123,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUserService(UserService userService){
         this.userService = userService;
+    }
+
+    public WorkoutService getWorkoutService(){
+        return this.workoutService;
+    }
+
+    public void setWorkoutService(WorkoutService workoutService){
+        this.workoutService = workoutService;
     }
 
     public void publishEvent(Event event){
