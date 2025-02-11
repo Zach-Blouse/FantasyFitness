@@ -23,6 +23,7 @@ import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.workout.WorkoutFragment;
 import com.zblouse.fantasyfitness.workout.WorkoutService;
+import com.zblouse.fantasyfitness.world.GameWorldFragment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -92,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new WorkoutFragment()).commit();
         } else if (itemId == R.id.action_map){
-
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new GameWorldFragment()).commit();
         }
 
         return true;

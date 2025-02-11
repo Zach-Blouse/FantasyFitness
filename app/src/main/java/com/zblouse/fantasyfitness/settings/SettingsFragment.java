@@ -11,8 +11,9 @@ import androidx.fragment.app.Fragment;
 
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
+import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment  extends AuthenticationRequiredFragment {
 
     public SettingsFragment(){
         super(R.layout.settings_fragment);
@@ -20,6 +21,7 @@ public class SettingsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.OnCreateView();
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.settings_fragment,container,false);
         ((MainActivity)getActivity()).showNavigation();
         Button logoutButton = layout.findViewById(R.id.logout_button);

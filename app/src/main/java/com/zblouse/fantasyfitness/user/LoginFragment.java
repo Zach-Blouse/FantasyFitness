@@ -46,7 +46,7 @@ public class LoginFragment extends Fragment implements EventListener {
                         //check if the user has an account prior to sending them to the user home.
                         ((MainActivity)getActivity()).getUserService().userExistCheck(((MainActivity)getActivity()).getCurrentUser().getUid());
                     } else {
-                        Toast.makeText(getActivity(),"Failed to Authenticate",Toast.LENGTH_SHORT);
+                        Toast.makeText(getActivity(),"Failed to Authenticate",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
