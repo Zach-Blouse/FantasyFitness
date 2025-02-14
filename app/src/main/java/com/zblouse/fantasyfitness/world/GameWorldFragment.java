@@ -7,17 +7,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
+import com.zblouse.fantasyfitness.core.Event;
+import com.zblouse.fantasyfitness.core.EventListener;
+import com.zblouse.fantasyfitness.core.EventType;
 
-public class GameWorldFragment extends AuthenticationRequiredFragment {
+import java.util.HashMap;
+
+public class GameWorldFragment extends AuthenticationRequiredFragment implements EventListener {
+
+    private CardView locationInfoCardView;
+    private TextView locationNameTextView;
+    private TextView locationDescriptionTextView;
+    private TextView locationConnectionsTextView;
 
     public GameWorldFragment(){
         super(R.layout.game_world_fragment);
@@ -31,7 +42,44 @@ public class GameWorldFragment extends AuthenticationRequiredFragment {
         //Implementing scrolling both directions at once, since vertical is the parent, the touch is implemented there
         ScrollView verticalScrollView = layout.findViewById(R.id.world_map_vertical);
         HorizontalScrollView horizontalScrollView = layout.findViewById(R.id.world_map_horizontal);
+        horizontalScrollView.setOnTouchListener(getOnTouchListener(verticalScrollView,horizontalScrollView));
+
         verticalScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+               return horizontalScrollView.onTouchEvent(motionEvent);
+            }
+        });
+
+        locationInfoCardView = layout.findViewById(R.id.location_info_view);
+        locationInfoCardView.setVisibility(View.INVISIBLE);
+        locationNameTextView = layout.findViewById(R.id.location_info_name);
+        locationDescriptionTextView = layout.findViewById(R.id.location_info_description);
+        locationConnectionsTextView = layout.findViewById(R.id.location_info_connected_locations);
+        Button closeLocationInfoCardButton = layout.findViewById(R.id.close_location_info_button);
+        closeLocationInfoCardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeLocationInfoPopup();
+            }
+        });
+
+        Button valleyOfMonstersButton = layout.findViewById(R.id.valley_of_monsters);
+        valleyOfMonstersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation("Valley of Monsters",new HashMap<>());
+            }
+        });
+        return layout;
+    }
+
+    public void closeLocationInfoPopup(){
+        locationInfoCardView.setVisibility(View.INVISIBLE);
+    }
+
+    private View.OnTouchListener getOnTouchListener(ScrollView verticalScrollView, HorizontalScrollView horizontalScrollView){
+        return new View.OnTouchListener() {
 
             private float mx, my, curX, curY;
             private boolean started = false;
@@ -61,34 +109,24 @@ public class GameWorldFragment extends AuthenticationRequiredFragment {
                 }
                 return false;
             }
-        });
-
-        horizontalScrollView.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return false;
-            }
-        });
-
-
-        Button town1Button = layout.findViewById(R.id.town1Button);
-        town1Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(),"Town 1",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        Button town2Button = layout.findViewById(R.id.town2Button);
-        town2Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(),"Town 2",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        return layout;
+        };
     }
 
+    @Override
+    public void publishEvent(Event event) {
+        if(event.getEventType().equals(EventType.LOCATION_FETCH_EVENT)){
+            GameLocationFetchEvent gameLocationFetchEvent = ((GameLocationFetchEvent)event);
+            GameLocation gameLocation = gameLocationFetchEvent.getLocation();
+            if(gameLocation != null) {
+                locationNameTextView.setText(gameLocation.getLocationName());
+                locationDescriptionTextView.setText(gameLocation.getLocationDescription());
+                String connectionsString = "Can Travel To:";
+                for(GameLocation location: gameLocation.getConnectedLocations().keySet()){
+                    connectionsString += "\n" + location.getLocationName() + " " + gameLocation.getConnectedLocations().get(location);
+                }
+                locationConnectionsTextView.setText(connectionsString);
+                locationInfoCardView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
 }

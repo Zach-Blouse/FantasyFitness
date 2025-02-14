@@ -23,6 +23,8 @@ import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.workout.WorkoutFragment;
 import com.zblouse.fantasyfitness.workout.WorkoutService;
+import com.zblouse.fantasyfitness.world.GameLocation;
+import com.zblouse.fantasyfitness.world.GameLocationService;
 import com.zblouse.fantasyfitness.world.GameWorldFragment;
 
 import java.util.HashMap;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private UserService userService;
     private WorkoutService workoutService;
     private Map<DeviceServiceType, DeviceService> deviceServices;
+    private GameLocationService gameLocationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setOnItemSelectedListener(navigationListener);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+        gameLocationService = new GameLocationService(this);
 
         currentUser = firebaseAuth.getCurrentUser();
         if(currentUser == null) {
@@ -161,6 +166,10 @@ public class MainActivity extends AppCompatActivity {
     public void setDeviceService(DeviceServiceType type, DeviceService deviceService){
         deviceServices.remove(type);
         deviceServices.put(type,deviceService);
+    }
+
+    public GameLocationService getGameLocationService(){
+        return this.gameLocationService;
     }
 
 }

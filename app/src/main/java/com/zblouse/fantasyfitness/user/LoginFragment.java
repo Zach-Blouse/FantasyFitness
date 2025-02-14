@@ -72,6 +72,7 @@ public class LoginFragment extends Fragment implements EventListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.login_fragment,container,false);
         ((MainActivity)getActivity()).hideNavigation();
+        ((MainActivity)getActivity()).getGameLocationService().initializeLocationDatabase();
         if(((MainActivity)getActivity()).getCurrentUser() != null){
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new UserHomeFragment()).commit();
@@ -118,7 +119,6 @@ public class LoginFragment extends Fragment implements EventListener {
         if(event.getEventType().equals(EventType.USER_EXIST_EVENT)){
             Log.i(this.getClass().getName(),"USER EXIST RESPONSE");
             if(((UserExistEvent)(event)).exists()){
-                Toast.makeText(getActivity(),"Account already exists",Toast.LENGTH_SHORT).show();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new UserHomeFragment()).commit();
             } else {

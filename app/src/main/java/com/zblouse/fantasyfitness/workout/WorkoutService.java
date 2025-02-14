@@ -13,6 +13,8 @@ import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
 
+import java.util.HashMap;
+
 public class WorkoutService implements EventListener {
 
     private final Handler handler;
@@ -52,7 +54,7 @@ public class WorkoutService implements EventListener {
             //If the workout is paused, don't update the time or distance
             if (!paused) {
                 long time = timeTracker.update();
-                mainActivity.publishEvent(new WorkoutTimeUpdateEvent(time));
+                mainActivity.publishEvent(new WorkoutTimeUpdateEvent(time, new HashMap<>()));
             }
             handler.postDelayed(this, 500);
         }
@@ -62,7 +64,7 @@ public class WorkoutService implements EventListener {
         paused = true;
         long updatedTime = timeTracker.pause();
         distanceTracker.pause();
-        mainActivity.publishEvent(new WorkoutTimeUpdateEvent(updatedTime));
+        mainActivity.publishEvent(new WorkoutTimeUpdateEvent(updatedTime, new HashMap<>()));
     }
 
     public void unpause() {
@@ -88,7 +90,7 @@ public class WorkoutService implements EventListener {
 
     public void stopWorkout(){
         distanceTracker.stop();
-        mainActivity.publishEvent(new WorkoutTimeUpdateEvent(timeTracker.stop()));
+        mainActivity.publishEvent(new WorkoutTimeUpdateEvent(timeTracker.stop(), new HashMap<>()));
         paused = true;
         handler.removeCallbacks(workoutRunnable);
     }
@@ -97,7 +99,7 @@ public class WorkoutService implements EventListener {
     public void publishEvent(Event event) {
         if(event.getEventType().equals(EventType.DEVICE_LOCATION_EVENT)){
             if (!paused) {
-                mainActivity.publishEvent(new WorkoutDistanceUpdateEvent(distanceTracker.update(((LocationEvent)event).getLocation())));
+                mainActivity.publishEvent(new WorkoutDistanceUpdateEvent(distanceTracker.update(((LocationEvent)event).getLocation()), new HashMap<>()));
             }
         }
     }
