@@ -12,6 +12,8 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.zblouse.fantasyfitness.core.EventListener;
 
+import java.util.HashMap;
+
 public class LocationDeviceService extends DeviceService{
 
     private final MainActivity mainActivity;
@@ -64,7 +66,7 @@ public class LocationDeviceService extends DeviceService{
                     // Got last known location. In some rare situations this can be null.
                     if (location != null) {
                         //send the location updates to the subscribers
-                        LocationEvent locationEvent = new LocationEvent(location);
+                        LocationEvent locationEvent = new LocationEvent(location, new HashMap<>());
                         sendEvent(locationEvent);
                     }
                 }

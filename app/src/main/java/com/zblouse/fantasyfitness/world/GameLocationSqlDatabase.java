@@ -4,31 +4,32 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
-import com.zblouse.fantasyfitness.core.SqlDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameLocationSqlDatabase extends SqlDatabase {
+public class GameLocationSqlDatabase extends SQLiteOpenHelper {
 
+    public static final String GAME_LOCATION_DATABASE_NAME = "location";
     public static final String TABLE_NAME = "location";
     public static final String ID_KEY = "id";
     public static final String NAME_KEY = "name";
     public static final String DESCRIPTION_KEY = "description";
 
     public GameLocationSqlDatabase(Context context){
-        super(context);
+        super(context, GAME_LOCATION_DATABASE_NAME,null,1);
+
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        String createLocationTableQuery = "CREATE TABLE " + TABLE_NAME + "(" +
+        database.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
                 ID_KEY + " INTEGER PRIMARY KEY," +
                 NAME_KEY + " TEXT," +
                 DESCRIPTION_KEY + " TEXT" +
-                ")";
-        database.execSQL(createLocationTableQuery);
+                ")");
     }
 
     @Override
@@ -48,14 +49,16 @@ public class GameLocationSqlDatabase extends SqlDatabase {
 
     public GameLocation getLocationByName(String name){
         SQLiteDatabase database = getReadableDatabase();
-
-        Cursor locationCursor = database.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + NAME_KEY + "=" + name, null);
+        Log.e("GAMELOCATIONDATABASE","QUERY: " + "SELECT * FROM " + TABLE_NAME + " WHERE " + NAME_KEY + "='" + name +"'");
+        Cursor locationCursor = database.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + NAME_KEY + "='" + name +"'", null);
         GameLocation foundLocation = null;
         if(locationCursor.moveToFirst()) {
             do {
                 foundLocation = new GameLocation(locationCursor.getInt(0),locationCursor.getString(1),
                         locationCursor.getString(2));
             } while(locationCursor.moveToNext());
+        } else {
+            Log.e("GAMELOCATIONDATABASE","none found that match name total count=" + getAllLocations().size());
         }
         locationCursor.close();
         return foundLocation;

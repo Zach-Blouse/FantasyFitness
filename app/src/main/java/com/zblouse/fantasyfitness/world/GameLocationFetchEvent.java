@@ -11,6 +11,7 @@ public class GameLocationFetchEvent extends Event {
 
     public GameLocationFetchEvent(GameLocation location, Map<String, Object> metadata) {
         super(EventType.LOCATION_FETCH_EVENT, metadata);
+        this.location = location;
     }
 
     public GameLocation getLocation(){

@@ -1,6 +1,7 @@
 package com.zblouse.fantasyfitness.world;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -68,7 +69,14 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
         valleyOfMonstersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).getGameLocationService().fetchLocation("Valley of Monsters",new HashMap<>());
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.VALLEY_OF_MONSTERS,new HashMap<>());
+            }
+        });
+        Button towerButton = layout.findViewById(R.id.tower);
+        towerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.LAST_TOWER,new HashMap<>());
             }
         });
         return layout;
@@ -114,6 +122,7 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
 
     @Override
     public void publishEvent(Event event) {
+        Log.e("GAMEWORLDFRAGMENT", "EVENT PUBLISHED " + event.getEventType());
         if(event.getEventType().equals(EventType.LOCATION_FETCH_EVENT)){
             GameLocationFetchEvent gameLocationFetchEvent = ((GameLocationFetchEvent)event);
             GameLocation gameLocation = gameLocationFetchEvent.getLocation();
@@ -126,6 +135,7 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
                 }
                 locationConnectionsTextView.setText(connectionsString);
                 locationInfoCardView.setVisibility(View.VISIBLE);
+                Log.e("GAMEWORLDFRAGMENT", "LOCATION CARD SHOULD BE VISIBLE " + event.getEventType());
             }
         }
     }

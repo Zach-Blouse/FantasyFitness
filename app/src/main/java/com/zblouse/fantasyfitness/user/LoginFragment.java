@@ -72,7 +72,7 @@ public class LoginFragment extends Fragment implements EventListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.login_fragment,container,false);
         ((MainActivity)getActivity()).hideNavigation();
-        ((MainActivity)getActivity()).getGameLocationService().initializeLocationDatabase();
+        
         if(((MainActivity)getActivity()).getCurrentUser() != null){
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new UserHomeFragment()).commit();

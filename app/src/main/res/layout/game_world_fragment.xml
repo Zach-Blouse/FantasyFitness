@@ -9,6 +9,7 @@
         android:id="@+id/location_info_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:backgroundTint="@color/fantasy_fitness_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,6 +20,7 @@
 
         <ScrollView
             android:layout_width="wrap_content"
+            android:layout_margin="5dp"
             android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="380dp"
@@ -26,6 +28,7 @@
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/location_info_name"
+                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/fantasy_fitness_white"
@@ -63,7 +66,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <ScrollView
+    <HorizontalScrollView
         android:id="@+id/world_map_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,7 +74,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
-        <HorizontalScrollView
+        <ScrollView
             android:id="@+id/world_map_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -269,8 +272,8 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </HorizontalScrollView>
-    </ScrollView>
+        </ScrollView>
+    </HorizontalScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

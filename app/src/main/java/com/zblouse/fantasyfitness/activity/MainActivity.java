@@ -23,8 +23,9 @@ import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.workout.WorkoutFragment;
 import com.zblouse.fantasyfitness.workout.WorkoutService;
-import com.zblouse.fantasyfitness.world.GameLocation;
+import com.zblouse.fantasyfitness.world.GameLocationDistanceSqlDatabase;
 import com.zblouse.fantasyfitness.world.GameLocationService;
+import com.zblouse.fantasyfitness.world.GameLocationSqlDatabase;
 import com.zblouse.fantasyfitness.world.GameWorldFragment;
 
 import java.util.HashMap;
@@ -64,8 +65,11 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        deleteDatabase(GameLocationSqlDatabase.GAME_LOCATION_DATABASE_NAME);
+        deleteDatabase(GameLocationDistanceSqlDatabase.GAME_LOCATION_DISTANCE_DATABASE_NAME);
         gameLocationService = new GameLocationService(this);
 
+        gameLocationService.initializeLocationDatabase();
         currentUser = firebaseAuth.getCurrentUser();
         if(currentUser == null) {
             getSupportFragmentManager().beginTransaction()

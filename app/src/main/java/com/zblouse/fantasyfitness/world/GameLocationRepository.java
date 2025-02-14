@@ -1,6 +1,7 @@
 package com.zblouse.fantasyfitness.world;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.zblouse.fantasyfitness.core.DomainService;
 import com.zblouse.fantasyfitness.core.Repository;
@@ -19,8 +20,16 @@ public class GameLocationRepository implements Repository<GameLocation> {
         gameLocationDistanceSqlDatabase = new GameLocationDistanceSqlDatabase(context);
     }
 
+    public boolean databaseInitialized(){
+        return !gameLocationSqlDatabase.getAllLocations().isEmpty();
+    }
+
     public void getLocationByName(String locationName, DomainService<GameLocation> domainService, Map<String, Object> metadata){
         GameLocation location = gameLocationSqlDatabase.getLocationByName(locationName);
+        if(location == null){
+            Log.e("GAMELOCATIONREPOSITORY", "Location: " + locationName + " is null");
+            domainService.repositoryResponse(null, metadata);
+        }
         List<GameLocationDistance> locationDistances = gameLocationDistanceSqlDatabase.getAllLocationDistancesForLocation(location);
         Map<GameLocation, Double> locationMap = new HashMap<>();
         for(GameLocationDistance locationDistance: locationDistances){
@@ -30,6 +39,7 @@ public class GameLocationRepository implements Repository<GameLocation> {
                 locationMap.put(gameLocationSqlDatabase.getLocationById(locationDistance.getLocation1Id()), locationDistance.getDistanceMiles());
             }
         }
+
         domainService.repositoryResponse(new GameLocation(location.getId(),location.getLocationName(),location.getLocationDescription(),locationMap), metadata);
     }
 

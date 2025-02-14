@@ -4,14 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
-import com.zblouse.fantasyfitness.core.SqlDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameLocationDistanceSqlDatabase extends SqlDatabase {
+public class GameLocationDistanceSqlDatabase extends SQLiteOpenHelper {
 
+    public static final String GAME_LOCATION_DISTANCE_DATABASE_NAME = "location_distance";
     public static final String TABLE_NAME = "location_distance";
     public static final String ID_KEY = "id";
     public static final String LOCATION_1_KEY = "location1";
@@ -19,24 +19,17 @@ public class GameLocationDistanceSqlDatabase extends SqlDatabase {
     public static final String DISTANCE_KEY = "distance";
 
     public GameLocationDistanceSqlDatabase(Context context){
-        super(context);
+        super(context, GAME_LOCATION_DISTANCE_DATABASE_NAME,null,1);
     }
 
-    /**
-     * Creates the PRODUCTS_TABLE_NAME table
-     * @param database
-     */
     @Override
     public void onCreate(SQLiteDatabase database) {
-        String createLocationDistanceTableQuery = "CREATE TABLE " + TABLE_NAME + "(" +
+        database.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
                 ID_KEY + " INTEGER PRIMARY KEY," +
                 LOCATION_1_KEY + " INTEGER," +
                 LOCATION_2_KEY + " INTEGER," +
-                DISTANCE_KEY + " REAL," +
-                "FOREIGN KEY(" + LOCATION_1_KEY + ") REFERENCES " + GameLocationSqlDatabase.TABLE_NAME + "(" + GameLocationSqlDatabase.ID_KEY + ")," +
-                "FOREIGN KEY(" + LOCATION_2_KEY + ") REFERENCES " + GameLocationSqlDatabase.TABLE_NAME + "(" + GameLocationSqlDatabase.ID_KEY + ")" +
-                ")";
-        database.execSQL(createLocationDistanceTableQuery);
+                DISTANCE_KEY + " REAL"
+                +")");
     }
 
     @Override
