@@ -20,6 +20,8 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.util.HashMap;
+
 public class WorkoutServiceTest {
 
     @Test
@@ -96,7 +98,7 @@ public class WorkoutServiceTest {
         WorkoutService workoutService = new WorkoutService(mockActivity, mockHandler, mockTimeTracker, mockDistanceTracker);
         workoutService.unpause();
         Location mockLocation = Mockito.mock(Location.class);
-        LocationEvent locationEvent = new LocationEvent(mockLocation);
+        LocationEvent locationEvent = new LocationEvent(mockLocation, new HashMap<>());
         workoutService.publishEvent(locationEvent);
         ArgumentCaptor<WorkoutDistanceUpdateEvent> distanceUpdateEventArgumentCaptor = ArgumentCaptor.forClass(WorkoutDistanceUpdateEvent.class);
         verify(mockActivity).publishEvent((WorkoutDistanceUpdateEvent)distanceUpdateEventArgumentCaptor.capture());

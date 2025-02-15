@@ -20,27 +20,32 @@ public class GameLocationRepository implements Repository<GameLocation> {
         gameLocationDistanceSqlDatabase = new GameLocationDistanceSqlDatabase(context);
     }
 
+    public GameLocationRepository(GameLocationSqlDatabase gameLocationSqlDatabase, GameLocationDistanceSqlDatabase gameLocationDistanceSqlDatabase){
+        this.gameLocationSqlDatabase = gameLocationSqlDatabase;
+        this.gameLocationDistanceSqlDatabase = gameLocationDistanceSqlDatabase;
+    }
+
     public boolean databaseInitialized(){
         return !gameLocationSqlDatabase.getAllLocations().isEmpty();
     }
 
-    public void getLocationByName(String locationName, DomainService<GameLocation> domainService, Map<String, Object> metadata){
+    public void getLocationByName(String locationName, DomainService<GameLocation> domainService, Map<String, Object> metadata) {
         GameLocation location = gameLocationSqlDatabase.getLocationByName(locationName);
-        if(location == null){
-            Log.e("GAMELOCATIONREPOSITORY", "Location: " + locationName + " is null");
+        if (location == null) {
             domainService.repositoryResponse(null, metadata);
-        }
-        List<GameLocationDistance> locationDistances = gameLocationDistanceSqlDatabase.getAllLocationDistancesForLocation(location);
-        Map<GameLocation, Double> locationMap = new HashMap<>();
-        for(GameLocationDistance locationDistance: locationDistances){
-            if(locationDistance.getLocation1Id().equals(location.getId())){
-                locationMap.put(gameLocationSqlDatabase.getLocationById(locationDistance.getLocation2Id()), locationDistance.getDistanceMiles());
-            } else {
-                locationMap.put(gameLocationSqlDatabase.getLocationById(locationDistance.getLocation1Id()), locationDistance.getDistanceMiles());
+        } else {
+            List<GameLocationDistance> locationDistances = gameLocationDistanceSqlDatabase.getAllLocationDistancesForLocation(location);
+            Map<GameLocation, Double> locationMap = new HashMap<>();
+            for (GameLocationDistance locationDistance : locationDistances) {
+                if (locationDistance.getLocation1Id().equals(location.getId())) {
+                    locationMap.put(gameLocationSqlDatabase.getLocationById(locationDistance.getLocation2Id()), locationDistance.getDistanceMiles());
+                } else {
+                    locationMap.put(gameLocationSqlDatabase.getLocationById(locationDistance.getLocation1Id()), locationDistance.getDistanceMiles());
+                }
             }
-        }
 
-        domainService.repositoryResponse(new GameLocation(location.getId(),location.getLocationName(),location.getLocationDescription(),locationMap), metadata);
+            domainService.repositoryResponse(new GameLocation(location.getId(), location.getLocationName(), location.getLocationDescription(), locationMap), metadata);
+        }
     }
 
     public void createGameLocation(GameLocation location){

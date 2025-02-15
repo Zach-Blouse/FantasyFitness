@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.ViewCompat;
 
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.MainActivity;
@@ -79,6 +80,87 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
                 ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.LAST_TOWER,new HashMap<>());
             }
         });
+        Button arduwynButton = layout.findViewById(R.id.arduwyn);
+        arduwynButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.ARDUWYN,new HashMap<>());
+            }
+        });
+        Button monastaryButton = layout.findViewById(R.id.monastary);
+        monastaryButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.MONASTARY,new HashMap<>());
+            }
+        });
+
+        Button northRoadButton = layout.findViewById(R.id.north_road);
+        northRoadButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.NORTH_ROAD,new HashMap<>());
+            }
+        });
+
+        Button faolynButton = layout.findViewById(R.id.faolyn);
+        faolynButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.FAOLYN,new HashMap<>());
+            }
+        });
+
+        Button riverlandsButton = layout.findViewById(R.id.riverlands);
+        riverlandsButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.RIVERLANDS,new HashMap<>());
+            }
+        });
+
+        Button bridgetonButton = layout.findViewById(R.id.bridgeton);
+        bridgetonButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.BRIDGETON,new HashMap<>());
+            }
+        });
+        Button mountainPassButton = layout.findViewById(R.id.mountain_pass);
+        mountainPassButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.MOUNTAIN_PASS,new HashMap<>());
+            }
+        });
+        Button woodlandsButton = layout.findViewById(R.id.woodlands);
+        woodlandsButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.WOODLANDS,new HashMap<>());
+            }
+        });
+        Button thanadelButton = layout.findViewById(R.id.thanadel_village);
+        thanadelButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.THANADEL_VILLAGE,new HashMap<>());
+            }
+        });
+        Button farmlandsButton = layout.findViewById(R.id.farmlands);
+        farmlandsButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.FARMLANDS,new HashMap<>());
+            }
+        });
+        Button hillsButton = layout.findViewById(R.id.hills);
+        hillsButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).getGameLocationService().fetchLocation(GameLocationService.HILLS,new HashMap<>());
+            }
+        });
         return layout;
     }
 
@@ -91,6 +173,7 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
 
             private float mx, my, curX, curY;
             private boolean started = false;
+
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -122,7 +205,6 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
 
     @Override
     public void publishEvent(Event event) {
-        Log.e("GAMEWORLDFRAGMENT", "EVENT PUBLISHED " + event.getEventType());
         if(event.getEventType().equals(EventType.LOCATION_FETCH_EVENT)){
             GameLocationFetchEvent gameLocationFetchEvent = ((GameLocationFetchEvent)event);
             GameLocation gameLocation = gameLocationFetchEvent.getLocation();
@@ -135,7 +217,6 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
                 }
                 locationConnectionsTextView.setText(connectionsString);
                 locationInfoCardView.setVisibility(View.VISIBLE);
-                Log.e("GAMEWORLDFRAGMENT", "LOCATION CARD SHOULD BE VISIBLE " + event.getEventType());
             }
         }
     }
