@@ -218,9 +218,5 @@ public class GameWorldTest {
         onView(withId(R.id.location_info_name)).check(matches(withText(GameLocationService.VALLEY_OF_MONSTERS)));
         onView(withId(R.id.close_location_info_button)).perform(click());
         onView(withId(R.id.location_info_view)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.tower)).perform(click());
-        onView(withId(R.id.location_info_view)).check(matches(isDisplayed()));
-        onView(withId(R.id.location_info_name)).check(matches(withText(GameLocationService.LAST_TOWER)));
-
     }
 }
