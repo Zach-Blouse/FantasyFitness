@@ -25,7 +25,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: Run Coverage
-      run: ./gradlew testCoverage
+      run: ./gradlew createDebugCoverageReport
     - name: Store reports
       uses: actions/upload-artifact@v4
       with:
