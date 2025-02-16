@@ -3,12 +3,14 @@ package com.zblouse.fantasyfitness.workout;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventType;
 
+import java.util.Map;
+
 public class WorkoutDistanceUpdateEvent extends Event {
 
     private final double distanceMeters;
 
-    public WorkoutDistanceUpdateEvent(double distanceMeters){
-        super(EventType.WORKOUT_DISTANCE_UPDATE_EVENT);
+    public WorkoutDistanceUpdateEvent(double distanceMeters, Map<String, Object> metadata){
+        super(EventType.WORKOUT_DISTANCE_UPDATE_EVENT, metadata);
         this.distanceMeters = distanceMeters;
     }
 

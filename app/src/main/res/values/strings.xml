@@ -10,4 +10,6 @@
     <string name="resume_workout">Resume Workout</string>
     <string name="stop_workout">Stop Workout</string>
     <string name="complete_workout">Complete Workout</string>
+    <string name="map_descriptor">Game Map</string>
+    <string name="close">Close</string>
 </resources>

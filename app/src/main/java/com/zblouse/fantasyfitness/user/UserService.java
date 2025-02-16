@@ -55,18 +55,18 @@ public class UserService implements DomainService<User> {
         if(metadata.containsKey(CALLING_FUNCTION_KEY)){
             if(metadata.get(CALLING_FUNCTION_KEY).equals(REGISTER_USER)){
                 if(responseBody==null){
-                    CreateAccountResponseEvent createAccountResponseEvent = new CreateAccountResponseEvent(false);
+                    CreateAccountResponseEvent createAccountResponseEvent = new CreateAccountResponseEvent(false, metadata);
                     activity.publishEvent(createAccountResponseEvent);
                 }else {
-                    CreateAccountResponseEvent createAccountResponseEvent = new CreateAccountResponseEvent(true);
+                    CreateAccountResponseEvent createAccountResponseEvent = new CreateAccountResponseEvent(true, metadata);
                     activity.publishEvent(createAccountResponseEvent);
                 }
             } else if(metadata.get(CALLING_FUNCTION_KEY).equals(USER_EXIST_CHECK)){
                 if(responseBody == null){
-                    UserExistEvent event = new UserExistEvent(false);
+                    UserExistEvent event = new UserExistEvent(false, metadata);
                     activity.publishEvent(event);
                 } else {
-                    UserExistEvent event = new UserExistEvent(true);
+                    UserExistEvent event = new UserExistEvent(true, metadata);
                     activity.publishEvent(event);
                 }
             }

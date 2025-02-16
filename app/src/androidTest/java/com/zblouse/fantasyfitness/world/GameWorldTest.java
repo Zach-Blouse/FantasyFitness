@@ -1,4 +1,4 @@
-package com.zblouse.fantasyfitness.workout;
+package com.zblouse.fantasyfitness.world;
 
 import static android.app.Activity.RESULT_OK;
 import static androidx.test.espresso.Espresso.onView;
@@ -6,17 +6,17 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.Manifest;
 import android.app.Instrumentation;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Looper;
 
@@ -24,7 +24,6 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,16 +34,16 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.LocationDeviceService;
 import com.zblouse.fantasyfitness.activity.LocationEvent;
 import com.zblouse.fantasyfitness.activity.MainActivity;
-import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.PermissionDeviceService;
-import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.user.UserFirestoreDatabase;
 import com.zblouse.fantasyfitness.user.UserRepository;
 import com.zblouse.fantasyfitness.user.UserService;
+import com.zblouse.fantasyfitness.workout.WorkoutService;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -52,12 +51,10 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
-public class WorkoutDistanceTest {
+public class GameWorldTest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
@@ -67,7 +64,7 @@ public class WorkoutDistanceTest {
             new IntentsTestRule<>(MainActivity.class);
 
     @Test
-    public void workoutDistanceTest() throws InterruptedException {
+    public void gameWorldTest() throws InterruptedException {
 
         //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
         com.firebase.ui.auth.data.model.User user = new User.Builder("google", "test@test.com")
@@ -138,31 +135,12 @@ public class WorkoutDistanceTest {
         //FINISH AUTHENTICATION, TEST IS AT USER HOME
         //FOLLOWING THIS LINE IS THE BEGINNING OF THE ACTUAL TEST THIS TEST IS SUPPOSED TO BE TESTING
 
-        onView(withId(R.id.action_workout)).perform(click());
-        onView(withId(R.id.workout_distance)).check(matches(withText("0.00 km")));
-        onView(withId(R.id.start_workout_button)).perform(click());
-        verify(mockPermissionDeviceService).hasPermission(eq(Manifest.permission.ACCESS_FINE_LOCATION));
-        Location location1 = new Location("provider");
-        location1.setLatitude(10.10);
-        location1.setLongitude(10.10);
-        Location location2 = new Location("provider");
-        location2.setLatitude(10.11);
-        location2.setLongitude(10.11);
-        Location location3 = new Location("provider");
-        location3.setLatitude(10.12);
-        location3.setLongitude(10.15);
-        LocationEvent firstLocationEvent = new LocationEvent(location1, new HashMap<>());
-        LocationEvent secondLocationEvent = new LocationEvent(location2, new HashMap<>());
-        LocationEvent thirdLocationEvent = new LocationEvent(location3, new HashMap<>());
-        workoutService.publishEvent(firstLocationEvent);
-        onView(withId(R.id.workout_distance)).check(matches(withText("0.00 km")));
-        workoutService.publishEvent(secondLocationEvent);
-        onView(withId(R.id.workout_distance)).check(matches(withText("1.56 km")));
-        workoutService.publishEvent(thirdLocationEvent);
-        onView(withId(R.id.workout_distance)).check(matches(withText("6.08 km")));
+        onView(withId(R.id.action_map)).perform(click());
+        onView(withId(R.id.imageView)).check(matches(isDisplayed()));
     }
+
     @Test
-    public void workoutDistanceWithPauseTest() throws InterruptedException {
+    public void gameLocationInfoDisplayTest() throws InterruptedException {
 
         //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
         com.firebase.ui.auth.data.model.User user = new User.Builder("google", "test@test.com")
@@ -233,39 +211,12 @@ public class WorkoutDistanceTest {
         //FINISH AUTHENTICATION, TEST IS AT USER HOME
         //FOLLOWING THIS LINE IS THE BEGINNING OF THE ACTUAL TEST THIS TEST IS SUPPOSED TO BE TESTING
 
-        onView(withId(R.id.action_workout)).perform(click());
-        onView(withId(R.id.workout_distance)).check(matches(withText("0.00 km")));
-        onView(withId(R.id.start_workout_button)).perform(click());
-        verify(mockPermissionDeviceService).hasPermission(eq(Manifest.permission.ACCESS_FINE_LOCATION));
-        Location location1 = new Location("provider");
-        location1.setLatitude(10.10);
-        location1.setLongitude(10.10);
-        Location location2 = new Location("provider");
-        location2.setLatitude(10.11);
-        location2.setLongitude(10.11);
-        Location location3 = new Location("provider");
-        location3.setLatitude(10.12);
-        location3.setLongitude(10.15);
-        Location pauseLocation = new Location("provider");
-        pauseLocation.setLatitude(11.0);
-        pauseLocation.setLongitude(11.0);
-        LocationEvent firstLocationEvent = new LocationEvent(location1, new HashMap<>());
-        LocationEvent secondLocationEvent = new LocationEvent(location2, new HashMap<>());
-        LocationEvent thirdLocationEvent = new LocationEvent(location3, new HashMap<>());
-        LocationEvent pauseLocationEvent = new LocationEvent(pauseLocation, new HashMap<>());
-        workoutService.publishEvent(firstLocationEvent);
-        onView(withId(R.id.workout_distance)).check(matches(withText("0.00 km")));
-        workoutService.publishEvent(secondLocationEvent);
-        onView(withId(R.id.workout_distance)).check(matches(withText("1.56 km")));
-        onView(withId(R.id.pause_workout_button)).perform(click());
-        workoutService.publishEvent(pauseLocationEvent);
-        onView(withId(R.id.workout_distance)).check(matches(withText("1.56 km")));
-        onView(withId(R.id.pause_workout_button)).perform(click());
-        workoutService.publishEvent(secondLocationEvent);
-        onView(withId(R.id.workout_distance)).check(matches(withText("1.56 km")));
-        workoutService.publishEvent(thirdLocationEvent);
-        onView(withId(R.id.workout_distance)).check(matches(withText("6.08 km")));
+        onView(withId(R.id.action_map)).perform(click());
+        onView(withId(R.id.location_info_view)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.valley_of_monsters)).perform(click());
+        onView(withId(R.id.location_info_view)).check(matches(isDisplayed()));
+        onView(withId(R.id.location_info_name)).check(matches(withText(GameLocationService.VALLEY_OF_MONSTERS)));
+        onView(withId(R.id.close_location_info_button)).perform(click());
+        onView(withId(R.id.location_info_view)).check(matches(not(isDisplayed())));
     }
-
-
 }

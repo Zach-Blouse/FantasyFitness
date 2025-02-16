@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/location_info_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:backgroundTint="@color/fantasy_fitness_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible"
+        android:maxHeight="350dp">
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/location_info_name"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:text="testText"
+                    android:textSize="25sp" />
+                <TextView
+                    android:id="@+id/location_info_description"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:layout_height="wrap_content"
+                    android:text="This is a lot of text I kind of hope that it wraps around skfa;slfjo;asdkfjal;skdjflasd;kfjs;dalkjfa;sldkfj"
+                    android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/location_info_connected_locations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:text="testText"
+                    android:textSize="16sp" />
+                <Button
+                    android:id="@+id/close_location_info_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="@string/close"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+        </ScrollView>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+    <HorizontalScrollView
+        android:id="@+id/world_map_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <ScrollView
+            android:id="@+id/world_map_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/map_descriptor"
+                    android:src="@drawable/worldmapsmall"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <Button
+                    android:id="@+id/thanadel_village"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="1068dp"
+                    android:layout_marginTop="692dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="Thanadel Village"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/woodlands"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="1072dp"
+                    android:layout_marginTop="848dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="Woodlands"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/farmlands"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="1108dp"
+                    android:layout_marginTop="504dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="Farmlands"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/faolyn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="984dp"
+                    android:layout_marginTop="440dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="Faolyn"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/riverlands"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="848dp"
+                    android:layout_marginTop="608dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="Riverlands"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/bridgeton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginStart="824dp"
+                    android:layout_marginTop="776dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="Bridgeton"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/hills"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="452dp"
+                    android:layout_marginTop="664dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="Hills"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/mountain_pass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="252dp"
+                    android:layout_marginTop="964dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="Mountain Pass"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/monastary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="544dp"
+                    android:layout_marginTop="356dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="Monastary"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/tower"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="292dp"
+                    android:layout_marginTop="156dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="Tower"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/arduwyn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="712dp"
+                    android:layout_marginTop="168dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="Arduwyn"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/valley_of_monsters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="96dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="Valley of Monsters"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/north_road"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="812dp"
+                    android:layout_marginTop="304dp"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="North Road"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </HorizontalScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

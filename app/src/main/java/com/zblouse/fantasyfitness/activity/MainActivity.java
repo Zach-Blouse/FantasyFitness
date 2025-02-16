@@ -23,6 +23,10 @@ import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.workout.WorkoutFragment;
 import com.zblouse.fantasyfitness.workout.WorkoutService;
+import com.zblouse.fantasyfitness.world.GameLocationDistanceSqlDatabase;
+import com.zblouse.fantasyfitness.world.GameLocationService;
+import com.zblouse.fantasyfitness.world.GameLocationSqlDatabase;
+import com.zblouse.fantasyfitness.world.GameWorldFragment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private UserService userService;
     private WorkoutService workoutService;
     private Map<DeviceServiceType, DeviceService> deviceServices;
+    private GameLocationService gameLocationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        deleteDatabase(GameLocationSqlDatabase.GAME_LOCATION_DATABASE_NAME);
+        deleteDatabase(GameLocationDistanceSqlDatabase.GAME_LOCATION_DISTANCE_DATABASE_NAME);
+        gameLocationService = new GameLocationService(this);
+
+        gameLocationService.initializeLocationDatabase();
         currentUser = firebaseAuth.getCurrentUser();
         if(currentUser == null) {
             getSupportFragmentManager().beginTransaction()
@@ -92,7 +102,8 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new WorkoutFragment()).commit();
         } else if (itemId == R.id.action_map){
-
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new GameWorldFragment()).commit();
         }
 
         return true;
@@ -159,6 +170,10 @@ public class MainActivity extends AppCompatActivity {
     public void setDeviceService(DeviceServiceType type, DeviceService deviceService){
         deviceServices.remove(type);
         deviceServices.put(type,deviceService);
+    }
+
+    public GameLocationService getGameLocationService(){
+        return this.gameLocationService;
     }
 
 }
