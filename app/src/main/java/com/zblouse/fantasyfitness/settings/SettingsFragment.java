@@ -15,8 +15,8 @@ import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 
 public class SettingsFragment  extends AuthenticationRequiredFragment {
 
-    public SettingsFragment(){
-        super(R.layout.settings_fragment);
+    public SettingsFragment(MainActivity mainActivity){
+        super(R.layout.settings_fragment, mainActivity);
     }
 
     @Override

@@ -30,8 +30,8 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     private static final int MILLIS_IN_MINUTE = 60000;
     private static final int MILLIS_IN_SECOND = 1000;
 
-    public WorkoutFragment() {
-        super(R.layout.workout_fragment);
+    public WorkoutFragment(MainActivity mainActivity) {
+        super(R.layout.workout_fragment, mainActivity);
     }
 
     @Override

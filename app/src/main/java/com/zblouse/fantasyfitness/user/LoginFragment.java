@@ -32,8 +32,11 @@ import java.util.List;
 
 public class LoginFragment extends Fragment implements EventListener {
 
-    public LoginFragment(){
+    private MainActivity mainActivity;
+
+    public LoginFragment(MainActivity mainActivity){
         super(R.layout.login_fragment);
+        this.mainActivity = mainActivity;
     }
 
     //ActivityResultLauncher that is used when an existing user is logging in
@@ -59,10 +62,10 @@ public class LoginFragment extends Fragment implements EventListener {
                 @Override
                 public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
                     if (result.getResultCode() == RESULT_OK) {
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container, new CreateAccountFragment()).commit();
+                        mainActivity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container, new CreateAccountFragment(mainActivity)).commit();
                     } else {
-                        Toast.makeText(getActivity(),"Failed to Authenticate",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mainActivity,"Failed to Authenticate",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -71,11 +74,11 @@ public class LoginFragment extends Fragment implements EventListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.login_fragment,container,false);
-        ((MainActivity)getActivity()).hideNavigation();
+        mainActivity.hideNavigation();
         
-        if(((MainActivity)getActivity()).getCurrentUser() != null){
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new UserHomeFragment()).commit();
+        if(mainActivity.getCurrentUser() != null){
+            mainActivity.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment(mainActivity)).commit();
         }
         Button loginButton = layout.findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -117,14 +120,13 @@ public class LoginFragment extends Fragment implements EventListener {
     @Override
     public void publishEvent(Event event) {
         if(event.getEventType().equals(EventType.USER_EXIST_EVENT)){
-            Log.i(this.getClass().getName(),"USER EXIST RESPONSE");
             if(((UserExistEvent)(event)).exists()){
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new UserHomeFragment()).commit();
+                mainActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new UserHomeFragment(mainActivity)).commit();
             } else {
                 Toast.makeText(getActivity(),"You need to register your account",Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new CreateAccountFragment()).commit();
+                mainActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new CreateAccountFragment(mainActivity)).commit();
             }
         }
     }

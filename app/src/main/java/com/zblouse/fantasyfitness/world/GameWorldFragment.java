@@ -32,8 +32,8 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
     private TextView locationDescriptionTextView;
     private TextView locationConnectionsTextView;
 
-    public GameWorldFragment(){
-        super(R.layout.game_world_fragment);
+    public GameWorldFragment(MainActivity mainActivity){
+        super(R.layout.game_world_fragment, mainActivity);
     }
 
     @Override

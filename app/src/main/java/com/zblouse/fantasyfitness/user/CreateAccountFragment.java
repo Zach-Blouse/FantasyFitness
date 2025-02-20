@@ -20,16 +20,16 @@ import com.zblouse.fantasyfitness.home.UserHomeFragment;
 
 public class CreateAccountFragment extends AuthenticationRequiredFragment implements EventListener {
 
-    public CreateAccountFragment(){
-        super(R.layout.create_account_fragment);
+    public CreateAccountFragment(MainActivity mainActivity){
+        super(R.layout.create_account_fragment, mainActivity);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.OnCreateView();
         //Check if the user already has an account
-        ((MainActivity)getActivity()).getUserService().userExistCheck(((MainActivity)getActivity()).getCurrentUser().getUid());
-        ((MainActivity)getActivity()).hideNavigation();
+        mainActivity.getUserService().userExistCheck(mainActivity.getCurrentUser().getUid());
+        mainActivity.hideNavigation();
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.create_account_fragment,container,false);
 
         EditText usernameEditText = layout.findViewById(R.id.username_edit_text);
@@ -38,10 +38,10 @@ public class CreateAccountFragment extends AuthenticationRequiredFragment implem
             @Override
             public void onClick(View view) {
                 if(usernameEditText.getText().toString().isEmpty()){
-                    Toast.makeText(getActivity(),"Username field is required",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mainActivity,"Username field is required",Toast.LENGTH_SHORT).show();
                 } else {
                     String username = usernameEditText.getText().toString();
-                    ((MainActivity)getActivity()).getUserService().registerUser(((MainActivity)getActivity()).getCurrentUser().getUid(),username);
+                    mainActivity.getUserService().registerUser(((MainActivity)getActivity()).getCurrentUser().getUid(),username);
                 }
             }
         });
@@ -60,19 +60,17 @@ public class CreateAccountFragment extends AuthenticationRequiredFragment implem
     public void publishEvent(Event event) {
         if(event.getEventType().equals(EventType.CREATE_ACCOUNT_RESPONSE)){
             if(((CreateAccountResponseEvent)event).isAccountCreated()){
-                Log.i(this.getClass().getName(),"ACCOUNT CREATED");
                 Toast.makeText(getActivity(),"Account Created",Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new UserHomeFragment()).commit();
+                mainActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new UserHomeFragment(mainActivity)).commit();
             } else {
                 Toast.makeText(getActivity(),"Failed to create account",Toast.LENGTH_SHORT).show();
             }
         } else if(event.getEventType().equals(EventType.USER_EXIST_EVENT)){
-            Log.i(this.getClass().getName(),"USER EXIST RESPONSE");
             if(((UserExistEvent)(event)).exists()){
                 Toast.makeText(getActivity(),"Account already exists",Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new UserHomeFragment()).commit();
+                mainActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new UserHomeFragment(mainActivity)).commit();
             }
         }
     }

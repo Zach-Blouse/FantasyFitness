@@ -1,6 +1,8 @@
 package com.zblouse.fantasyfitness.user;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.zblouse.fantasyfitness.activity.MainActivity;
@@ -99,6 +101,35 @@ public class UserServiceTest {
         ArgumentCaptor<UserExistEvent> userExistEventArgumentCaptor = ArgumentCaptor.forClass(UserExistEvent.class);
         verify(mockActivity).publishEvent((UserExistEvent)userExistEventArgumentCaptor.capture());
         assert(!userExistEventArgumentCaptor.getValue().exists());
+    }
+
+    @Test
+    public void registerUserAltConstructorTest(){
+        MainActivity mockActivity = Mockito.mock(MainActivity.class);
+        UserRepository mockRespository = Mockito.mock(UserRepository.class);
+        UserService testedUserService = new UserService();
+        testedUserService.setUserRepository(mockRespository);
+        testedUserService.setMainActivity(mockActivity);
+
+        testedUserService.registerUser("testId","testusername");
+        ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(mockRespository).writeUser(eq("testId"),eq("testusername"),(Map<String,Object>)mapArgumentCaptor.capture());
+        assert(mapArgumentCaptor.getValue().containsKey(UserService.CALLING_FUNCTION_KEY));
+        assert(mapArgumentCaptor.getValue().get(UserService.CALLING_FUNCTION_KEY).equals(UserService.REGISTER_USER));
+    }
+
+    @Test
+    public void repositoryResponseNoCallingFunctionKeyTest(){
+        MainActivity mockActivity = Mockito.mock(MainActivity.class);
+        UserRepository mockRespository = Mockito.mock(UserRepository.class);
+        UserService testedUserService = new UserService(mockActivity,mockRespository);
+        User testUser = new User("testUser", "testusername");
+
+        Map<String, Object> metadata = new HashMap<>();
+
+        testedUserService.repositoryResponse(testUser,metadata);
+        ArgumentCaptor<UserExistEvent> userExistEventArgumentCaptor = ArgumentCaptor.forClass(UserExistEvent.class);
+        verify(mockActivity,times(0)).publishEvent(any());
     }
 
 }
