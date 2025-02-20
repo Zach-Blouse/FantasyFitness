@@ -17,9 +17,9 @@ public class AuthenticationRequiredFragment extends Fragment {
     }
 
     protected void OnCreateView(){
-        FirebaseUser currentUser = ((MainActivity)getActivity()).getCurrentUser();
+        FirebaseUser currentUser = mainActivity.getCurrentUser();
         if(currentUser == null) {
-            getActivity().getSupportFragmentManager().beginTransaction()
+            mainActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new LoginFragment(mainActivity)).commit();
         }
     }

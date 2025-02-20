@@ -10,8 +10,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
+import com.zblouse.fantasyfitness.activity.ToastDeviceService;
 import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
@@ -38,10 +40,10 @@ public class CreateAccountFragment extends AuthenticationRequiredFragment implem
             @Override
             public void onClick(View view) {
                 if(usernameEditText.getText().toString().isEmpty()){
-                    Toast.makeText(mainActivity,"Username field is required",Toast.LENGTH_SHORT).show();
+                    ((ToastDeviceService)mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Username field is required");
                 } else {
                     String username = usernameEditText.getText().toString();
-                    mainActivity.getUserService().registerUser(((MainActivity)getActivity()).getCurrentUser().getUid(),username);
+                    mainActivity.getUserService().registerUser(mainActivity.getCurrentUser().getUid(),username);
                 }
             }
         });
@@ -50,7 +52,7 @@ public class CreateAccountFragment extends AuthenticationRequiredFragment implem
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).logout();
+                mainActivity.logout();
             }
         });
         return layout;
@@ -60,15 +62,15 @@ public class CreateAccountFragment extends AuthenticationRequiredFragment implem
     public void publishEvent(Event event) {
         if(event.getEventType().equals(EventType.CREATE_ACCOUNT_RESPONSE)){
             if(((CreateAccountResponseEvent)event).isAccountCreated()){
-                Toast.makeText(getActivity(),"Account Created",Toast.LENGTH_SHORT).show();
+                ((ToastDeviceService)mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Account Created");
                 mainActivity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new UserHomeFragment(mainActivity)).commit();
             } else {
-                Toast.makeText(getActivity(),"Failed to create account",Toast.LENGTH_SHORT).show();
+                ((ToastDeviceService)mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Failed to create account");
             }
         } else if(event.getEventType().equals(EventType.USER_EXIST_EVENT)){
             if(((UserExistEvent)(event)).exists()){
-                Toast.makeText(getActivity(),"Account already exists",Toast.LENGTH_SHORT).show();
+                ((ToastDeviceService)mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Account already exists");
                 mainActivity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new UserHomeFragment(mainActivity)).commit();
             }

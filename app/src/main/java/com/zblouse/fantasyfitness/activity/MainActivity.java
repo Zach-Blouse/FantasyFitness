@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         deviceServices = new HashMap<>();
         deviceServices.put(DeviceServiceType.LOCATION, new LocationDeviceService(this));
         deviceServices.put(DeviceServiceType.PERMISSION, new PermissionDeviceService(this));
+        deviceServices.put(DeviceServiceType.TOAST, new ToastDeviceService(this));
 
         userService = new UserService(this);
         workoutService = new WorkoutService(this);

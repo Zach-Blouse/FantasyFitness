@@ -20,8 +20,10 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 
+import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
+import com.zblouse.fantasyfitness.activity.ToastDeviceService;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
@@ -124,7 +126,7 @@ public class LoginFragment extends Fragment implements EventListener {
                 mainActivity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new UserHomeFragment(mainActivity)).commit();
             } else {
-                Toast.makeText(getActivity(),"You need to register your account",Toast.LENGTH_SHORT).show();
+                ((ToastDeviceService)mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("You need to register your account");
                 mainActivity.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new CreateAccountFragment(mainActivity)).commit();
             }

@@ -20,6 +20,7 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
 
     public UserHomeFragment(MainActivity mainActivity){
         super(R.layout.user_home_fragment, mainActivity);
+        System.out.println("USERHOME");
     }
 
     @Override
