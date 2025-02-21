@@ -23,12 +23,12 @@ public class SettingsFragment  extends AuthenticationRequiredFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.OnCreateView();
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.settings_fragment,container,false);
-        ((MainActivity)getActivity()).showNavigation();
+        mainActivity.showNavigation();
         Button logoutButton = layout.findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).logout();
+                mainActivity.logout();
             }
         });
 

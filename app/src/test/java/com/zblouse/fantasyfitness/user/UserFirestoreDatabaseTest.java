@@ -131,6 +131,38 @@ public class UserFirestoreDatabaseTest {
     }
 
     @Test
+    public void readFailedTest(){
+        FirebaseFirestore mockFirestore = Mockito.mock(FirebaseFirestore.class);
+        UserRepository mockRepository = Mockito.mock(UserRepository.class);
+        String testUserId = "testId1";
+        String testUsername = "username1";
+        Map<String, Object> metadata = new HashMap<>();
+        metadata.put("testName", "createTest");
+
+        CollectionReference mockCollectionReference = Mockito.mock(CollectionReference.class);
+        when(mockFirestore.collection(eq("users"))).thenReturn(mockCollectionReference);
+        DocumentReference mockDocument = Mockito.mock(DocumentReference.class);
+        when(mockCollectionReference.document(eq(testUserId))).thenReturn(mockDocument);
+        Task mockTask = Mockito.mock(Task.class);
+        when(mockTask.isSuccessful()).thenReturn(false);
+        DocumentSnapshot mockDocumentSnapshot = Mockito.mock(DocumentSnapshot.class);
+        when(mockTask.getResult()).thenReturn(mockDocumentSnapshot);
+        when(mockDocument.get()).thenReturn(mockTask);
+        when(mockDocumentSnapshot.exists()).thenReturn(true);
+        when(mockDocumentSnapshot.get("UID", String.class)).thenReturn(testUserId);
+        when(mockDocumentSnapshot.get("USERNAME", String.class)).thenReturn(testUsername);
+        UserFirestoreDatabase testedDatabase = new UserFirestoreDatabase(mockFirestore);
+        testedDatabase.read(testUserId,mockRepository,metadata);
+        ArgumentCaptor<OnCompleteListener<Void>> onCompleteListenerArgumentCaptor = ArgumentCaptor.forClass(OnCompleteListener.class);
+        verify(mockTask).addOnCompleteListener(onCompleteListenerArgumentCaptor.capture());
+        onCompleteListenerArgumentCaptor.getValue().onComplete(mockTask);
+        ArgumentCaptor<Map> mapArgumentCaptor2 = ArgumentCaptor.forClass(Map.class);
+        verify(mockRepository).readCallback(eq(null),mapArgumentCaptor2.capture());
+        assert(mapArgumentCaptor2.getValue().containsKey("testName"));
+        assert(mapArgumentCaptor2.getValue().get("testName").equals("createTest"));
+    }
+
+    @Test
     public void readUserNotFoundTest(){
         FirebaseFirestore mockFirestore = Mockito.mock(FirebaseFirestore.class);
         UserRepository mockRepository = Mockito.mock(UserRepository.class);

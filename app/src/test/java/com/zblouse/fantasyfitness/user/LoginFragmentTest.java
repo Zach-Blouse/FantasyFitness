@@ -113,6 +113,5 @@ public class LoginFragmentTest {
         shadowOf(Looper.getMainLooper()).idle();
         Fragment activeFragement = mainActivity.getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         assert(activeFragement instanceof UserHomeFragment);
-
     }
 }
