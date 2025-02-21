@@ -173,6 +173,10 @@ public class MainActivity extends AppCompatActivity {
         deviceServices.put(type,deviceService);
     }
 
+    public void setGameLocationService(GameLocationService gameLocationService){
+        this.gameLocationService = gameLocationService;
+    }
+
     public GameLocationService getGameLocationService(){
         return this.gameLocationService;
     }
