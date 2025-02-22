@@ -70,8 +70,6 @@ public class UserService implements DomainService<User> {
                     activity.publishEvent(event);
                 }
             }
-        } else {
-            Log.e(this.getClass().toString(),"Error: Repository Response does not contain Repository Interaction metadata");
         }
     }
 }

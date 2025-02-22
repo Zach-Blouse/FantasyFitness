@@ -1,5 +1,5 @@
 package com.zblouse.fantasyfitness.activity;
 
 public enum DeviceServiceType {
-    LOCATION,PERMISSION
+    LOCATION,PERMISSION,TOAST
 }

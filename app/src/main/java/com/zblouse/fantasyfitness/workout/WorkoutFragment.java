@@ -30,14 +30,14 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     private static final int MILLIS_IN_MINUTE = 60000;
     private static final int MILLIS_IN_SECOND = 1000;
 
-    public WorkoutFragment() {
-        super(R.layout.workout_fragment);
+    public WorkoutFragment(MainActivity mainActivity) {
+        super(R.layout.workout_fragment, mainActivity);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.OnCreateView();
-        ((MainActivity)getActivity()).showNavigation();
+        mainActivity.showNavigation();
         layout = (LinearLayout) inflater.inflate(R.layout.workout_fragment,container,false);
         workoutTimeTextView = layout.findViewById(R.id.workout_time);
         workoutDistanceTextView = layout.findViewById(R.id.workout_distance);
@@ -54,7 +54,7 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     @Override
     public void publishEvent(Event event) {
         if(event.getEventType().equals(EventType.TIME_UPDATE_EVENT)){
-            getActivity().runOnUiThread(new Runnable() {
+            mainActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     workoutTimeTextView.setText(formatTimeDisplay(((WorkoutTimeUpdateEvent)event).getTime()));
@@ -62,7 +62,7 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
             });
 
         } else if(event.getEventType().equals(EventType.WORKOUT_DISTANCE_UPDATE_EVENT)){
-            getActivity().runOnUiThread(new Runnable() {
+            mainActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     workoutDistanceTextView.setText(formatDistanceDisplay(((WorkoutDistanceUpdateEvent)event).getDistanceMeters()));
@@ -72,8 +72,8 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     }
 
     private void startWorkout(){
-        if(((MainActivity)getActivity()).getWorkoutService().startWorkout()) {
-            ((MainActivity) getActivity()).hideNavigation();
+        if(mainActivity.getWorkoutService().startWorkout()) {
+            mainActivity.hideNavigation();
 
             ((ViewGroup) layout).removeView(startWorkoutButton);
             ((ViewGroup) layout).addView(pauseWorkoutButton);
@@ -82,7 +82,7 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     }
 
     private void pauseWorkout(){
-        ((MainActivity)getActivity()).getWorkoutService().pause();
+        mainActivity.getWorkoutService().pause();
         pauseWorkoutButton.setText(R.string.resume_workout);
         pauseWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +94,7 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     }
 
     private void unpauseWorkout(){
-        ((MainActivity)getActivity()).getWorkoutService().unpause();
+        mainActivity.getWorkoutService().unpause();
         pauseWorkoutButton.setText(R.string.pause_workout);
         pauseWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +105,7 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     }
 
     private void stopWorkout(){
-        ((MainActivity)getActivity()).getWorkoutService().pause();
+        mainActivity.getWorkoutService().pause();
         pauseWorkoutButton.setText(R.string.resume_workout);
         pauseWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,9 +135,9 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     }
 
     private void finishWorkout(){
-        ((MainActivity)getActivity()).showNavigation();
+        mainActivity.showNavigation();
 
-        ((MainActivity)getActivity()).getWorkoutService().stopWorkout();
+        mainActivity.getWorkoutService().stopWorkout();
         initialButtonSetup();
     }
 

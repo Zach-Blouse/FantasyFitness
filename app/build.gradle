@@ -35,7 +35,7 @@ android {
             includeAndroidResources = true
         }
         unitTests.all {
-            jvmArgs '-noverify'
+            jvmArgs '-noverify','-Djdk.attach.allowAttachSelf=true'
         }
     }
 }
@@ -58,6 +58,7 @@ dependencies {
     testImplementation libs.junit
     testImplementation("org.mockito:mockito-core:5.15.2")
     testImplementation 'org.robolectric:robolectric:4.14'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
 
     androidTestImplementation("org.mockito:mockito-android:5.15.2")
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

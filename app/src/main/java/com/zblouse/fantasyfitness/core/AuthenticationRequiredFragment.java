@@ -9,15 +9,18 @@ import com.zblouse.fantasyfitness.user.LoginFragment;
 
 public class AuthenticationRequiredFragment extends Fragment {
 
-    protected AuthenticationRequiredFragment(int id){
+    protected MainActivity mainActivity;
+
+    protected AuthenticationRequiredFragment(int id, MainActivity mainActivity){
         super(id);
+        this.mainActivity = mainActivity;
     }
 
     protected void OnCreateView(){
-        FirebaseUser currentUser = ((MainActivity)getActivity()).getCurrentUser();
+        FirebaseUser currentUser = mainActivity.getCurrentUser();
         if(currentUser == null) {
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new LoginFragment()).commit();
+            mainActivity.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new LoginFragment(mainActivity)).commit();
         }
     }
 }

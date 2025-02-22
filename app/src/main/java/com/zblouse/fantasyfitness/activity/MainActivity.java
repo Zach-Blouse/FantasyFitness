@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         deviceServices = new HashMap<>();
         deviceServices.put(DeviceServiceType.LOCATION, new LocationDeviceService(this));
         deviceServices.put(DeviceServiceType.PERMISSION, new PermissionDeviceService(this));
+        deviceServices.put(DeviceServiceType.TOAST, new ToastDeviceService(this));
 
         userService = new UserService(this);
         workoutService = new WorkoutService(this);
@@ -73,10 +74,10 @@ public class MainActivity extends AppCompatActivity {
         currentUser = firebaseAuth.getCurrentUser();
         if(currentUser == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new LoginFragment()).commit();
+                    .replace(R.id.fragment_container, new LoginFragment(this)).commit();
         } else {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new UserHomeFragment()).commit();
+                    .replace(R.id.fragment_container, new UserHomeFragment(this)).commit();
         }
     }
 
@@ -94,16 +95,16 @@ public class MainActivity extends AppCompatActivity {
         int itemId = item.getItemId();
         if (itemId == R.id.action_home) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new UserHomeFragment()).commit();
+                    .replace(R.id.fragment_container, new UserHomeFragment(this)).commit();
         } else if (itemId == R.id.action_settings) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new SettingsFragment()).commit();
+                    .replace(R.id.fragment_container, new SettingsFragment(this)).commit();
         } else if (itemId == R.id.action_workout){
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new WorkoutFragment()).commit();
+                    .replace(R.id.fragment_container, new WorkoutFragment(this)).commit();
         } else if (itemId == R.id.action_map){
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new GameWorldFragment()).commit();
+                    .replace(R.id.fragment_container, new GameWorldFragment(this)).commit();
         }
 
         return true;
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     public void logout(){
         firebaseAuth.signOut();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new LoginFragment()).commit();
+                .replace(R.id.fragment_container, new LoginFragment(this)).commit();
     }
 
     public FirebaseUser getCurrentUser(){
@@ -170,6 +171,10 @@ public class MainActivity extends AppCompatActivity {
     public void setDeviceService(DeviceServiceType type, DeviceService deviceService){
         deviceServices.remove(type);
         deviceServices.put(type,deviceService);
+    }
+
+    public void setGameLocationService(GameLocationService gameLocationService){
+        this.gameLocationService = gameLocationService;
     }
 
     public GameLocationService getGameLocationService(){
