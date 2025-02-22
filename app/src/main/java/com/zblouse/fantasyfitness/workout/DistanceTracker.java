@@ -29,8 +29,9 @@ public class DistanceTracker {
         paused = false;
     }
 
-    public void stop(){
+    public double stop(){
         pause();
+        return totalDistanceMeters;
     }
 
     public void pause(){
@@ -40,5 +41,9 @@ public class DistanceTracker {
 
     public void unpause(){
         paused = false;
+    }
+
+    public double getTotalDistanceMeters(){
+        return totalDistanceMeters;
     }
 }

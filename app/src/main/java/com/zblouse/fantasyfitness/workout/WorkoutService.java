@@ -89,10 +89,11 @@ public class WorkoutService implements EventListener {
     }
 
     public void stopWorkout(){
-        distanceTracker.stop();
-        mainActivity.publishEvent(new WorkoutTimeUpdateEvent(timeTracker.stop(), new HashMap<>()));
+        double finalDistance = distanceTracker.stop();
+        long finalTime = timeTracker.stop();
         paused = true;
         handler.removeCallbacks(workoutRunnable);
+        mainActivity.publishEvent(new WorkoutCompleteEvent(finalTime, finalDistance, new HashMap<>()));
     }
 
     @Override

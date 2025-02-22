@@ -15,6 +15,7 @@ import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 public class WorkoutFragment extends AuthenticationRequiredFragment implements EventListener {
@@ -66,6 +67,15 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
                 @Override
                 public void run() {
                     workoutDistanceTextView.setText(formatDistanceDisplay(((WorkoutDistanceUpdateEvent)event).getDistanceMeters()));
+                }
+            });
+        } else if(event.getEventType().equals(EventType.WORKOUT_COMPLETE_EVENT)){
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    workoutTimeTextView.setText(formatTimeDisplay(((WorkoutCompleteEvent)event).getWorkoutTime()));
+                    workoutDistanceTextView.setText(formatDistanceDisplay(((WorkoutCompleteEvent)event).getWorkoutDistanceMeters()));
+                    mainActivity.getUserGameStateService().addUserGameDistance(mainActivity.getCurrentUser().getUid(),((WorkoutCompleteEvent)event).getWorkoutDistanceMeters(),new HashMap<>());
                 }
             });
         }

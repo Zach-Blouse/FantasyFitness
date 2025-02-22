@@ -19,6 +19,8 @@ import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.home.UserHomeFragment;
 import com.zblouse.fantasyfitness.settings.SettingsFragment;
 import com.zblouse.fantasyfitness.user.LoginFragment;
+import com.zblouse.fantasyfitness.user.UserGameStateRepository;
+import com.zblouse.fantasyfitness.user.UserGameStateService;
 import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.workout.WorkoutFragment;
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private WorkoutService workoutService;
     private Map<DeviceServiceType, DeviceService> deviceServices;
     private GameLocationService gameLocationService;
+    private UserGameStateService userGameStateService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         deleteDatabase(GameLocationSqlDatabase.GAME_LOCATION_DATABASE_NAME);
         deleteDatabase(GameLocationDistanceSqlDatabase.GAME_LOCATION_DISTANCE_DATABASE_NAME);
         gameLocationService = new GameLocationService(this);
+        userGameStateService= new UserGameStateService(this);
 
         gameLocationService.initializeLocationDatabase();
         currentUser = firebaseAuth.getCurrentUser();
@@ -179,6 +183,14 @@ public class MainActivity extends AppCompatActivity {
 
     public GameLocationService getGameLocationService(){
         return this.gameLocationService;
+    }
+
+    public UserGameStateService getUserGameStateService(){
+        return this.userGameStateService;
+    }
+
+    public void setUserGameStateService(UserGameStateService userGameStateService){
+        this.userGameStateService = userGameStateService;
     }
 
 }

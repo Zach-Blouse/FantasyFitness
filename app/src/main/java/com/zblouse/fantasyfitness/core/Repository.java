@@ -8,4 +8,5 @@ public interface Repository<T> {
 
     public void readCallback(T object, Map<String, Object> metadata);
     public void writeCallback(T object, Map<String, Object> metadata);
+    public void updateCallback(boolean success, Map<String, Object> metadata);
 }

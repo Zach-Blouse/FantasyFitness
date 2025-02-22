@@ -65,11 +65,16 @@ public class GameLocationRepository implements Repository<GameLocation> {
 
     @Override
     public void readCallback(GameLocation object, Map<String, Object> metadata) {
-
+        
     }
 
     @Override
     public void writeCallback(GameLocation object, Map<String, Object> metadata) {
+
+    }
+
+    @Override
+    public void updateCallback(boolean success, Map<String, Object> metadata) {
 
     }
 }

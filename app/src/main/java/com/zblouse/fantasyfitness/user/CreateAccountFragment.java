@@ -19,6 +19,9 @@ import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
 import com.zblouse.fantasyfitness.home.UserHomeFragment;
+import com.zblouse.fantasyfitness.world.GameLocationService;
+
+import java.util.HashMap;
 
 public class CreateAccountFragment extends AuthenticationRequiredFragment implements EventListener {
 
@@ -44,6 +47,7 @@ public class CreateAccountFragment extends AuthenticationRequiredFragment implem
                 } else {
                     String username = usernameEditText.getText().toString();
                     mainActivity.getUserService().registerUser(mainActivity.getCurrentUser().getUid(),username);
+                    mainActivity.getUserGameStateService().initializeUserGameState(mainActivity.getCurrentUser().getUid(), GameLocationService.THANADEL_VILLAGE, new HashMap<>());
                 }
             }
         });
