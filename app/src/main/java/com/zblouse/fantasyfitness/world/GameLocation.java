@@ -46,4 +46,16 @@ public class GameLocation implements Serializable {
     public Map<GameLocation, Double> getConnectedLocations(){
         return this.connectedLocations;
     }
+
+    @Override
+    public boolean equals(Object object){
+        if(object == null){
+            return false;
+        } else if (object instanceof GameLocation){
+            GameLocation otherLocation = (GameLocation)object;
+            return otherLocation.getLocationName().equals(locationName);
+        } else {
+            return false;
+        }
+    }
 }

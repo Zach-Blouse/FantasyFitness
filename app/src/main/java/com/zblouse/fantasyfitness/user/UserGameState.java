@@ -4,12 +4,12 @@ public class UserGameState {
 
     private final String userId;
     private final String currentGameLocationName;
-    private final double savedWorkoutDistanceKm;
+    private final double savedWorkoutDistanceMeters;
 
-    public UserGameState(String userId, String currentGameLocationName, double savedWorkoutDistanceKm){
+    public UserGameState(String userId, String currentGameLocationName, double savedWorkoutDistanceMeters){
         this.userId = userId;
         this.currentGameLocationName = currentGameLocationName;
-        this.savedWorkoutDistanceKm = savedWorkoutDistanceKm;
+        this.savedWorkoutDistanceMeters = savedWorkoutDistanceMeters;
     }
 
     public String getCurrentGameLocationName(){
@@ -20,8 +20,8 @@ public class UserGameState {
         return this.userId;
     }
 
-    public double getSavedWorkoutDistanceKm(){
-        return this.savedWorkoutDistanceKm;
+    public double getSavedWorkoutDistanceMeters(){
+        return this.savedWorkoutDistanceMeters;
     }
 
 }

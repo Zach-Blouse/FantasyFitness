@@ -31,7 +31,7 @@ public class UserGameStateRepository implements Repository<UserGameState> {
 
     private void modifyUserDistance(UserGameState userGameState, Map<String, Object> metadata){
         double modifyValue = (Double)metadata.get(MODIFY_VALUE);
-        database.updateField(userGameState.getUserId(), UserGameStateFirestoreDatabase.USER_SAVED_DISTANCE,userGameState.getSavedWorkoutDistanceKm()+modifyValue,this,metadata);
+        database.updateField(userGameState.getUserId(), UserGameStateFirestoreDatabase.USER_SAVED_DISTANCE,userGameState.getSavedWorkoutDistanceMeters()+modifyValue,this,metadata);
     }
 
     public void getUserGameState(String userId, Map<String, Object> metadata){

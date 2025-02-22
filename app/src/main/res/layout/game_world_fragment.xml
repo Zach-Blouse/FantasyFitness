@@ -49,6 +49,17 @@
                     android:text="testText"
                     android:textSize="16sp" />
                 <Button
+                    android:id="@+id/travel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="@string/travel"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <Button
                     android:id="@+id/close_location_info_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -59,6 +70,7 @@
                     android:textSize="25sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
             </LinearLayout>
         </ScrollView>
 

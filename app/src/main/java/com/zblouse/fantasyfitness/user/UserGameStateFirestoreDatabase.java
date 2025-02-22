@@ -29,7 +29,7 @@ public class UserGameStateFirestoreDatabase extends FirestoreDatabase {
     public void write(UserGameState userGameState, Repository<UserGameState> repository, Map<String, Object> metadata){
         Map<String, Object> newUserGameState = new HashMap<>();
         newUserGameState.put(USER_LOCATION_FIELD,userGameState.getCurrentGameLocationName());
-        newUserGameState.put(USER_SAVED_DISTANCE,userGameState.getSavedWorkoutDistanceKm());
+        newUserGameState.put(USER_SAVED_DISTANCE,userGameState.getSavedWorkoutDistanceMeters());
         firestore.collection(COLLECTION).document(userGameState.getUserId()).set(newUserGameState).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
