@@ -2,9 +2,16 @@ package com.zblouse.fantasyfitness.world;
 
 import android.util.Log;
 
+import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.MainActivity;
+import com.zblouse.fantasyfitness.activity.ToastDeviceService;
 import com.zblouse.fantasyfitness.core.DomainService;
+import com.zblouse.fantasyfitness.user.UserGameState;
+import com.zblouse.fantasyfitness.user.UserGameStateRepository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GameLocationService implements DomainService<GameLocation> {
@@ -22,8 +29,12 @@ public class GameLocationService implements DomainService<GameLocation> {
     public static final String HILLS = "Hills";
     public static final String MOUNTAIN_PASS = "Mountain Pass";
     public static final String FARMLANDS = "Farmlands";
+
+    private static final String TRAVEL_DESTINATION = "travelDestination";
+
     private final MainActivity mainActivity;
     private final GameLocationRepository gameLocationRepository;
+
 
     public GameLocationService(MainActivity mainActivity){
         this.mainActivity = mainActivity;
@@ -42,6 +53,96 @@ public class GameLocationService implements DomainService<GameLocation> {
     @Override
     public void repositoryResponse(GameLocation responseBody, Map<String, Object> metadata) {
         mainActivity.publishEvent(new GameLocationFetchEvent(responseBody, metadata));
+    }
+
+    @Override
+    public void interDomainServiceResponse(Object responseObject, Map<String, Object> metadata) {
+        if(metadata.get(INTER_DOMAIN_SERVICE_RESPONSE_CLASS_KEY).equals(UserGameState.class)){
+            UserGameState userGameState = (UserGameState) responseObject;
+            if(metadata.get(ORIGIN_FUNCTION).equals("travel")){
+                travel(((GameLocation)metadata.get(TRAVEL_DESTINATION)),userGameState);
+            }
+        }
+    }
+
+    //implements Dijkstra's Algorithm
+    public GameLocationPaths generatePaths(String startingLocationName){
+        List<GameLocation> allLocations = gameLocationRepository.getAllGameLocations();
+
+        GameLocation startingLocation = null;
+        for(GameLocation location: allLocations){
+            if(location.getLocationName().equals(startingLocationName)){
+                startingLocation = location;
+                break;
+            }
+        }
+        if(startingLocation == null){
+            return null;
+        }
+
+        allLocations.remove(startingLocation);
+        GameLocationPaths paths = new GameLocationPaths(startingLocation);
+        GameLocation lastLocationAdded = startingLocation;
+        double lastLocationTotalDistance = 0;
+        List<GameLocation> lastLocationPath = new ArrayList<>();
+        Map<GameLocation, Path> availableLocations = new HashMap<>();
+
+        while(!allLocations.isEmpty()){
+            Map<GameLocation, Double> newLocations = lastLocationAdded.getConnectedLocations();
+            for(GameLocation location: newLocations.keySet()){
+                //making sure we haven't yet added this location to the Path
+                if(allLocations.contains(location)){
+                    List<GameLocation> newLocationPath = new ArrayList<>(lastLocationPath);
+                    newLocationPath.add(location);
+                    if(availableLocations.containsKey(location)){
+                        if(availableLocations.get(location).getDistanceKm() > lastLocationTotalDistance + newLocations.get(location)){
+                            availableLocations.remove(location);
+                            availableLocations.put(location, new Path(lastLocationTotalDistance + newLocations.get(location), newLocationPath));
+                        }
+                    }else {
+                        availableLocations.put(location, new Path(lastLocationTotalDistance + newLocations.get(location), newLocationPath));
+                    }
+                }
+            }
+            //Find the closest location still in available locations
+            GameLocation closestLocation = null;
+            for(GameLocation location: availableLocations.keySet()){
+                if(closestLocation == null){
+                    closestLocation = location;
+                } else if(availableLocations.get(location).getDistanceKm() < availableLocations.get(closestLocation).getDistanceKm()) {
+                    closestLocation = location;
+                }
+            }
+
+            paths.addPath(closestLocation.getLocationName(), availableLocations.get(closestLocation));
+            lastLocationAdded = gameLocationRepository.getLocationById(closestLocation.getId());
+            lastLocationTotalDistance = availableLocations.get(closestLocation).getDistanceKm();
+            lastLocationPath = availableLocations.get(closestLocation).getLocationPath();
+            availableLocations.remove(closestLocation);
+            allLocations.remove(closestLocation);
+        }
+
+        return paths;
+    }
+
+    public void travel(GameLocation gameLocation){
+        Map<String, Object> metadata = new HashMap<>();
+        metadata.put(INTER_DOMAIN_SERVICE_ORIGIN_KEY, this);
+        metadata.put(ORIGIN_FUNCTION, "travel");
+        metadata.put(TRAVEL_DESTINATION, gameLocation);
+        mainActivity.getUserGameStateService().fetchUserGameState(mainActivity.getCurrentUser().getUid(),metadata);
+    }
+
+    private void travel(GameLocation travelDestination, UserGameState userGameState){
+        GameLocationPaths gameLocationPaths = generatePaths(userGameState.getCurrentGameLocationName());
+        Path path = gameLocationPaths.getPath(travelDestination.getLocationName());
+        if(path.getDistanceKm() <= (userGameState.getSavedWorkoutDistanceMeters()/1000)){
+            mainActivity.getUserGameStateService().addUserGameDistance(mainActivity.getCurrentUser().getUid(),(-1)*path.getDistanceKm() *1000,new HashMap<>());
+            mainActivity.getUserGameStateService().updateUserGameLocation(mainActivity.getCurrentUser().getUid(),travelDestination.getLocationName(),new HashMap<>());
+        }else {
+            //This shouldn't be possible, as the button should be disabled, but send the toast anyway
+            ((ToastDeviceService)mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Unable to travel, you do not have enough saved distance. Go on a run or walk to get more distance.");
+        }
     }
 
     public void initializeLocationDatabase(){

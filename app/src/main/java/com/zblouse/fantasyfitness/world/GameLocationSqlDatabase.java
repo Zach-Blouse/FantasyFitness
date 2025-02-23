@@ -49,7 +49,6 @@ public class GameLocationSqlDatabase extends SQLiteOpenHelper {
 
     public GameLocation getLocationByName(String name){
         SQLiteDatabase database = getReadableDatabase();
-        Log.e("GAMELOCATIONDATABASE","QUERY: " + "SELECT * FROM " + TABLE_NAME + " WHERE " + NAME_KEY + "='" + name +"'");
         Cursor locationCursor = database.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + NAME_KEY + "='" + name +"'", null);
         GameLocation foundLocation = null;
         if(locationCursor.moveToFirst()) {

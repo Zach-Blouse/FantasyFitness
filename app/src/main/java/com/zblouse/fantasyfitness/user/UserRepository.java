@@ -48,4 +48,9 @@ public class UserRepository implements Repository<User> {
     public void writeCallback(User user, Map<String, Object> metadata) {
         domainService.repositoryResponse(user,metadata);
     }
+
+    @Override
+    public void updateCallback(boolean success, Map<String, Object> metadata) {
+
+    }
 }

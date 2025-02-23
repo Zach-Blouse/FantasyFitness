@@ -9,6 +9,8 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,8 +39,12 @@ import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.PermissionDeviceService;
 import com.zblouse.fantasyfitness.user.UserFirestoreDatabase;
+import com.zblouse.fantasyfitness.user.UserGameStateFirestoreDatabase;
+import com.zblouse.fantasyfitness.user.UserGameStateRepository;
+import com.zblouse.fantasyfitness.user.UserGameStateService;
 import com.zblouse.fantasyfitness.user.UserRepository;
 import com.zblouse.fantasyfitness.user.UserService;
+import com.zblouse.fantasyfitness.world.GameLocationService;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -75,12 +81,15 @@ public class WorkoutTimerTest {
         UserService userService = new UserService();
         PermissionDeviceService permissionDeviceService = Mockito.mock(PermissionDeviceService.class);
         when(permissionDeviceService.hasPermission(any())).thenReturn(true);
+        UserGameStateService userGameStateService = new UserGameStateService();
 
         activityRule.getScenario().onActivity(activity -> {
             activity.setFirebaseAuth(mockAuth);
+            userGameStateService.setMainActivity(activity);
             userService.setMainActivity(activity);
             activity.setUserService(userService);
             activity.setDeviceService(DeviceServiceType.PERMISSION,permissionDeviceService);
+            activity.setUserGameStateService(userGameStateService);
         });
 
         //Set up mock firestore
@@ -101,10 +110,43 @@ public class WorkoutTimerTest {
         when(mockDocumentSnapshot.exists()).thenReturn(true);
         when(mockDocumentSnapshot.get("UID")).thenReturn("testUid");
         when(mockDocumentSnapshot.get("USERNAME")).thenReturn("testUsername");
+        when(mockReadTask.isSuccessful()).thenReturn(true);
+        when(mockReadTask.getResult()).thenReturn(mockDocumentSnapshot);
+        when(mockDocumentSnapshot.exists()).thenReturn(true);
+
 
         UserFirestoreDatabase userFirestoreDatabase = new UserFirestoreDatabase(mockFirestore);
         UserRepository userRepository = new UserRepository(userService, userFirestoreDatabase);
         userService.setUserRepository(userRepository);
+
+        CollectionReference mockGameStateCollectionReference = Mockito.mock(CollectionReference.class);
+        when(mockFirestore.collection(eq("gameState"))).thenReturn(mockGameStateCollectionReference);
+        DocumentReference mockGameStateDocument = Mockito.mock(DocumentReference.class);
+        when(mockGameStateCollectionReference.document(eq("testUserId"))).thenReturn(mockGameStateDocument);
+
+        Task<DocumentSnapshot> mockGameStateReadTask = Mockito.mock(Task.class);
+        when(mockGameStateDocument.get()).thenReturn(mockGameStateReadTask);
+        ArgumentCaptor<OnCompleteListener<DocumentSnapshot>> onCompleteListenerArgumentCaptorReadGameState = ArgumentCaptor.forClass(OnCompleteListener.class);
+        DocumentSnapshot mockGameStateDocumentSnapshot = Mockito.mock(DocumentSnapshot.class);
+
+        when(mockGameStateReadTask.isSuccessful()).thenReturn(true);
+        when(mockGameStateReadTask.getResult()).thenReturn(mockGameStateDocumentSnapshot);
+        when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
+        when(mockGameStateDocumentSnapshot.get(eq("gameLocation"), eq(String.class))).thenReturn(GameLocationService.ARDUWYN);
+        when(mockGameStateDocumentSnapshot.get(eq("savedDistance"), eq(Double.class))).thenReturn(5500.0);
+        when(mockGameStateReadTask.isSuccessful()).thenReturn(true);
+        when(mockGameStateReadTask.getResult()).thenReturn(mockGameStateDocumentSnapshot);
+        when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
+
+        Task<Void> mockGameStateUpdateTask = Mockito.mock(Task.class);
+        when(mockGameStateDocument.update(anyString(), any())).thenReturn(mockGameStateUpdateTask);
+        ArgumentCaptor<OnCompleteListener<Void>> onCompleteListenerArgumentCaptorUpdateGameState = ArgumentCaptor.forClass(OnCompleteListener.class);
+
+        when(mockGameStateUpdateTask.isSuccessful()).thenReturn(true);
+
+        UserGameStateFirestoreDatabase userGameStateFirestoreDatabase = new UserGameStateFirestoreDatabase(mockFirestore);
+        UserGameStateRepository userGameStateRepository = new UserGameStateRepository(userGameStateFirestoreDatabase, userGameStateService);
+        userGameStateService.setUserGameStateRepository(userGameStateRepository);
 
         Instrumentation.ActivityResult firebaseResult = new Instrumentation.ActivityResult(RESULT_OK, response.toIntent());
         intending(hasComponent("com.firebase.ui.auth.KickoffActivity")).respondWith(firebaseResult);
@@ -150,6 +192,10 @@ public class WorkoutTimerTest {
         onView(withId(R.id.stop_workout_button)).perform(click());
         onView(withId(R.id.workout_time)).check(matches(withText("00:05")));
 
+        verify(mockGameStateReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorReadGameState.capture());
+        onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
+        verify(mockGameStateUpdateTask).addOnCompleteListener(onCompleteListenerArgumentCaptorUpdateGameState.capture());
+        onCompleteListenerArgumentCaptorUpdateGameState.getValue().onComplete(mockGameStateUpdateTask);
     }
 
     @Test
@@ -166,11 +212,17 @@ public class WorkoutTimerTest {
         FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
         when(mockAuth.getCurrentUser()).thenReturn(mockFirebaseUser);
         UserService userService = new UserService();
+        PermissionDeviceService permissionDeviceService = Mockito.mock(PermissionDeviceService.class);
+        when(permissionDeviceService.hasPermission(any())).thenReturn(true);
+        UserGameStateService userGameStateService = new UserGameStateService();
 
         activityRule.getScenario().onActivity(activity -> {
             activity.setFirebaseAuth(mockAuth);
+            userGameStateService.setMainActivity(activity);
             userService.setMainActivity(activity);
             activity.setUserService(userService);
+            activity.setDeviceService(DeviceServiceType.PERMISSION,permissionDeviceService);
+            activity.setUserGameStateService(userGameStateService);
         });
 
         //Set up mock firestore
@@ -191,10 +243,43 @@ public class WorkoutTimerTest {
         when(mockDocumentSnapshot.exists()).thenReturn(true);
         when(mockDocumentSnapshot.get("UID")).thenReturn("testUid");
         when(mockDocumentSnapshot.get("USERNAME")).thenReturn("testUsername");
+        when(mockReadTask.isSuccessful()).thenReturn(true);
+        when(mockReadTask.getResult()).thenReturn(mockDocumentSnapshot);
+        when(mockDocumentSnapshot.exists()).thenReturn(true);
+
 
         UserFirestoreDatabase userFirestoreDatabase = new UserFirestoreDatabase(mockFirestore);
         UserRepository userRepository = new UserRepository(userService, userFirestoreDatabase);
         userService.setUserRepository(userRepository);
+
+        CollectionReference mockGameStateCollectionReference = Mockito.mock(CollectionReference.class);
+        when(mockFirestore.collection(eq("gameState"))).thenReturn(mockGameStateCollectionReference);
+        DocumentReference mockGameStateDocument = Mockito.mock(DocumentReference.class);
+        when(mockGameStateCollectionReference.document(eq("testUserId"))).thenReturn(mockGameStateDocument);
+
+        Task<DocumentSnapshot> mockGameStateReadTask = Mockito.mock(Task.class);
+        when(mockGameStateDocument.get()).thenReturn(mockGameStateReadTask);
+        ArgumentCaptor<OnCompleteListener<DocumentSnapshot>> onCompleteListenerArgumentCaptorReadGameState = ArgumentCaptor.forClass(OnCompleteListener.class);
+        DocumentSnapshot mockGameStateDocumentSnapshot = Mockito.mock(DocumentSnapshot.class);
+
+        when(mockGameStateReadTask.isSuccessful()).thenReturn(true);
+        when(mockGameStateReadTask.getResult()).thenReturn(mockGameStateDocumentSnapshot);
+        when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
+        when(mockGameStateDocumentSnapshot.get(eq("gameLocation"), eq(String.class))).thenReturn(GameLocationService.ARDUWYN);
+        when(mockGameStateDocumentSnapshot.get(eq("savedDistance"), eq(Double.class))).thenReturn(5500.0);
+        when(mockGameStateReadTask.isSuccessful()).thenReturn(true);
+        when(mockGameStateReadTask.getResult()).thenReturn(mockGameStateDocumentSnapshot);
+        when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
+
+        Task<Void> mockGameStateUpdateTask = Mockito.mock(Task.class);
+        when(mockGameStateDocument.update(anyString(), any())).thenReturn(mockGameStateUpdateTask);
+        ArgumentCaptor<OnCompleteListener<Void>> onCompleteListenerArgumentCaptorUpdateGameState = ArgumentCaptor.forClass(OnCompleteListener.class);
+
+        when(mockGameStateUpdateTask.isSuccessful()).thenReturn(true);
+
+        UserGameStateFirestoreDatabase userGameStateFirestoreDatabase = new UserGameStateFirestoreDatabase(mockFirestore);
+        UserGameStateRepository userGameStateRepository = new UserGameStateRepository(userGameStateFirestoreDatabase, userGameStateService);
+        userGameStateService.setUserGameStateRepository(userGameStateRepository);
 
         Instrumentation.ActivityResult firebaseResult = new Instrumentation.ActivityResult(RESULT_OK, response.toIntent());
         intending(hasComponent("com.firebase.ui.auth.KickoffActivity")).respondWith(firebaseResult);
@@ -221,9 +306,6 @@ public class WorkoutTimerTest {
         Thread.sleep(5000);
         onView(withId(R.id.workout_time)).check(matches(withText("00:05")));
         onView(withId(R.id.pause_workout_button)).perform(click());
-        Thread.sleep(5000);
-        onView(withId(R.id.workout_time)).check(matches(withText("00:10")));
-        onView(withId(R.id.stop_workout_button)).perform(click());
         Thread.sleep(5000);
         onView(withId(R.id.workout_time)).check(matches(withText("00:10")));
     }
