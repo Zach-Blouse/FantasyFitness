@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,8 @@ import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
 import com.zblouse.fantasyfitness.user.UserGameState;
+import com.zblouse.fantasyfitness.user.UserGameStateFetchResponseEvent;
+import com.zblouse.fantasyfitness.user.UserGameStateService;
 import com.zblouse.fantasyfitness.user.UserGameStateUpdateEvent;
 
 import java.util.HashMap;
@@ -32,10 +35,12 @@ import java.util.Map;
 
 public class GameWorldFragment extends AuthenticationRequiredFragment implements EventListener {
 
+    private ConstraintLayout layout;
     private CardView locationInfoCardView;
     private TextView locationNameTextView;
     private TextView locationDescriptionTextView;
     private TextView locationConnectionsTextView;
+    private Button travelButton;
     private String lastKnownGameLocation;
     private Double lastKnownSavedDistanceMeters;
     private GameLocationPaths lastKnownGameLocationPaths;
@@ -51,7 +56,7 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.OnCreateView();
-        ConstraintLayout layout = (ConstraintLayout) inflater.inflate(R.layout.game_world_fragment,container,false);
+        layout = (ConstraintLayout) inflater.inflate(R.layout.game_world_fragment,container,false);
         mainActivity.showNavigation();
         //Implementing scrolling both directions at once, since vertical is the parent, the touch is implemented there
         verticalScrollView = layout.findViewById(R.id.world_map_vertical);
@@ -70,6 +75,7 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
         locationNameTextView = layout.findViewById(R.id.location_info_name);
         locationDescriptionTextView = layout.findViewById(R.id.location_info_description);
         locationConnectionsTextView = layout.findViewById(R.id.location_info_connected_locations);
+        travelButton = layout.findViewById(R.id.travel_button);
 
         Button closeLocationInfoCardButton = layout.findViewById(R.id.close_location_info_button);
         closeLocationInfoCardButton.setOnClickListener(new View.OnClickListener() {
@@ -229,6 +235,7 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
     }
 
     private void currentGameLocationUpdate(String lastKnownGameLocation){
+        locationInfoCardView.setVisibility(View.INVISIBLE);
         this.lastKnownGameLocation = lastKnownGameLocation;
         for(Button button: locationButtonMap.values()){
             button.setBackgroundColor(getColor(getContext(), R.color.fantasy_fitness_green));
@@ -260,13 +267,39 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
                 }
                 locationConnectionsTextView.setText(connectionsString);
                 locationInfoCardView.setVisibility(View.VISIBLE);
+                if(gameLocation.getLocationName().equals(lastKnownGameLocation)){
+                    if(((ViewGroup)locationInfoCardView).findViewById(travelButton.getId()) != null) {
+                        ((ViewGroup)locationInfoCardView).removeView(travelButton);
+                    }
+                }else{
+                    if(((ViewGroup)locationInfoCardView).findViewById(travelButton.getId()) == null) {
+                        ((ViewGroup) locationInfoCardView).addView(travelButton);
+                    }
+                    if(lastKnownGameLocationPaths.getPath(gameLocation.getLocationName()).getDistanceKm() <= (lastKnownSavedDistanceMeters/1000)) {
+                        travelButton.setClickable(true);
+                        travelButton.setBackgroundColor(getColor(getContext(), R.color.fantasy_fitness_green));
+                        travelButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mainActivity.getGameLocationService().travel(gameLocation);
+                            }
+                        });
+                    } else {
+                        travelButton.setClickable(false);
+                        travelButton.setBackgroundColor(getColor(getContext(), R.color.fantasy_fitness_gray));
+                    }
+                }
 
             }
-        }else if(event.getEventType().equals(EventType.USER_GAME_STATE_UPDATE_EVENT)){
-            UserGameState userGameState = ((UserGameStateUpdateEvent)event).getUserGameState();
+        }else if(event.getEventType().equals(EventType.USER_GAME_STATE_FETCH_RESPONSE_EVENT)){
+            UserGameState userGameState = ((UserGameStateFetchResponseEvent)event).getUserGameState();
             lastKnownSavedDistanceMeters = userGameState.getSavedWorkoutDistanceMeters();
             currentGameLocationUpdate(userGameState.getCurrentGameLocationName());
             lastKnownGameLocationPaths = mainActivity.getGameLocationService().generatePaths(userGameState.getCurrentGameLocationName());
+        }else if(event.getEventType().equals(EventType.USER_GAME_STATE_UPDATE_EVENT)){
+            if(event.getMetadata().containsKey(UserGameStateService.NEW_LOCATION)){
+                mainActivity.getUserGameStateService().fetchUserGameState(mainActivity.getCurrentUser().getUid(),new HashMap<>());
+            }
         }
     }
 }

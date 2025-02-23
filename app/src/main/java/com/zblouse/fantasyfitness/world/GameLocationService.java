@@ -2,8 +2,12 @@ package com.zblouse.fantasyfitness.world;
 
 import android.util.Log;
 
+import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.MainActivity;
+import com.zblouse.fantasyfitness.activity.ToastDeviceService;
 import com.zblouse.fantasyfitness.core.DomainService;
+import com.zblouse.fantasyfitness.user.UserGameState;
+import com.zblouse.fantasyfitness.user.UserGameStateRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +29,12 @@ public class GameLocationService implements DomainService<GameLocation> {
     public static final String HILLS = "Hills";
     public static final String MOUNTAIN_PASS = "Mountain Pass";
     public static final String FARMLANDS = "Farmlands";
+
+    private static final String TRAVEL_DESTINATION = "travelDestination";
+
     private final MainActivity mainActivity;
     private final GameLocationRepository gameLocationRepository;
+
 
     public GameLocationService(MainActivity mainActivity){
         this.mainActivity = mainActivity;
@@ -47,32 +55,28 @@ public class GameLocationService implements DomainService<GameLocation> {
         mainActivity.publishEvent(new GameLocationFetchEvent(responseBody, metadata));
     }
 
+    @Override
+    public void interDomainServiceResponse(Object responseObject, Map<String, Object> metadata) {
+        if(metadata.get(INTER_DOMAIN_SERVICE_RESPONSE_CLASS_KEY).equals(UserGameState.class)){
+            UserGameState userGameState = (UserGameState) responseObject;
+            if(metadata.get(ORIGIN_FUNCTION).equals("travel")){
+                travel(((GameLocation)metadata.get(TRAVEL_DESTINATION)),userGameState);
+            }
+        }
+    }
+
     //implements Dijkstra's Algorithm
     public GameLocationPaths generatePaths(String startingLocationName){
-        Log.e("PATH GENERATION", "Generating paths for "+ startingLocationName);
         List<GameLocation> allLocations = gameLocationRepository.getAllGameLocations();
-
-
-        for(GameLocation gameLocation: allLocations){
-            String connectionsString = "";
-            for(GameLocation location: gameLocation.getConnectedLocations().keySet()){
-                connectionsString += " " + location.getLocationName() + " " + gameLocation.getConnectedLocations().get(location);
-            }
-            Log.e("PATH GENERATION", gameLocation.getLocationName() + " connects to: " + connectionsString);
-        }
-
-
 
         GameLocation startingLocation = null;
         for(GameLocation location: allLocations){
             if(location.getLocationName().equals(startingLocationName)){
                 startingLocation = location;
-                Log.e("PATH GENERATION", "FOUND STARTING LOCATION");
                 break;
             }
         }
         if(startingLocation == null){
-            Log.e("PATH GENERATION", "Starting location is null");
             return null;
         }
 
@@ -84,9 +88,7 @@ public class GameLocationService implements DomainService<GameLocation> {
         Map<GameLocation, Path> availableLocations = new HashMap<>();
 
         while(!allLocations.isEmpty()){
-            Log.e("PATH GENERATION", "ALL LOCATIONS SIZE: " + allLocations.size());
             Map<GameLocation, Double> newLocations = lastLocationAdded.getConnectedLocations();
-            Log.e("PATH GENERATION", "LAST ADDED CONNECTED LOCATIONS: " + newLocations.size());
             for(GameLocation location: newLocations.keySet()){
                 //making sure we haven't yet added this location to the Path
                 if(allLocations.contains(location)){
@@ -100,9 +102,6 @@ public class GameLocationService implements DomainService<GameLocation> {
                     }else {
                         availableLocations.put(location, new Path(lastLocationTotalDistance + newLocations.get(location), newLocationPath));
                     }
-
-                } else {
-                    Log.e("PATH GENERATION", "LOCATION NOT IN ALL LOCATIONS");
                 }
             }
             //Find the closest location still in available locations
@@ -122,16 +121,28 @@ public class GameLocationService implements DomainService<GameLocation> {
             availableLocations.remove(closestLocation);
             allLocations.remove(closestLocation);
         }
-        Log.e("PATH GENERATION", "Generated Paths for "+ startingLocationName);
-        for(String location: paths.getReachableLocationNames()){
-            Path path = paths.getPath(location);
-            String pathString = "";
-            for(GameLocation locationInPath: path.getLocationPath()){
-                pathString += locationInPath.getLocationName() + ", ";
-            }
-            Log.e("PATH GENERATION", "Path to  "+ location + " is " + path.getDistanceKm() +" km and requires going to " + pathString);
-        }
+
         return paths;
+    }
+
+    public void travel(GameLocation gameLocation){
+        Map<String, Object> metadata = new HashMap<>();
+        metadata.put(INTER_DOMAIN_SERVICE_ORIGIN_KEY, this);
+        metadata.put(ORIGIN_FUNCTION, "travel");
+        metadata.put(TRAVEL_DESTINATION, gameLocation);
+        mainActivity.getUserGameStateService().fetchUserGameState(mainActivity.getCurrentUser().getUid(),metadata);
+    }
+
+    private void travel(GameLocation travelDestination, UserGameState userGameState){
+        GameLocationPaths gameLocationPaths = generatePaths(userGameState.getCurrentGameLocationName());
+        Path path = gameLocationPaths.getPath(travelDestination.getLocationName());
+        if(path.getDistanceKm() <= (userGameState.getSavedWorkoutDistanceMeters()/1000)){
+            mainActivity.getUserGameStateService().addUserGameDistance(mainActivity.getCurrentUser().getUid(),(-1)*path.getDistanceKm() *1000,new HashMap<>());
+            mainActivity.getUserGameStateService().updateUserGameLocation(mainActivity.getCurrentUser().getUid(),travelDestination.getLocationName(),new HashMap<>());
+        }else {
+            //This shouldn't be possible, as the button should be disabled, but send the toast anyway
+            ((ToastDeviceService)mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Unable to travel, you do not have enough saved distance. Go on a run or walk to get more distance.");
+        }
     }
 
     public void initializeLocationDatabase(){

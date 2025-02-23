@@ -72,4 +72,9 @@ public class UserService implements DomainService<User> {
             }
         }
     }
+
+    @Override
+    public void interDomainServiceResponse(Object responseObject, Map<String, Object> metadata) {
+
+    }
 }
