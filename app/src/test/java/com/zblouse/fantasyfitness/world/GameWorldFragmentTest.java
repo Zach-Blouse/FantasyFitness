@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.LocationEvent;
 import com.zblouse.fantasyfitness.activity.MainActivity;
+import com.zblouse.fantasyfitness.user.UserGameStateService;
 import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.workout.WorkoutFragment;
 
@@ -43,10 +44,12 @@ public class GameWorldFragmentTest {
     @Test
     public void onCreateTest() {
         UserService mockUserService = Mockito.mock(UserService.class);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
         FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
         FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
         MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
         mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
         mainActivity.setUserService(mockUserService);
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
@@ -77,10 +80,12 @@ public class GameWorldFragmentTest {
         UserService mockUserService = Mockito.mock(UserService.class);
         FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
         FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
         GameLocationService mockLocationService = Mockito.mock(GameLocationService.class);
         MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
         mainActivity.setFirebaseAuth(mockAuth);
         mainActivity.setUserService(mockUserService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
         mainActivity.setGameLocationService(mockLocationService);
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
@@ -118,11 +123,13 @@ public class GameWorldFragmentTest {
     @Test
     public void publishEventTest() {
         UserService mockUserService = Mockito.mock(UserService.class);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
         FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
         FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
         MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
         mainActivity.setFirebaseAuth(mockAuth);
         mainActivity.setUserService(mockUserService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);

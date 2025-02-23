@@ -39,6 +39,13 @@ public class LocationDeviceService extends DeviceService{
         this.handler = new Handler(Looper.myLooper());
     }
 
+    public LocationDeviceService(MainActivity mainActivity, FusedLocationProviderClient fusedLocationProviderClient){
+        super(DeviceServiceType.LOCATION);
+        this.mainActivity = mainActivity;
+        this.fusedLocationProviderClient = fusedLocationProviderClient;
+        this.handler = new Handler(Looper.myLooper());
+    }
+
     @Override
     public void subscribe(EventListener eventListener){
         super.subscribe(eventListener);

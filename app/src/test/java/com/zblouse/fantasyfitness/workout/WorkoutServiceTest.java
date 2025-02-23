@@ -83,9 +83,9 @@ public class WorkoutServiceTest {
         verify(mockTimeTracker).stop();
         verify(mockDistanceTracker).stop();
         verify(mockHandler).removeCallbacks(any());
-        ArgumentCaptor<WorkoutTimeUpdateEvent> timeUpdateEventArgumentCaptor = ArgumentCaptor.forClass(WorkoutTimeUpdateEvent.class);
-        verify(mockActivity).publishEvent((WorkoutTimeUpdateEvent)timeUpdateEventArgumentCaptor.capture());
-        assert(timeUpdateEventArgumentCaptor.getValue().getTime() == 3456L);
+        ArgumentCaptor<WorkoutCompleteEvent> workoutCompleteEventArgumentCaptor = ArgumentCaptor.forClass(WorkoutCompleteEvent.class);
+        verify(mockActivity).publishEvent((WorkoutCompleteEvent)workoutCompleteEventArgumentCaptor.capture());
+        assert(workoutCompleteEventArgumentCaptor.getValue().getWorkoutTime() == 3456L);
     }
 
     @Test

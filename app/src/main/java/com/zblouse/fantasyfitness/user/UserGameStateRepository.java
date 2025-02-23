@@ -23,7 +23,7 @@ public class UserGameStateRepository implements Repository<UserGameState> {
         this.userGameStateDomainService = userGameStateDomainService;
     }
 
-    public void modifyUserDistance(String userId, double distanceKm, Map<String, Object> metadata){
+    public void addUserDistance(String userId, double distanceKm, Map<String, Object> metadata){
         metadata.put(MULTI_STAGE_UPDATE, USER_DISTANCE);
         metadata.put(MODIFY_VALUE, distanceKm);
         database.read(userId,this,metadata);

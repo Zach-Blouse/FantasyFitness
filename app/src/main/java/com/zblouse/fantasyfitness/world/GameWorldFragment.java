@@ -275,7 +275,10 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
                     if(((ViewGroup)locationInfoCardView).findViewById(travelButton.getId()) == null) {
                         ((ViewGroup) locationInfoCardView).addView(travelButton);
                     }
-                    if(lastKnownGameLocationPaths.getPath(gameLocation.getLocationName()).getDistanceKm() <= (lastKnownSavedDistanceMeters/1000)) {
+                    if(lastKnownGameLocationPaths == null){
+                        travelButton.setClickable(false);
+                        travelButton.setBackgroundColor(getColor(mainActivity, R.color.fantasy_fitness_gray));
+                    }else if(lastKnownGameLocationPaths.getPath(gameLocation.getLocationName()).getDistanceKm() <= (lastKnownSavedDistanceMeters/1000)) {
                         travelButton.setClickable(true);
                         travelButton.setBackgroundColor(getColor(getContext(), R.color.fantasy_fitness_green));
                         travelButton.setOnClickListener(new View.OnClickListener() {

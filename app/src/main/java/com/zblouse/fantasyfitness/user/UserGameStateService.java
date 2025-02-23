@@ -20,8 +20,8 @@ public class UserGameStateService implements DomainService<UserGameState> {
     private static final String ADD_USER_GAME_DISTANCE = "addUserGameDistance";
     private static final String UPDATE_USER_GAME_LOCATION = "updateUserGameLocation";
 
-    private final MainActivity activity;
-    private final UserGameStateRepository userGameStateRepository;
+    private MainActivity activity;
+    private UserGameStateRepository userGameStateRepository;
 
     public UserGameStateService(MainActivity mainActivity){
         this.activity = mainActivity;
@@ -33,6 +33,18 @@ public class UserGameStateService implements DomainService<UserGameState> {
         this.userGameStateRepository = userGameStateRepository;
     }
 
+    public UserGameStateService(){
+
+    }
+
+    public void setUserGameStateRepository(UserGameStateRepository userGameStateRepository){
+        this.userGameStateRepository = userGameStateRepository;
+    }
+
+    public void setMainActivity(MainActivity mainActivity){
+        this.activity = mainActivity;
+    }
+
     public void fetchUserGameState(String userId, Map<String, Object> metadata){
         metadata.put(CALLING_FUNCTION_KEY, FETCH_GAME_STATE_FUNCTION);
         userGameStateRepository.getUserGameState(userId, metadata);
@@ -40,7 +52,7 @@ public class UserGameStateService implements DomainService<UserGameState> {
 
     public void addUserGameDistance(String userId, double distanceKm, Map<String, Object> metadata){
         metadata.put(CALLING_FUNCTION_KEY,ADD_USER_GAME_DISTANCE);
-        userGameStateRepository.modifyUserDistance(userId, distanceKm, metadata);
+        userGameStateRepository.addUserDistance(userId, distanceKm, metadata);
     }
 
     public void initializeUserGameState(String userId, String initialLocationName,Map<String, Object> metadata ){

@@ -13,6 +13,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -134,5 +135,80 @@ public class GameLocationRepositoryTest {
         assertEquals(1, (long)gameLocationDistanceArgumentCaptor.getValue().getLocation1Id());
         assertEquals(2, (long)gameLocationDistanceArgumentCaptor.getValue().getLocation2Id());
         assertEquals(5, gameLocationDistanceArgumentCaptor.getValue().getDistanceMiles(),0);
+    }
+
+    @Test
+    public void getAllGameLocationsTest(){
+        String testLocation1Name = "TestLocation1";
+        String testLocation2Name = "TestLocation2";
+        String testLocation3Name = "TestLocation3";
+        GameLocationSqlDatabase mockGameLocationSqlDatabase = Mockito.mock(GameLocationSqlDatabase.class);
+        GameLocationDistanceSqlDatabase mockGameLocationDistanceSqlDatabase = Mockito.mock(GameLocationDistanceSqlDatabase.class);
+        GameLocation location1 = new GameLocation(1,testLocation1Name,"Description 1");
+        when(mockGameLocationSqlDatabase.getLocationByName(eq(testLocation1Name))).thenReturn(location1);
+        when(mockGameLocationSqlDatabase.getLocationById(1)).thenReturn(location1);
+        GameLocation location2 = new GameLocation(2, testLocation2Name,"Description 2");
+        when(mockGameLocationSqlDatabase.getLocationByName(eq(testLocation2Name))).thenReturn(location2);
+        when(mockGameLocationSqlDatabase.getLocationById(2)).thenReturn(location2);
+        GameLocation location3 = new GameLocation(3, testLocation3Name,"Description 3");
+        when(mockGameLocationSqlDatabase.getLocationByName(eq(testLocation3Name))).thenReturn(location3);
+        when(mockGameLocationSqlDatabase.getLocationById(3)).thenReturn(location3);
+        GameLocationDistance testDistance1 = new GameLocationDistance(1,2,5);
+        GameLocationDistance testDistance2 = new GameLocationDistance(3,1,4);
+        List<GameLocationDistance> distances = new ArrayList<>();
+        distances.add(testDistance1);
+        distances.add(testDistance2);
+        when(mockGameLocationDistanceSqlDatabase.getAllLocationDistancesForLocation(eq(location1))).thenReturn(distances);
+        List<GameLocation> sqlResponseList = Arrays.asList(location1, location2, location3);
+        when(mockGameLocationSqlDatabase.getAllLocations()).thenReturn(sqlResponseList);
+
+        GameLocationRepository testedRepository = new GameLocationRepository(mockGameLocationSqlDatabase, mockGameLocationDistanceSqlDatabase);
+
+        List<GameLocation> responseList = testedRepository.getAllGameLocations();
+        assertEquals (3, responseList.size());
+    }
+
+    @Test
+    public void getLocationByIdTest(){
+        Integer testLocation1Id = 1;
+        Integer testLocation2Id = 2;
+        Integer testLocation3Id = 3;
+        String testLocation1Name = "TestLocation1";
+        String testLocation2Name = "TestLocation2";
+        String testLocation3Name = "TestLocation3";
+        GameLocationSqlDatabase mockGameLocationSqlDatabase = Mockito.mock(GameLocationSqlDatabase.class);
+        GameLocationDistanceSqlDatabase mockGameLocationDistanceSqlDatabase = Mockito.mock(GameLocationDistanceSqlDatabase.class);
+        GameLocation location1 = new GameLocation(testLocation1Id,testLocation1Name,"Description 1");
+        when(mockGameLocationSqlDatabase.getLocationByName(eq(testLocation1Name))).thenReturn(location1);
+        when(mockGameLocationSqlDatabase.getLocationById(testLocation1Id)).thenReturn(location1);
+        GameLocation location2 = new GameLocation(testLocation2Id, testLocation2Name,"Description 2");
+        when(mockGameLocationSqlDatabase.getLocationByName(eq(testLocation2Name))).thenReturn(location2);
+        when(mockGameLocationSqlDatabase.getLocationById(testLocation2Id)).thenReturn(location2);
+        GameLocation location3 = new GameLocation(testLocation3Id, testLocation3Name,"Description 3");
+        when(mockGameLocationSqlDatabase.getLocationByName(eq(testLocation3Name))).thenReturn(location3);
+        when(mockGameLocationSqlDatabase.getLocationById(testLocation3Id)).thenReturn(location3);
+        GameLocationDistance testDistance1 = new GameLocationDistance(testLocation1Id,testLocation2Id,5);
+        GameLocationDistance testDistance2 = new GameLocationDistance(testLocation3Id,testLocation1Id,4);
+        List<GameLocationDistance> distances = new ArrayList<>();
+        distances.add(testDistance1);
+        distances.add(testDistance2);
+        when(mockGameLocationDistanceSqlDatabase.getAllLocationDistancesForLocation(eq(location1))).thenReturn(distances);
+
+        GameLocationRepository testedRepository = new GameLocationRepository(mockGameLocationSqlDatabase, mockGameLocationDistanceSqlDatabase);
+        GameLocation responseLocation = testedRepository.getLocationById(testLocation1Id);
+
+        assertEquals(testLocation1Id,responseLocation.getId());
+        assertEquals(testLocation1Name, responseLocation.getLocationName());
+    }
+
+    @Test
+    public void getLocationByIdNullTest(){
+        Integer testLocation1Id = 1;
+        GameLocationSqlDatabase mockGameLocationSqlDatabase = Mockito.mock(GameLocationSqlDatabase.class);
+        GameLocationDistanceSqlDatabase mockGameLocationDistanceSqlDatabase = Mockito.mock(GameLocationDistanceSqlDatabase.class);
+        when(mockGameLocationSqlDatabase.getLocationById(eq(testLocation1Id))).thenReturn(null);
+        GameLocationRepository testedRepository = new GameLocationRepository(mockGameLocationSqlDatabase, mockGameLocationDistanceSqlDatabase);
+        GameLocation responseLocation = testedRepository.getLocationById(testLocation1Id);
+        assertNull(responseLocation);
     }
 }
