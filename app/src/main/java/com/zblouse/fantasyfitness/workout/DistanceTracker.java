@@ -30,13 +30,13 @@ public class DistanceTracker {
     }
 
     public double stop(){
-        pause();
-        return totalDistanceMeters;
+        return pause();
     }
 
-    public void pause(){
+    public double pause(){
         paused = true;
         lastLocation = null;
+        return totalDistanceMeters;
     }
 
     public void unpause(){

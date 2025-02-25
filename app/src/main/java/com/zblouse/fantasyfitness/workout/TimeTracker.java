@@ -35,4 +35,8 @@ public class TimeTracker {
         paused = false;
         lastTimestamp = System.currentTimeMillis();
     }
+
+    public long getTotalTimeMillis(){
+        return totalTimeMillis;
+    }
 }
