@@ -6,8 +6,6 @@ import static org.mockito.Mockito.verify;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.zblouse.fantasyfitness.workout.WorkoutTimeUpdateEvent;
-
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;

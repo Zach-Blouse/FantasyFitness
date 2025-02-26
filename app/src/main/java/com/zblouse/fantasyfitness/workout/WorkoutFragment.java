@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.zblouse.fantasyfitness.activity.DeviceServiceType;
+import com.zblouse.fantasyfitness.activity.LocationForegroundDeviceService;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
@@ -54,21 +56,17 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
 
     @Override
     public void publishEvent(Event event) {
-        if(event.getEventType().equals(EventType.TIME_UPDATE_EVENT)){
+        if(event.getEventType().equals(EventType.WORKOUT_UPDATE_EVENT)){
             mainActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    workoutTimeTextView.setText(formatTimeDisplay(((WorkoutTimeUpdateEvent)event).getTime()));
+                    workoutTimeTextView.setText(formatTimeDisplay(((WorkoutUpdateEvent)event).getTime()));
+                    workoutDistanceTextView.setText(formatDistanceDisplay(((WorkoutUpdateEvent)event).getDistanceMeters()));
+                    ((LocationForegroundDeviceService)mainActivity.getDeviceService(DeviceServiceType.LOCATION_FOREGROUND))
+                            .updateLocationForegroundServiceNotification(formatNotificationDisplay(((WorkoutUpdateEvent)event).getTime(),((WorkoutUpdateEvent)event).getDistanceMeters()));
                 }
             });
 
-        } else if(event.getEventType().equals(EventType.WORKOUT_DISTANCE_UPDATE_EVENT)){
-            mainActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    workoutDistanceTextView.setText(formatDistanceDisplay(((WorkoutDistanceUpdateEvent)event).getDistanceMeters()));
-                }
-            });
         } else if(event.getEventType().equals(EventType.WORKOUT_COMPLETE_EVENT)){
             mainActivity.runOnUiThread(new Runnable() {
                 @Override
@@ -76,6 +74,14 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
                     workoutTimeTextView.setText(formatTimeDisplay(((WorkoutCompleteEvent)event).getWorkoutTime()));
                     workoutDistanceTextView.setText(formatDistanceDisplay(((WorkoutCompleteEvent)event).getWorkoutDistanceMeters()));
                     mainActivity.getUserGameStateService().addUserGameDistance(mainActivity.getCurrentUser().getUid(),((WorkoutCompleteEvent)event).getWorkoutDistanceMeters(),new HashMap<>());
+                    ((LocationForegroundDeviceService)mainActivity.getDeviceService(DeviceServiceType.LOCATION_FOREGROUND)).stopLocationForegroundService();
+                }
+            });
+        } else if(event.getEventType().equals(EventType.WORKOUT_START_EVENT)){
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((LocationForegroundDeviceService)mainActivity.getDeviceService(DeviceServiceType.LOCATION_FOREGROUND)).startLocationForegroundService();
                 }
             });
         }
@@ -167,6 +173,10 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     private String formatDistanceDisplay(double distanceMeters){
         double distanceKm = distanceMeters/1000;
         return String.format(Locale.US, "%.2f",distanceKm) + " km";
+    }
+
+    private String formatNotificationDisplay(long time, double distance){
+        return formatTimeDisplay(time) + " " + formatDistanceDisplay(distance);
     }
 
     private void initialButtonSetup(){

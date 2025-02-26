@@ -9,14 +9,12 @@ import static org.mockito.Mockito.when;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.MainActivity;
-import com.zblouse.fantasyfitness.user.CreateAccountFragment;
 import com.zblouse.fantasyfitness.user.UserService;
 
 import org.junit.Rule;
@@ -71,7 +69,7 @@ public class WorkoutFragmentTest {
         Bundle mockBundle = Mockito.mock(Bundle.class);
         WorkoutFragment testedFragment = new WorkoutFragment(mainActivity);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
-        testedFragment.publishEvent(new WorkoutTimeUpdateEvent(1000, new HashMap<>()));
+        testedFragment.publishEvent(new WorkoutUpdateEvent(1000, 0, new HashMap<>()));
 
         assertEquals("00:01",((TextView)returnedView.findViewById(R.id.workout_time)).getText());
 
@@ -90,7 +88,7 @@ public class WorkoutFragmentTest {
         Bundle mockBundle = Mockito.mock(Bundle.class);
         WorkoutFragment testedFragment = new WorkoutFragment(mainActivity);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
-        testedFragment.publishEvent(new WorkoutDistanceUpdateEvent(1230, new HashMap<>()));
+        testedFragment.publishEvent(new WorkoutUpdateEvent(0, 1230, new HashMap<>()));
 
         assertEquals("1.23 km",((TextView)returnedView.findViewById(R.id.workout_distance)).getText());
 

@@ -2,6 +2,7 @@ package com.zblouse.fantasyfitness.activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
@@ -19,7 +20,8 @@ public class PermissionDeviceService extends DeviceService{
     }
 
     public void requestPermission(String permission, int requestCode){
+        Log.e("PERMISSION_DEVICE_SERVICE", "Requesting permission: " + permission);
         ActivityCompat.requestPermissions(mainActivity, new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION}, requestCode);
+                permission}, requestCode);
     }
 }

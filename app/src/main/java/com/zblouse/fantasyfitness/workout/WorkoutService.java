@@ -54,7 +54,8 @@ public class WorkoutService implements EventListener {
             //If the workout is paused, don't update the time or distance
             if (!paused) {
                 long time = timeTracker.update();
-                mainActivity.publishEvent(new WorkoutTimeUpdateEvent(time, new HashMap<>()));
+                double distance = distanceTracker.getTotalDistanceMeters();
+                mainActivity.publishEvent(new WorkoutUpdateEvent(time, distance, new HashMap<>()));
             }
             handler.postDelayed(this, 500);
         }
@@ -63,8 +64,8 @@ public class WorkoutService implements EventListener {
     public void pause() {
         paused = true;
         long updatedTime = timeTracker.pause();
-        distanceTracker.pause();
-        mainActivity.publishEvent(new WorkoutTimeUpdateEvent(updatedTime, new HashMap<>()));
+        double updatedDistance = distanceTracker.pause();
+        mainActivity.publishEvent(new WorkoutUpdateEvent(updatedTime, updatedDistance, new HashMap<>()));
     }
 
     public void unpause() {
@@ -75,17 +76,19 @@ public class WorkoutService implements EventListener {
 
     public boolean startWorkout() {
         //ensure we have location permissions before starting
-        if(((PermissionDeviceService)mainActivity.getDeviceService(DeviceServiceType.PERMISSION)).hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)){
+
+        if (((PermissionDeviceService) mainActivity.getDeviceService(DeviceServiceType.PERMISSION)).hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
             paused = false;
             timeTracker.start();
             distanceTracker.start();
             handler.post(workoutRunnable);
-            ((LocationDeviceService)mainActivity.getDeviceService(DeviceServiceType.LOCATION)).subscribe(this);
+            ((LocationDeviceService) mainActivity.getDeviceService(DeviceServiceType.LOCATION)).subscribe(this);
             return true;
-        } else{
+        } else {
             ((PermissionDeviceService) mainActivity.getDeviceService(DeviceServiceType.PERMISSION)).requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, 5);
             return false;
         }
+
     }
 
     public void stopWorkout(){
@@ -100,7 +103,7 @@ public class WorkoutService implements EventListener {
     public void publishEvent(Event event) {
         if(event.getEventType().equals(EventType.DEVICE_LOCATION_EVENT)){
             if (!paused) {
-                mainActivity.publishEvent(new WorkoutDistanceUpdateEvent(distanceTracker.update(((LocationEvent)event).getLocation()), new HashMap<>()));
+                mainActivity.publishEvent(new WorkoutUpdateEvent(timeTracker.getTotalTimeMillis(), distanceTracker.update(((LocationEvent)event).getLocation()), new HashMap<>()));
             }
         }
     }
