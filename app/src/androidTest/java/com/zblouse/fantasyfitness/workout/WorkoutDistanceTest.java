@@ -23,6 +23,7 @@ import android.os.Looper;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -65,6 +66,9 @@ public class WorkoutDistanceTest {
     @Rule
     public IntentsTestRule<MainActivity> intentsTestRule =
             new IntentsTestRule<>(MainActivity.class);
+
+    @Rule
+    public GrantPermissionRule grantPermissionsRule = GrantPermissionRule.grant(Manifest.permission.POST_NOTIFICATIONS, Manifest.permission.FOREGROUND_SERVICE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
 
     @Test
     public void workoutDistanceTest() throws InterruptedException {

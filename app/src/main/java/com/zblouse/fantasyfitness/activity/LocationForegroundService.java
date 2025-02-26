@@ -23,7 +23,6 @@ public class LocationForegroundService extends Service {
 
         createNotificationChannel();
         String notificationText = intent.getStringExtra(LocationForegroundDeviceService.NOTIFICATION_TEXT);
-        Log.e("LOCATIONFOREGROUNDSERVICE", "notification: " + notificationText);
         startForeground(1, getNotification(notificationText));
         return START_STICKY;
     }
@@ -47,8 +46,9 @@ public class LocationForegroundService extends Service {
     }
 
     private Notification getNotification(String notificationText) {
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+        Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
                 notificationIntent,
                 PendingIntent.FLAG_IMMUTABLE);
         NotificationCompat.Builder builder = new

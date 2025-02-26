@@ -100,8 +100,8 @@ public class WorkoutServiceTest {
         Location mockLocation = Mockito.mock(Location.class);
         LocationEvent locationEvent = new LocationEvent(mockLocation, new HashMap<>());
         workoutService.publishEvent(locationEvent);
-        ArgumentCaptor<WorkoutDistanceUpdateEvent> distanceUpdateEventArgumentCaptor = ArgumentCaptor.forClass(WorkoutDistanceUpdateEvent.class);
-        verify(mockActivity).publishEvent((WorkoutDistanceUpdateEvent)distanceUpdateEventArgumentCaptor.capture());
+        ArgumentCaptor<WorkoutUpdateEvent> distanceUpdateEventArgumentCaptor = ArgumentCaptor.forClass(WorkoutUpdateEvent.class);
+        verify(mockActivity).publishEvent((WorkoutUpdateEvent)distanceUpdateEventArgumentCaptor.capture());
         assert(distanceUpdateEventArgumentCaptor.getValue().getDistanceMeters() == 57.5);
 
     }

@@ -1,6 +1,7 @@
 package com.zblouse.fantasyfitness.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
 import androidx.activity.EdgeToEdge;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("MAINACTIVITY","RUNNING ON CREATE");
         FirebaseApp.initializeApp(this);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);

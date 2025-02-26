@@ -69,7 +69,7 @@ public class WorkoutFragmentTest {
         Bundle mockBundle = Mockito.mock(Bundle.class);
         WorkoutFragment testedFragment = new WorkoutFragment(mainActivity);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
-        testedFragment.publishEvent(new WorkoutUpdateEvent(1000, new HashMap<>()));
+        testedFragment.publishEvent(new WorkoutUpdateEvent(1000, 0, new HashMap<>()));
 
         assertEquals("00:01",((TextView)returnedView.findViewById(R.id.workout_time)).getText());
 
@@ -88,7 +88,7 @@ public class WorkoutFragmentTest {
         Bundle mockBundle = Mockito.mock(Bundle.class);
         WorkoutFragment testedFragment = new WorkoutFragment(mainActivity);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
-        testedFragment.publishEvent(new WorkoutDistanceUpdateEvent(1230, new HashMap<>()));
+        testedFragment.publishEvent(new WorkoutUpdateEvent(0, 1230, new HashMap<>()));
 
         assertEquals("1.23 km",((TextView)returnedView.findViewById(R.id.workout_distance)).getText());
 
