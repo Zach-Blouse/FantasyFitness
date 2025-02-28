@@ -57,7 +57,7 @@ public class WorkoutService implements EventListener {
                 double distance = distanceTracker.getTotalDistanceMeters();
                 mainActivity.publishEvent(new WorkoutUpdateEvent(time, distance, new HashMap<>()));
             }
-            handler.postDelayed(this, 500);
+            handler.postDelayed(this, 1000);
         }
     };
 

@@ -3,7 +3,9 @@ package com.zblouse.fantasyfitness.user;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.core.DomainService;
 import com.zblouse.fantasyfitness.world.GameLocationService;
@@ -47,9 +49,12 @@ public class UserGameStateServiceTest {
     public void initializeUserGameStateTest(){
         String userId = "testUserId1";
         MainActivity mockActivity = Mockito.mock(MainActivity.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        when(mockUser.getUid()).thenReturn(userId);
+        when(mockActivity.getCurrentUser()).thenReturn(mockUser);
         UserGameStateRepository mockUserGameStateRepository = Mockito.mock(UserGameStateRepository.class);
         UserGameStateService testedService = new UserGameStateService(mockActivity, mockUserGameStateRepository);
-        testedService.initializeUserGameState(userId, GameLocationService.THANADEL_VILLAGE, new HashMap<>());
+        testedService.initializeUserGameState();
         ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
         verify(mockUserGameStateRepository).writeUserGameState(eq(userId),eq(GameLocationService.THANADEL_VILLAGE),eq(0.0),mapArgumentCaptor.capture());
         assert(mapArgumentCaptor.getValue().containsKey(UserGameStateService.CALLING_FUNCTION_KEY));

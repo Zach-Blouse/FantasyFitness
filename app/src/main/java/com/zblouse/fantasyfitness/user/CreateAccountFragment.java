@@ -47,7 +47,8 @@ public class CreateAccountFragment extends AuthenticationRequiredFragment implem
                 } else {
                     String username = usernameEditText.getText().toString();
                     mainActivity.getUserService().registerUser(mainActivity.getCurrentUser().getUid(),username);
-                    mainActivity.getUserGameStateService().initializeUserGameState(mainActivity.getCurrentUser().getUid(), GameLocationService.THANADEL_VILLAGE, new HashMap<>());
+                    mainActivity.getUserGameStateService().initializeUserGameState();
+                    mainActivity.getWorkoutRecordService().initializeWorkoutRecords();
                 }
             }
         });

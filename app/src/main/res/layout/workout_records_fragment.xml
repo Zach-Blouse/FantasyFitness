@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fantasy_fitness_gray"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/workout_records_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/workout_records"
+        android:textColor="@color/fantasy_fitness_white"
+        android:textSize="50sp"
+        android:layout_gravity="center"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+    <TextView
+        android:id="@+id/workout_records_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/fantasy_fitness_white"
+        android:textSize="24sp"
+        android:layout_gravity="start"/>
+
+</LinearLayout>

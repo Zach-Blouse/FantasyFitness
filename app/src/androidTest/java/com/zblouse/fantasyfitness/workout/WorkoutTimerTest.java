@@ -312,6 +312,7 @@ public class WorkoutTimerTest {
         onView(withId(R.id.workout_time)).check(matches(withText("00:05")));
         onView(withId(R.id.pause_workout_button)).perform(click());
         Thread.sleep(5000);
+        onView(withId(R.id.pause_workout_button)).perform(click());
         onView(withId(R.id.workout_time)).check(matches(withText("00:10")));
     }
 

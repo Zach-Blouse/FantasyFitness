@@ -64,6 +64,7 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
                     workoutDistanceTextView.setText(formatDistanceDisplay(((WorkoutUpdateEvent)event).getDistanceMeters()));
                     ((LocationForegroundDeviceService)mainActivity.getDeviceService(DeviceServiceType.LOCATION_FOREGROUND))
                             .updateLocationForegroundServiceNotification(formatNotificationDisplay(((WorkoutUpdateEvent)event).getTime(),((WorkoutUpdateEvent)event).getDistanceMeters()));
+                    mainActivity.getWorkoutRecordService().checkForRecords(((WorkoutUpdateEvent)event).getTime(),((WorkoutUpdateEvent)event).getDistanceMeters());
                 }
             });
 
