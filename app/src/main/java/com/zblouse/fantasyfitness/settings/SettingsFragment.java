@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
+import com.zblouse.fantasyfitness.user.CreateAccountFragment;
+import com.zblouse.fantasyfitness.workout.WorkoutRecordsFragment;
 
 public class SettingsFragment  extends AuthenticationRequiredFragment {
 
@@ -29,6 +31,14 @@ public class SettingsFragment  extends AuthenticationRequiredFragment {
             @Override
             public void onClick(View view) {
                 mainActivity.logout();
+            }
+        });
+        Button workoutRecordsButton = layout.findViewById(R.id.workout_records_button);
+        workoutRecordsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new WorkoutRecordsFragment(mainActivity)).commit();
             }
         });
 

@@ -25,6 +25,7 @@ import com.zblouse.fantasyfitness.user.UserGameStateService;
 import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.workout.WorkoutFragment;
+import com.zblouse.fantasyfitness.workout.WorkoutRecordService;
 import com.zblouse.fantasyfitness.workout.WorkoutService;
 import com.zblouse.fantasyfitness.world.GameLocationDistanceSqlDatabase;
 import com.zblouse.fantasyfitness.world.GameLocationService;
@@ -45,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
     private Map<DeviceServiceType, DeviceService> deviceServices;
     private GameLocationService gameLocationService;
     private UserGameStateService userGameStateService;
+    private WorkoutRecordService workoutRecordService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("MAINACTIVITY","RUNNING ON CREATE");
         FirebaseApp.initializeApp(this);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -76,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
         deleteDatabase(GameLocationSqlDatabase.GAME_LOCATION_DATABASE_NAME);
         deleteDatabase(GameLocationDistanceSqlDatabase.GAME_LOCATION_DISTANCE_DATABASE_NAME);
         gameLocationService = new GameLocationService(this);
-        userGameStateService= new UserGameStateService(this);
+        userGameStateService = new UserGameStateService(this);
+        workoutRecordService = new WorkoutRecordService(this);
 
         gameLocationService.initializeLocationDatabase();
         currentUser = firebaseAuth.getCurrentUser();
@@ -195,6 +197,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUserGameStateService(UserGameStateService userGameStateService){
         this.userGameStateService = userGameStateService;
+    }
+
+    public WorkoutRecordService getWorkoutRecordService(){
+        return this.workoutRecordService;
+    }
+
+    public void setWorkoutRecordService(WorkoutRecordService workoutRecordService){
+        this.workoutRecordService = workoutRecordService;
     }
 
 }

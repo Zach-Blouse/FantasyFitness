@@ -3,7 +3,9 @@ package com.zblouse.fantasyfitness.user;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.core.DomainService;
 import com.zblouse.fantasyfitness.world.GameLocationDistance;
+import com.zblouse.fantasyfitness.world.GameLocationService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,9 +57,10 @@ public class UserGameStateService implements DomainService<UserGameState> {
         userGameStateRepository.addUserDistance(userId, distanceKm, metadata);
     }
 
-    public void initializeUserGameState(String userId, String initialLocationName,Map<String, Object> metadata ){
+    public void initializeUserGameState(){
+        Map<String, Object> metadata = new HashMap<>();
         metadata.put(CALLING_FUNCTION_KEY, INITIALIZE_GAME_STATE_FUNCTION);
-        userGameStateRepository.writeUserGameState(userId, initialLocationName,0, metadata);
+        userGameStateRepository.writeUserGameState(activity.getCurrentUser().getUid(), GameLocationService.THANADEL_VILLAGE,0, metadata);
     }
 
     public void updateUserGameLocation(String userId, String newLocationName, Map<String, Object> metadata){

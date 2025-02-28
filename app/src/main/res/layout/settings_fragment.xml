@@ -5,7 +5,9 @@
     android:background="@color/fantasy_fitness_gray"
     android:orientation="vertical">
 
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
     <Button
         android:id="@+id/logout_button"
         android:layout_width="250dp"
@@ -15,6 +17,19 @@
         android:layout_gravity="center"
         android:backgroundTint="@color/fantasy_fitness_green"
         android:textColor="@color/fantasy_fitness_white"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+    <Button
+        android:id="@+id/workout_records_button"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="@string/workout_records"
+        android:textSize="25sp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/fantasy_fitness_green"
+        android:textColor="@color/fantasy_fitness_white"/>
+
 
 
 </LinearLayout>
