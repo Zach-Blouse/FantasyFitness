@@ -36,6 +36,10 @@ public class LoginFragment extends Fragment implements EventListener {
 
     private MainActivity mainActivity;
 
+    public LoginFragment(){
+        super(R.layout.login_fragment);
+    }
+
     public LoginFragment(MainActivity mainActivity){
         super(R.layout.login_fragment);
         this.mainActivity = mainActivity;

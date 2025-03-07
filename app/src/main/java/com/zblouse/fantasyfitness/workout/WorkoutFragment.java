@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.LocationForegroundDeviceService;
 import com.zblouse.fantasyfitness.activity.MainActivity;
@@ -33,6 +35,10 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     private static final int MILLIS_IN_MINUTE = 60000;
     private static final int MILLIS_IN_SECOND = 1000;
 
+    public WorkoutFragment(){
+        super(R.layout.workout_fragment);
+    }
+
     public WorkoutFragment(MainActivity mainActivity) {
         super(R.layout.workout_fragment, mainActivity);
     }
@@ -50,6 +56,16 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
         initialButtonSetup();
         ((ViewGroup)layout).removeView(pauseWorkoutButton);
         ((ViewGroup)layout).removeView(stopWorkoutButton);
+
+        if(savedInstanceState != null){
+            if(mainActivity.getWorkoutService().onRestoreInstanceState(savedInstanceState)){
+                mainActivity.hideNavigation();
+
+                ((ViewGroup) layout).removeView(startWorkoutButton);
+                ((ViewGroup) layout).addView(pauseWorkoutButton);
+                ((ViewGroup) layout).addView(stopWorkoutButton);
+            }
+        }
 
         return layout;
     }
@@ -86,6 +102,13 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
                 }
             });
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        mainActivity.getWorkoutService().onSaveInstanceState(outState);
     }
 
     private void startWorkout(){

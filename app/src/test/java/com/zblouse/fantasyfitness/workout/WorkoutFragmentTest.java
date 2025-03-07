@@ -3,6 +3,7 @@ package com.zblouse.fantasyfitness.workout;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.zblouse.fantasyfitness.R;
+import com.zblouse.fantasyfitness.activity.DeviceServiceType;
+import com.zblouse.fantasyfitness.activity.LocationForegroundDeviceService;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.user.UserService;
 
@@ -226,6 +229,27 @@ public class WorkoutFragmentTest {
         verify(mockWorkoutService).unpause();
         assertEquals("Pause Workout",((TextView)returnedView.findViewById(R.id.pause_workout_button)).getText());
         assertEquals("Stop Workout",((TextView)returnedView.findViewById(R.id.stop_workout_button)).getText());
+
+    }
+
+    @Test
+    public void workoutTimeAndDistanceNotificationSentTest(){
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        LocationForegroundDeviceService mockLocationForegroundDeviceService = Mockito.mock(LocationForegroundDeviceService.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setDeviceService(DeviceServiceType.LOCATION_FOREGROUND,mockLocationForegroundDeviceService);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        WorkoutFragment testedFragment = new WorkoutFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+        testedFragment.publishEvent(new WorkoutUpdateEvent(1000, 1500, new HashMap<>()));
+
+        verify(mockLocationForegroundDeviceService).updateLocationForegroundServiceNotification(eq("00:01 1.50 km"));
 
     }
 }

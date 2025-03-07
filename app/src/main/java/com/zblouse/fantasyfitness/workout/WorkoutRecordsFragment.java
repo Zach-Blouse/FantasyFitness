@@ -28,6 +28,10 @@ public class WorkoutRecordsFragment extends AuthenticationRequiredFragment imple
     private static final int MILLIS_IN_MINUTE = 60000;
     private static final int MILLIS_IN_SECOND = 1000;
 
+    public WorkoutRecordsFragment(){
+        super(R.layout.workout_records_fragment);
+    }
+
     public WorkoutRecordsFragment(MainActivity mainActivity) {
         super(R.layout.workout_records_fragment, mainActivity);
     }

@@ -20,6 +20,10 @@ import com.zblouse.fantasyfitness.user.UserExistEvent;
 
 public class UserHomeFragment extends AuthenticationRequiredFragment implements EventListener {
 
+    public UserHomeFragment(){
+        super(R.layout.user_home_fragment);
+    }
+
     public UserHomeFragment(MainActivity mainActivity){
         super(R.layout.user_home_fragment, mainActivity);
     }

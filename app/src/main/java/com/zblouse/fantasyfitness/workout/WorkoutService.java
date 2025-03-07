@@ -1,6 +1,8 @@
 package com.zblouse.fantasyfitness.workout;
 
 import android.Manifest;
+import android.location.Location;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -19,9 +21,14 @@ public class WorkoutService implements EventListener {
 
     private final Handler handler;
     private boolean paused;
+    private boolean workoutInProgress;
     private final TimeTracker timeTracker;
     private final DistanceTracker distanceTracker;
     private MainActivity mainActivity;
+    private static final String SAVE_STATE_WORKOUT_DISTANCE = "workoutDistance";
+    private static final String SAVE_STATE_WORKOUT_TIME = "workoutTime";
+    private static final String SAVE_STATE_WORKOUT_IN_PROGRESS = "workoutInProgress";
+    private static final String SAVE_STATE_LAST_LOCATION = "lastLocation";
 
     public WorkoutService() {
         this.handler = new Handler(Looper.myLooper());
@@ -42,6 +49,7 @@ public class WorkoutService implements EventListener {
         this.timeTracker = timeTracker;
         this.distanceTracker = distanceTracker;
         paused = true;
+        workoutInProgress = false;
     }
 
     public void setMainActivity(MainActivity mainActivity){
@@ -82,6 +90,7 @@ public class WorkoutService implements EventListener {
             timeTracker.start();
             distanceTracker.start();
             handler.post(workoutRunnable);
+            workoutInProgress = true;
             ((LocationDeviceService) mainActivity.getDeviceService(DeviceServiceType.LOCATION)).subscribe(this);
             return true;
         } else {
@@ -96,7 +105,31 @@ public class WorkoutService implements EventListener {
         long finalTime = timeTracker.stop();
         paused = true;
         handler.removeCallbacks(workoutRunnable);
+        workoutInProgress = false;
         mainActivity.publishEvent(new WorkoutCompleteEvent(finalTime, finalDistance, new HashMap<>()));
+    }
+
+    public Bundle onSaveInstanceState(Bundle outBundle){
+
+        outBundle.putBoolean(SAVE_STATE_WORKOUT_IN_PROGRESS, workoutInProgress);
+        if(workoutInProgress){
+            outBundle.putDouble(SAVE_STATE_WORKOUT_DISTANCE,distanceTracker.getTotalDistanceMeters());
+            outBundle.putLong(SAVE_STATE_WORKOUT_TIME, timeTracker.getTotalTimeMillis());
+            outBundle.putParcelable(SAVE_STATE_LAST_LOCATION,distanceTracker.getLastLocation());
+        }
+
+        return outBundle;
+    }
+
+    public boolean onRestoreInstanceState(Bundle savedState){
+        workoutInProgress = savedState.getBoolean(SAVE_STATE_WORKOUT_IN_PROGRESS);
+        if(workoutInProgress){
+            startWorkout();
+            distanceTracker.setTotalDistanceMeters(savedState.getDouble(SAVE_STATE_WORKOUT_DISTANCE,0));
+            distanceTracker.setLastLocation(savedState.getParcelable(SAVE_STATE_LAST_LOCATION, Location.class));
+            timeTracker.setTotalTimeMillis(savedState.getLong(SAVE_STATE_WORKOUT_TIME,0));
+        }
+        return workoutInProgress;
     }
 
     @Override
