@@ -39,4 +39,8 @@ public class TimeTracker {
     public long getTotalTimeMillis(){
         return totalTimeMillis;
     }
+
+    public void setTotalTimeMillis(long totalTimeMillis){
+        this.totalTimeMillis = totalTimeMillis;
+    }
 }

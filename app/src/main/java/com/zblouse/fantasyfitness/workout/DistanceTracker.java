@@ -46,4 +46,16 @@ public class DistanceTracker {
     public double getTotalDistanceMeters(){
         return totalDistanceMeters;
     }
+
+    public Location getLastLocation(){
+        return this.lastLocation;
+    }
+
+    public void setLastLocation(Location location){
+        this.lastLocation = location;
+    }
+
+    public void setTotalDistanceMeters(double totalDistanceMeters){
+        this.totalDistanceMeters = totalDistanceMeters;
+    }
 }

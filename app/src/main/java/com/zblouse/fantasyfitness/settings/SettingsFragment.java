@@ -17,6 +17,10 @@ import com.zblouse.fantasyfitness.workout.WorkoutRecordsFragment;
 
 public class SettingsFragment  extends AuthenticationRequiredFragment {
 
+    public SettingsFragment(){
+        super(R.layout.settings_fragment);
+    }
+
     public SettingsFragment(MainActivity mainActivity){
         super(R.layout.settings_fragment, mainActivity);
     }

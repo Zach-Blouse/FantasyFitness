@@ -25,6 +25,10 @@ import java.util.HashMap;
 
 public class CreateAccountFragment extends AuthenticationRequiredFragment implements EventListener {
 
+    public CreateAccountFragment(){
+        super(R.layout.create_account_fragment);
+    }
+
     public CreateAccountFragment(MainActivity mainActivity){
         super(R.layout.create_account_fragment, mainActivity);
     }

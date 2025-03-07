@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         FirebaseApp.initializeApp(this);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -82,12 +83,14 @@ public class MainActivity extends AppCompatActivity {
 
         gameLocationService.initializeLocationDatabase();
         currentUser = firebaseAuth.getCurrentUser();
-        if(currentUser == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new LoginFragment(this)).commit();
-        } else {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new UserHomeFragment(this)).commit();
+        if(savedInstanceState == null) {
+            if (currentUser == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new LoginFragment(this)).commit();
+            } else {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new UserHomeFragment(this)).commit();
+            }
         }
     }
 

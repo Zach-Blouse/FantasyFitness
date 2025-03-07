@@ -15,6 +15,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.ViewCompat;
@@ -46,8 +47,18 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
     private GameLocationPaths lastKnownGameLocationPaths;
     private ScrollView verticalScrollView;
     private HorizontalScrollView horizontalScrollView;
+    private boolean loadedFromSavedInstance;
 
     private Map<String, Button> locationButtonMap;
+
+    private static final String SAVE_STATE_VERTICAL_SCROLL_X = "verticalScrollX";
+    private static final String SAVE_STATE_VERTICAL_SCROLL_Y = "verticalScrollY";
+    private static final String SAVE_STATE_HORIZONTAL_SCROLL_X = "horizontalScrollX";
+    private static final String SAVE_STATE_HORIZONTAL_SCROLL_Y = "horizontalScrollY";
+
+    public GameWorldFragment(){
+        super(R.layout.game_world_fragment);
+    }
 
     public GameWorldFragment(MainActivity mainActivity){
         super(R.layout.game_world_fragment, mainActivity);
@@ -56,6 +67,7 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.OnCreateView();
+        loadedFromSavedInstance = false;
         layout = (ConstraintLayout) inflater.inflate(R.layout.game_world_fragment,container,false);
         mainActivity.showNavigation();
         //Implementing scrolling both directions at once, since vertical is the parent, the touch is implemented there
@@ -192,7 +204,24 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
         });
         locationButtonMap.put(GameLocationService.HILLS, hillsButton);
         mainActivity.getUserGameStateService().fetchUserGameState(mainActivity.getCurrentUser().getUid(), new HashMap<>());
+        if(savedInstanceState != null){
+            loadedFromSavedInstance = true;
+            verticalScrollView.setScrollX(savedInstanceState.getInt(SAVE_STATE_VERTICAL_SCROLL_X));
+            verticalScrollView.setScrollY(savedInstanceState.getInt(SAVE_STATE_VERTICAL_SCROLL_Y));
+            horizontalScrollView.setScrollX(savedInstanceState.getInt(SAVE_STATE_HORIZONTAL_SCROLL_X));
+            horizontalScrollView.setScrollY(savedInstanceState.getInt(SAVE_STATE_HORIZONTAL_SCROLL_Y));
+        }
         return layout;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(SAVE_STATE_VERTICAL_SCROLL_X, verticalScrollView.getScrollX());
+        outState.putInt(SAVE_STATE_VERTICAL_SCROLL_Y, verticalScrollView.getScrollY());
+        outState.putInt(SAVE_STATE_HORIZONTAL_SCROLL_X, horizontalScrollView.getScrollX());
+        outState.putInt(SAVE_STATE_HORIZONTAL_SCROLL_Y, horizontalScrollView.getScrollY());
     }
 
     public void closeLocationInfoPopup(){
@@ -244,13 +273,17 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
         locationButtonMap.get(lastKnownGameLocation).setBackgroundColor(getColor(getContext(), R.color.fantasy_fitness_red));
         int buttonTop = locationButtonMap.get(lastKnownGameLocation).getTop();
         int buttonBottom = locationButtonMap.get(lastKnownGameLocation).getBottom();
-        int scrollHeight = verticalScrollView.getBottom();
-        verticalScrollView.smoothScrollTo(0, ((buttonTop + buttonBottom - scrollHeight) / 2));
+        if(!loadedFromSavedInstance) {
+            int scrollHeight = verticalScrollView.getBottom();
+            verticalScrollView.smoothScrollTo(0, ((buttonTop + buttonBottom - scrollHeight) / 2));
 
-        int buttonLeft = locationButtonMap.get(lastKnownGameLocation).getLeft();
-        int buttonRight = locationButtonMap.get(lastKnownGameLocation).getRight();
-        int horizontalScrollWidth = horizontalScrollView.getWidth();
-        horizontalScrollView.smoothScrollTo(((buttonLeft + buttonRight - horizontalScrollWidth) / 2), 0);
+            int buttonLeft = locationButtonMap.get(lastKnownGameLocation).getLeft();
+            int buttonRight = locationButtonMap.get(lastKnownGameLocation).getRight();
+            int horizontalScrollWidth = horizontalScrollView.getWidth();
+            horizontalScrollView.smoothScrollTo(((buttonLeft + buttonRight - horizontalScrollWidth) / 2), 0);
+        } else {
+            loadedFromSavedInstance = false;
+        }
     }
 
     @Override
