@@ -3,11 +3,14 @@ package com.zblouse.fantasyfitness.workout;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.Manifest;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -16,13 +19,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
+import com.zblouse.fantasyfitness.activity.LocationDeviceService;
 import com.zblouse.fantasyfitness.activity.LocationForegroundDeviceService;
 import com.zblouse.fantasyfitness.activity.MainActivity;
+import com.zblouse.fantasyfitness.activity.PermissionDeviceService;
 import com.zblouse.fantasyfitness.user.UserService;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -250,6 +256,80 @@ public class WorkoutFragmentTest {
         testedFragment.publishEvent(new WorkoutUpdateEvent(1000, 1500, new HashMap<>()));
 
         verify(mockLocationForegroundDeviceService).updateLocationForegroundServiceNotification(eq("00:01 1.50 km"));
+
+    }
+
+    @Test
+    public void saveBundleTest(){
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        TimeTracker mockTimeTracker = Mockito.mock(TimeTracker.class);
+        DistanceTracker mockDistanceTracker = Mockito.mock(DistanceTracker.class);
+        long time = 3456L;
+        double distance = 1500.0;
+        when(mockTimeTracker.getTotalTimeMillis()).thenReturn(time);
+        when(mockDistanceTracker.getTotalDistanceMeters()).thenReturn(distance);
+        Handler mockHandler = Mockito.mock(Handler.class);
+        PermissionDeviceService mockPermissionDeviceService = Mockito.mock(PermissionDeviceService.class);
+        when(mockPermissionDeviceService.hasPermission(eq(Manifest.permission.ACCESS_FINE_LOCATION))).thenReturn(true);
+        mainActivity.setDeviceService(DeviceServiceType.PERMISSION, mockPermissionDeviceService);
+
+        WorkoutService workoutService = new WorkoutService(mainActivity, mockHandler, mockTimeTracker, mockDistanceTracker);
+        workoutService.startWorkout();
+
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        mainActivity.setWorkoutService(workoutService);
+
+        WorkoutFragment testedFragment = new WorkoutFragment(mainActivity);
+        Bundle bundle = new Bundle();
+        testedFragment.onSaveInstanceState(bundle);
+
+        assertEquals(time, bundle.getLong("workoutTime"));
+        assertEquals(distance, bundle.getDouble("workoutDistance"),0);
+        assert(bundle.getBoolean("workoutInProgress"));
+    }
+
+    @Test
+    public void loadBundleTest(){
+
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+
+        WorkoutFragment testedFragment = new WorkoutFragment(mainActivity);
+
+        TimeTracker mockTimeTracker = Mockito.mock(TimeTracker.class);
+        DistanceTracker mockDistanceTracker = Mockito.mock(DistanceTracker.class);
+        long time = 3456L;
+        double distance = 1500.0;
+
+        Handler mockHandler = Mockito.mock(Handler.class);
+        PermissionDeviceService mockPermissionDeviceService = Mockito.mock(PermissionDeviceService.class);
+        when(mockPermissionDeviceService.hasPermission(eq(Manifest.permission.ACCESS_FINE_LOCATION))).thenReturn(true);
+        mainActivity.setDeviceService(DeviceServiceType.PERMISSION, mockPermissionDeviceService);
+
+        WorkoutService workoutService = new WorkoutService(mainActivity, mockHandler, mockTimeTracker, mockDistanceTracker);
+
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        mainActivity.setWorkoutService(workoutService);
+
+
+        Bundle bundle = new Bundle();
+        bundle.putDouble("workoutDistance", distance);
+        bundle.putLong("workoutTime", time);
+        bundle.putBoolean("workoutInProgress", true);
+        testedFragment.onCreateView(layoutInflater, null, bundle);
+
+        verify(mockTimeTracker).setTotalTimeMillis(eq(time));
+        verify(mockDistanceTracker).setTotalDistanceMeters(eq(distance));
 
     }
 }
