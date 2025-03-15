@@ -301,13 +301,13 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
                 locationConnectionsTextView.setText(connectionsString);
                 locationInfoCardView.setVisibility(View.VISIBLE);
                 if(gameLocation.getLocationName().equals(lastKnownGameLocation)){
-                    if(((ViewGroup)locationInfoCardView).findViewById(travelButton.getId()) != null) {
-                        ((ViewGroup)locationInfoCardView).removeView(travelButton);
-                    }
+                    Log.e("GAME WORLD FRAGMENT", "last known location: " + lastKnownGameLocation + " is current location: " + gameLocation.getLocationName());
+
+                    travelButton.setVisibility(View.GONE);
+
                 }else{
-                    if(((ViewGroup)locationInfoCardView).findViewById(travelButton.getId()) == null) {
-                        ((ViewGroup) locationInfoCardView).addView(travelButton);
-                    }
+                    Log.e("GAME WORLD FRAGMENT", "last known location: " + lastKnownGameLocation + " current location: " + gameLocation.getLocationName());
+                    travelButton.setVisibility(View.VISIBLE);
                     if(lastKnownGameLocationPaths == null){
                         travelButton.setClickable(false);
                         travelButton.setBackgroundColor(getColor(mainActivity, R.color.fantasy_fitness_gray));

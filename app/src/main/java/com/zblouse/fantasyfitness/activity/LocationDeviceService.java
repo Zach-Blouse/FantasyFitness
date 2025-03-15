@@ -3,6 +3,7 @@ package com.zblouse.fantasyfitness.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.location.Location;
+import android.location.LocationRequest;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -70,11 +71,16 @@ public class LocationDeviceService extends DeviceService{
             fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener(mainActivity, new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
-                    // Got last known location. In some rare situations this can be null.
-                    if (location != null) {
-                        //send the location updates to the subscribers
-                        LocationEvent locationEvent = new LocationEvent(location, new HashMap<>());
-                        sendEvent(locationEvent);
+                    //Check Accuracy
+                    if(location.hasAccuracy()) {
+                        if(location.getAccuracy() < 5.0) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                //send the location updates to the subscribers
+                                LocationEvent locationEvent = new LocationEvent(location, new HashMap<>());
+                                sendEvent(locationEvent);
+                            }
+                        }
                     }
                 }
             });

@@ -14,10 +14,12 @@ public class DistanceTracker {
             if(lastLocation == null){
                 lastLocation = location;
             } else if(lastLocation != location){
-                float[] results = new float[3];
-                Location.distanceBetween(lastLocation.getLatitude(),lastLocation.getLongitude(),location.getLatitude(),location.getLongitude(),results);
-                totalDistanceMeters += results[0];
-                lastLocation = location;
+                if(location.getElapsedRealtimeAgeMillis() > lastLocation.getElapsedRealtimeAgeMillis()){
+                    float[] results = new float[3];
+                    Location.distanceBetween(lastLocation.getLatitude(),lastLocation.getLongitude(),location.getLatitude(),location.getLongitude(),results);
+                    totalDistanceMeters += results[0];
+                    lastLocation = location;
+                }
             }
         }
         return totalDistanceMeters;

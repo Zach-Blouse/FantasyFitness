@@ -19,6 +19,7 @@
         android:maxHeight="350dp">
 
         <ScrollView
+            android:id="@+id/location_info_scroll"
             android:layout_width="wrap_content"
             android:layout_margin="5dp"
             android:layout_height="wrap_content">
