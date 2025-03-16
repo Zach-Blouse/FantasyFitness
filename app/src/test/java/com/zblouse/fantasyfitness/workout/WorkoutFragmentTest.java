@@ -7,10 +7,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.robolectric.Shadows.shadowOf;
 
 import android.Manifest;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -58,11 +60,11 @@ public class WorkoutFragmentTest {
         WorkoutFragment testedFragment = new WorkoutFragment(mainActivity);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
-        assertNotNull(returnedView.findViewById(R.id.workout_time));
-        assertNotNull(returnedView.findViewById(R.id.start_workout_button));
-        assertNotNull(returnedView.findViewById(R.id.workout_distance));
-        assertNull(returnedView.findViewById(R.id.pause_workout_button));
-        assertNull(returnedView.findViewById(R.id.stop_workout_button));
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.workout_time).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.start_workout_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.workout_distance).getVisibility());
+        assertEquals(View.GONE, returnedView.findViewById(R.id.pause_workout_button).getVisibility());
+        assertEquals(View.GONE, returnedView.findViewById(R.id.stop_workout_button).getVisibility());
     }
 
     @Test
@@ -121,11 +123,12 @@ public class WorkoutFragmentTest {
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
         returnedView.findViewById(R.id.start_workout_button).performClick();
         verify(mockWorkoutService).startWorkout();
-        assertNotNull(returnedView.findViewById(R.id.workout_time));
-        assertNull(returnedView.findViewById(R.id.start_workout_button));
-        assertNotNull(returnedView.findViewById(R.id.workout_distance));
-        assertNotNull(returnedView.findViewById(R.id.pause_workout_button));
-        assertNotNull(returnedView.findViewById(R.id.stop_workout_button));
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.workout_time).getVisibility());
+        assertEquals(View.GONE, returnedView.findViewById(R.id.start_workout_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.workout_distance).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.pause_workout_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.stop_workout_button).getVisibility());
     }
 
     @Test
@@ -146,11 +149,11 @@ public class WorkoutFragmentTest {
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
         returnedView.findViewById(R.id.start_workout_button).performClick();
         verify(mockWorkoutService).startWorkout();
-        assertNotNull(returnedView.findViewById(R.id.workout_time));
-        assertNotNull(returnedView.findViewById(R.id.start_workout_button));
-        assertNotNull(returnedView.findViewById(R.id.workout_distance));
-        assertNull(returnedView.findViewById(R.id.pause_workout_button));
-        assertNull(returnedView.findViewById(R.id.stop_workout_button));
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.workout_time).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.start_workout_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.workout_distance).getVisibility());
+        assertEquals(View.GONE, returnedView.findViewById(R.id.pause_workout_button).getVisibility());
+        assertEquals(View.GONE, returnedView.findViewById(R.id.stop_workout_button).getVisibility());
     }
 
     @Test
@@ -201,12 +204,13 @@ public class WorkoutFragmentTest {
         assertEquals("Resume Workout",((TextView)returnedView.findViewById(R.id.pause_workout_button)).getText());
         assertEquals("Complete Workout",((TextView)returnedView.findViewById(R.id.stop_workout_button)).getText());
         returnedView.findViewById(R.id.stop_workout_button).performClick();
+        shadowOf(Looper.getMainLooper()).idle();
         verify(mockWorkoutService).stopWorkout();
-        assertNotNull(returnedView.findViewById(R.id.workout_time));
-        assertNotNull(returnedView.findViewById(R.id.start_workout_button));
-        assertNotNull(returnedView.findViewById(R.id.workout_distance));
-        assertNull(returnedView.findViewById(R.id.pause_workout_button));
-        assertNull(returnedView.findViewById(R.id.stop_workout_button));
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.workout_time).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.start_workout_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.workout_distance).getVisibility());
+        assertEquals(View.GONE, returnedView.findViewById(R.id.pause_workout_button).getVisibility());
+        assertEquals(View.GONE, returnedView.findViewById(R.id.stop_workout_button).getVisibility());
 
     }
 
