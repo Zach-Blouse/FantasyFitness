@@ -106,6 +106,7 @@ public class WorkoutService implements EventListener {
         paused = true;
         handler.removeCallbacks(workoutRunnable);
         workoutInProgress = false;
+        ((LocationDeviceService) mainActivity.getDeviceService(DeviceServiceType.LOCATION)).unsubscribe(this);
         mainActivity.publishEvent(new WorkoutCompleteEvent(finalTime, finalDistance, new HashMap<>()));
     }
 

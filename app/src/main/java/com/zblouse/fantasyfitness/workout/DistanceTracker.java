@@ -1,6 +1,7 @@
 package com.zblouse.fantasyfitness.workout;
 
 import android.location.Location;
+import android.util.Log;
 
 public class DistanceTracker {
 
@@ -14,10 +15,15 @@ public class DistanceTracker {
             if(lastLocation == null){
                 lastLocation = location;
             } else if(lastLocation != location){
-                float[] results = new float[3];
-                Location.distanceBetween(lastLocation.getLatitude(),lastLocation.getLongitude(),location.getLatitude(),location.getLongitude(),results);
-                totalDistanceMeters += results[0];
-                lastLocation = location;
+                if(location.getElapsedRealtimeNanos() > lastLocation.getElapsedRealtimeNanos()){
+                    Log.e("DISTANCE TRACKER", "LOCATION NEWER THAN LAST LOCATION");
+                    float[] results = new float[3];
+                    Location.distanceBetween(lastLocation.getLatitude(),lastLocation.getLongitude(),location.getLatitude(),location.getLongitude(),results);
+                    totalDistanceMeters += results[0];
+                    lastLocation = location;
+                } else {
+                    Log.e("DISTANCE TRACKER", "LOCATION OLDER THAN LAST LOCATION");
+                }
             }
         }
         return totalDistanceMeters;
