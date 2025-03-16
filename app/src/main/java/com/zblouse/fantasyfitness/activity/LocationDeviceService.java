@@ -3,14 +3,15 @@ package com.zblouse.fantasyfitness.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.location.Location;
-import android.location.LocationRequest;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.zblouse.fantasyfitness.core.EventListener;
 
 import java.util.HashMap;
@@ -22,14 +23,22 @@ public class LocationDeviceService extends DeviceService{
     private final Handler handler;
 
     private boolean scanning;
+    private final LocationRequest locationRequest = new LocationRequest.Builder(500).setPriority(Priority.PRIORITY_HIGH_ACCURACY).build();
 
-    private final Runnable locationRequestRunnable = new Runnable() {
+    private final LocationListener locationListener = new LocationListener() {
         @Override
-        public void run() {
-            if (scanning) {
-                requestLocation();
+        public void onLocationChanged(Location location) {
+            //Check Accuracy
+            if(location.hasAccuracy()) {
+                if(location.getAccuracy() < 6.0) {
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        //send the location updates to the subscribers
+                        LocationEvent locationEvent = new LocationEvent(location, new HashMap<>());
+                        sendEvent(locationEvent);
+                    }
+                }
             }
-            handler.postDelayed(this, 1000);
         }
     };
 
@@ -52,7 +61,7 @@ public class LocationDeviceService extends DeviceService{
         super.subscribe(eventListener);
         if(!scanning){
             scanning = true;
-            handler.post(locationRequestRunnable);
+            requestLocationUpdates();
         }
     }
 
@@ -61,31 +70,23 @@ public class LocationDeviceService extends DeviceService{
         super.unsubscribe(eventListener);
         if(eventListeners.isEmpty()){
             scanning = false;
-            handler.removeCallbacks(locationRequestRunnable);
+            stopLocationUpdates();
         }
     }
 
     @SuppressLint("MissingPermission")
-    private void requestLocation(){
+    private void requestLocationUpdates(){
         if(((PermissionDeviceService)mainActivity.getDeviceService(DeviceServiceType.PERMISSION)).hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
-            fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener(mainActivity, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    //Check Accuracy
-                    if(location.hasAccuracy()) {
-                        if(location.getAccuracy() < 5.0) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                //send the location updates to the subscribers
-                                LocationEvent locationEvent = new LocationEvent(location, new HashMap<>());
-                                sendEvent(locationEvent);
-                            }
-                        }
-                    }
-                }
-            });
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest,
+                locationListener,
+                Looper.getMainLooper());
         } else {
             ((PermissionDeviceService)mainActivity.getDeviceService(DeviceServiceType.PERMISSION)).requestPermission(Manifest.permission.ACCESS_FINE_LOCATION,5);
         }
+    }
+
+    private void stopLocationUpdates(){
+        Log.e("LOCATION DEVICE SERVICE", "Stopping Location Updates");
+        fusedLocationProviderClient.removeLocationUpdates(locationListener);
     }
 }

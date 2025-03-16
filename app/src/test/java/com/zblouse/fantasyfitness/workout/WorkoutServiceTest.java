@@ -74,6 +74,8 @@ public class WorkoutServiceTest {
     @Test
     public void stopTest(){
         MainActivity mockActivity = Mockito.mock(MainActivity.class);
+        LocationDeviceService mockLocationDeviceService = Mockito.mock(LocationDeviceService.class);
+        when(mockActivity.getDeviceService(eq(DeviceServiceType.LOCATION))).thenReturn(mockLocationDeviceService);
         TimeTracker mockTimeTracker = Mockito.mock(TimeTracker.class);
         DistanceTracker mockDistanceTracker = Mockito.mock(DistanceTracker.class);
         when(mockTimeTracker.stop()).thenReturn(3456L);

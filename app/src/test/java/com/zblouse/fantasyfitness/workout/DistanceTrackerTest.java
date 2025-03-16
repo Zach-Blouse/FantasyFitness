@@ -19,12 +19,19 @@ public class DistanceTrackerTest {
         Location location1 = new Location("provider");
         location1.setLatitude(10.10);
         location1.setLongitude(10.10);
+        location1.setAccuracy(3.3F);
+        location1.setElapsedRealtimeNanos(30000);
         Location location2 = new Location("provider");
         location2.setLatitude(10.11);
         location2.setLongitude(10.11);
+        location2.setAccuracy(3.3F);
+        location2.setTime(1500);
+        location2.setElapsedRealtimeNanos(40000);
         Location location3 = new Location("provider");
         location3.setLatitude(10.12);
         location3.setLongitude(10.15);
+        location3.setAccuracy(3.3F);
+        location3.setElapsedRealtimeNanos(50000);
 
         testedDistanceTracker.start();
         testedDistanceTracker.update(location1);
@@ -41,15 +48,19 @@ public class DistanceTrackerTest {
         Location location1 = new Location("provider");
         location1.setLatitude(10.10);
         location1.setLongitude(10.10);
+        location1.setElapsedRealtimeNanos(30000);
         Location pauseLocation = new Location("provider");
         pauseLocation.setLatitude(80.80);
         pauseLocation.setLongitude(80.80);
+        pauseLocation.setElapsedRealtimeNanos(40000);
         Location location2 = new Location("provider");
         location2.setLatitude(10.11);
         location2.setLongitude(10.11);
+        location2.setElapsedRealtimeNanos(40000);
         Location location3 = new Location("provider");
         location3.setLatitude(10.12);
         location3.setLongitude(10.15);
+        location3.setElapsedRealtimeNanos(50000);
 
         testedDistanceTracker.start();
         testedDistanceTracker.update(location1);
