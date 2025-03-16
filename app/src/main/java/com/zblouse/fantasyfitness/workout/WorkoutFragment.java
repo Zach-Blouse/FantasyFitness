@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.LocationForegroundDeviceService;
@@ -24,7 +25,7 @@ import java.util.Locale;
 
 public class WorkoutFragment extends AuthenticationRequiredFragment implements EventListener {
 
-    private LinearLayout layout;
+    private ConstraintLayout layout;
     private Button startWorkoutButton;
     private Button pauseWorkoutButton;
     private Button stopWorkoutButton;
@@ -34,6 +35,7 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     private static final int MILLIS_IN_HOUR = 3600000;
     private static final int MILLIS_IN_MINUTE = 60000;
     private static final int MILLIS_IN_SECOND = 1000;
+    private static final String SAVE_STATE_PAUSED = "workoutFragmentPaused";
 
     public WorkoutFragment(){
         super(R.layout.workout_fragment);
@@ -47,23 +49,30 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.OnCreateView();
         mainActivity.showNavigation();
-        layout = (LinearLayout) inflater.inflate(R.layout.workout_fragment,container,false);
+        layout = (ConstraintLayout) inflater.inflate(R.layout.workout_fragment,container,false);
         workoutTimeTextView = layout.findViewById(R.id.workout_time);
         workoutDistanceTextView = layout.findViewById(R.id.workout_distance);
         startWorkoutButton = layout.findViewById(R.id.start_workout_button);
         pauseWorkoutButton = layout.findViewById(R.id.pause_workout_button);
         stopWorkoutButton = layout.findViewById(R.id.stop_workout_button);
         initialButtonSetup();
-        ((ViewGroup)layout).removeView(pauseWorkoutButton);
-        ((ViewGroup)layout).removeView(stopWorkoutButton);
 
         if(savedInstanceState != null){
+            if(savedInstanceState.getBoolean(SAVE_STATE_PAUSED,false)){
+                pauseWorkoutButton.setText(R.string.resume_workout);
+                pauseWorkoutButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        unpauseWorkout();
+                    }
+                });
+            }
             if(mainActivity.getWorkoutService().onRestoreInstanceState(savedInstanceState)){
                 mainActivity.hideNavigation();
 
-                ((ViewGroup) layout).removeView(startWorkoutButton);
-                ((ViewGroup) layout).addView(pauseWorkoutButton);
-                ((ViewGroup) layout).addView(stopWorkoutButton);
+                startWorkoutButton.setVisibility(View.GONE);
+                pauseWorkoutButton.setVisibility(View.VISIBLE);
+                stopWorkoutButton.setVisibility(View.VISIBLE);
             }
         }
 
@@ -107,17 +116,16 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
+        outState.putBoolean(SAVE_STATE_PAUSED, mainActivity.getWorkoutService().isPaused());
         mainActivity.getWorkoutService().onSaveInstanceState(outState);
     }
 
     private void startWorkout(){
         if(mainActivity.getWorkoutService().startWorkout()) {
             mainActivity.hideNavigation();
-
-            ((ViewGroup) layout).removeView(startWorkoutButton);
-            ((ViewGroup) layout).addView(pauseWorkoutButton);
-            ((ViewGroup) layout).addView(stopWorkoutButton);
+            startWorkoutButton.setVisibility(View.GONE);
+            pauseWorkoutButton.setVisibility(View.VISIBLE);
+            stopWorkoutButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -204,20 +212,9 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
     }
 
     private void initialButtonSetup(){
-        if(((ViewGroup)layout).findViewById(startWorkoutButton.getId()) == null){
-            ((ViewGroup)layout).addView(startWorkoutButton);
-
-        }
-
-        if(((ViewGroup)layout).findViewById(pauseWorkoutButton.getId()) == null){
-            ((ViewGroup)layout).addView(pauseWorkoutButton);
-
-        }
-
-        if(((ViewGroup)layout).findViewById(stopWorkoutButton.getId()) == null){
-            ((ViewGroup)layout).addView(stopWorkoutButton);
-
-        }
+        startWorkoutButton.setVisibility(View.VISIBLE);
+        pauseWorkoutButton.setVisibility(View.GONE);
+        stopWorkoutButton.setVisibility(View.GONE);
         startWorkoutButton.setText(R.string.start_workout);
         startWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,8 +236,5 @@ public class WorkoutFragment extends AuthenticationRequiredFragment implements E
                 stopWorkout();
             }
         });
-
-        ((ViewGroup)layout).removeView(pauseWorkoutButton);
-        ((ViewGroup)layout).removeView(stopWorkoutButton);
     }
 }

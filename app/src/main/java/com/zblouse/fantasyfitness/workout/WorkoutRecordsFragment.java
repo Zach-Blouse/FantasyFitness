@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.LocationForegroundDeviceService;
@@ -21,7 +23,7 @@ import java.util.Locale;
 
 public class WorkoutRecordsFragment extends AuthenticationRequiredFragment implements EventListener {
 
-    private LinearLayout layout;
+    private ConstraintLayout layout;
     private TextView recordsTextView;
 
     private static final int MILLIS_IN_HOUR = 3600000;
@@ -40,7 +42,7 @@ public class WorkoutRecordsFragment extends AuthenticationRequiredFragment imple
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.OnCreateView();
         mainActivity.showNavigation();
-        layout = (LinearLayout) inflater.inflate(R.layout.workout_records_fragment,container,false);
+        layout = (ConstraintLayout) inflater.inflate(R.layout.workout_records_fragment,container,false);
         mainActivity.getWorkoutRecordService().fetchWorkoutRecords(new HashMap<>());
 
         recordsTextView = layout.findViewById(R.id.workout_records_display);

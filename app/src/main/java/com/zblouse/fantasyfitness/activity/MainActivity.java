@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView = findViewById(R.id.bottom_navigation);
         navigationView.setOnItemSelectedListener(navigationListener);
+        navigationView.setPadding(0,0,0,0);
+        navigationView.setOnApplyWindowInsetsListener(null);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
