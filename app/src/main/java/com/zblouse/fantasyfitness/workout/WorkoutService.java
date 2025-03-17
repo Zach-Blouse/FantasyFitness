@@ -29,6 +29,7 @@ public class WorkoutService implements EventListener {
     private static final String SAVE_STATE_WORKOUT_TIME = "workoutTime";
     private static final String SAVE_STATE_WORKOUT_IN_PROGRESS = "workoutInProgress";
     private static final String SAVE_STATE_LAST_LOCATION = "lastLocation";
+    private static final String SAVE_STATE_PAUSED = "paused";
 
     public WorkoutService() {
         this.handler = new Handler(Looper.myLooper());
@@ -54,6 +55,10 @@ public class WorkoutService implements EventListener {
 
     public void setMainActivity(MainActivity mainActivity){
         this.mainActivity = mainActivity;
+    }
+
+    public boolean isPaused(){
+        return this.paused;
     }
 
     private final Runnable workoutRunnable = new Runnable() {
@@ -117,6 +122,7 @@ public class WorkoutService implements EventListener {
             outBundle.putDouble(SAVE_STATE_WORKOUT_DISTANCE,distanceTracker.getTotalDistanceMeters());
             outBundle.putLong(SAVE_STATE_WORKOUT_TIME, timeTracker.getTotalTimeMillis());
             outBundle.putParcelable(SAVE_STATE_LAST_LOCATION,distanceTracker.getLastLocation());
+            outBundle.putBoolean(SAVE_STATE_PAUSED,paused);
         }
 
         return outBundle;
@@ -129,6 +135,10 @@ public class WorkoutService implements EventListener {
             distanceTracker.setTotalDistanceMeters(savedState.getDouble(SAVE_STATE_WORKOUT_DISTANCE,0));
             distanceTracker.setLastLocation(savedState.getParcelable(SAVE_STATE_LAST_LOCATION, Location.class));
             timeTracker.setTotalTimeMillis(savedState.getLong(SAVE_STATE_WORKOUT_TIME,0));
+            paused = savedState.getBoolean(SAVE_STATE_PAUSED, false);
+            if(paused){
+                pause();
+            }
         }
         return workoutInProgress;
     }

@@ -12,12 +12,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:text="00:00"
         android:textColor="@color/fantasy_fitness_white"
         android:textSize="96sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.167"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
@@ -26,12 +26,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="16dp"
         android:text="0.00 km"
         android:textColor="@color/fantasy_fitness_white"
         android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.195"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workout_time" />
 
@@ -40,15 +40,15 @@
         android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="114dp"
+        android:layout_marginTop="60dp"
+        android:autoSizeTextType="uniform"
         android:backgroundTint="@color/fantasy_fitness_green"
         android:text="@string/start_workout"
         android:textColor="@color/fantasy_fitness_white"
-        android:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/workout_distance" />
+        app:layout_constraintHorizontal_bias="0.398"
+        app:layout_constraintStart_toEndOf="@+id/workout_time"
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     <View
         android:id="@+id/view2"
@@ -61,12 +61,13 @@
         android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
+        android:autoSizeTextType="uniform"
         android:backgroundTint="@color/fantasy_fitness_green"
         android:text="@string/pause_workout"
         android:textColor="@color/fantasy_fitness_white"
-        android:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.73"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/start_workout_button" />
 
@@ -75,12 +76,13 @@
         android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
+        android:autoSizeTextType="uniform"
         android:backgroundTint="@color/fantasy_fitness_green"
         android:text="@string/stop_workout"
         android:textColor="@color/fantasy_fitness_white"
-        android:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.73"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pause_workout_button" />
 

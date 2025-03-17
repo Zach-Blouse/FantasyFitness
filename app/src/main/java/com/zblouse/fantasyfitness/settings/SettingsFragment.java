@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.zblouse.fantasyfitness.activity.MainActivity;
@@ -28,7 +29,7 @@ public class SettingsFragment  extends AuthenticationRequiredFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.OnCreateView();
-        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.settings_fragment,container,false);
+        ConstraintLayout layout = (ConstraintLayout) inflater.inflate(R.layout.settings_fragment,container,false);
         mainActivity.showNavigation();
         Button logoutButton = layout.findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(new View.OnClickListener() {

@@ -1,35 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fantasy_fitness_gray"
     android:orientation="vertical">
 
-    <View
+    <TextView
+        android:id="@+id/settings_title"
         android:layout_width="match_parent"
-        android:layout_height="25dp" />
+        android:layout_height="75dp"
+        android:layout_gravity="center"
+        android:autoSizeTextType="uniform"
+        android:text="@string/settings"
+        android:textAlignment="center"
+        android:textColor="@color/fantasy_fitness_white"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/logout_button"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text="@string/logout"
-        android:textSize="25sp"
         android:layout_gravity="center"
+        android:layout_marginTop="31dp"
         android:backgroundTint="@color/fantasy_fitness_green"
-        android:textColor="@color/fantasy_fitness_white"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="25dp" />
+        android:text="@string/logout"
+        android:textColor="@color/fantasy_fitness_white"
+        android:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_title" />
+
     <Button
         android:id="@+id/workout_records_button"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text="@string/workout_records"
-        android:textSize="25sp"
         android:layout_gravity="center"
+        android:layout_marginTop="36dp"
         android:backgroundTint="@color/fantasy_fitness_green"
-        android:textColor="@color/fantasy_fitness_white"/>
+        android:text="@string/workout_records"
+        android:textColor="@color/fantasy_fitness_white"
+        android:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logout_button" />
 
 
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
