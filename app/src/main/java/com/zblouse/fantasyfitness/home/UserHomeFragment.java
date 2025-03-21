@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -76,7 +77,21 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
             case GameLocationService.THANADEL_VILLAGE:
                 Log.e("USER_HOME_FRAGMENT", "IN THANADEL VILLAGE");
                 viewStub.setLayoutResource(R.layout.thanadel_village_layout);
-                viewStub.inflate();
+                View layout = viewStub.inflate();
+                Button innButton = layout.findViewById(R.id.inn_button);
+                innButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((ToastDeviceService)mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Clicked the Inn");
+                    }
+                });
+                Button generalStoreButton = layout.findViewById(R.id.general_store_button);
+                generalStoreButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((ToastDeviceService)mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Clicked the General Store");
+                    }
+                });
                 break;
             default:
                 break;
