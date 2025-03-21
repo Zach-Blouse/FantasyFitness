@@ -13,6 +13,13 @@
         android:textColor="@color/fantasy_fitness_white"
         android:textSize="50sp"
         android:layout_gravity="center"/>
+    <ViewStub
+        android:id="@+id/location_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingBottom="75dp"/>
 
 
 </LinearLayout>

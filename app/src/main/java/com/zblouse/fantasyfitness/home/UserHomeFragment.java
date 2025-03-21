@@ -5,8 +5,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.MainActivity;
@@ -17,8 +23,19 @@ import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
 import com.zblouse.fantasyfitness.user.UserExistEvent;
+import com.zblouse.fantasyfitness.user.UserGameState;
+import com.zblouse.fantasyfitness.user.UserGameStateFetchResponseEvent;
+import com.zblouse.fantasyfitness.world.GameLocation;
+import com.zblouse.fantasyfitness.world.GameLocationService;
+
+import java.util.HashMap;
+
 
 public class UserHomeFragment extends AuthenticationRequiredFragment implements EventListener {
+
+    private LayoutInflater layoutInflater;
+    private FrameLayout frameLayout;
+    private ViewStub viewStub;
 
     public UserHomeFragment(){
         super(R.layout.user_home_fragment);
@@ -31,9 +48,12 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.OnCreateView();
+        layoutInflater = inflater;
         mainActivity.getUserService().userExistCheck(mainActivity.getCurrentUser().getUid());
         mainActivity.showNavigation();
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.user_home_fragment,container,false);
+        mainActivity.getUserGameStateService().fetchUserGameState(mainActivity.getCurrentUser().getUid(), new HashMap<>());
+        viewStub = layout.findViewById(R.id.location_view_container);
         return layout;
     }
 
@@ -44,6 +64,22 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 ((ToastDeviceService)mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Account does not exist");
                 mainActivity.logout();
             }
+        }else if(event.getEventType().equals(EventType.USER_GAME_STATE_FETCH_RESPONSE_EVENT)){
+            UserGameState userGameState = ((UserGameStateFetchResponseEvent)event).getUserGameState();
+            loadLocationUi(userGameState.getCurrentGameLocationName());
+        }
+    }
+
+    private void loadLocationUi(String currentGameLocation){
+        Log.e("USER_HOME_FRAGMENT", "CURRENT LOCATION IS: " + currentGameLocation);
+        switch(currentGameLocation){
+            case GameLocationService.THANADEL_VILLAGE:
+                Log.e("USER_HOME_FRAGMENT", "IN THANADEL VILLAGE");
+                viewStub.setLayoutResource(R.layout.thanadel_village_layout);
+                viewStub.inflate();
+                break;
+            default:
+                break;
         }
     }
 }
