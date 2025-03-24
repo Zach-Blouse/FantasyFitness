@@ -410,17 +410,17 @@ public class GameWorldTest {
         //FOLLOWING THIS LINE IS THE BEGINNING OF THE ACTUAL TEST THIS TEST IS SUPPOSED TO BE TESTING
 
         onView(withId(R.id.action_map)).perform(click());
-        verify(mockGameStateReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorReadGameState.capture());
+        verify(mockGameStateReadTask, times(2)).addOnCompleteListener(onCompleteListenerArgumentCaptorReadGameState.capture());
         onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
         onView(withId(R.id.world_map_horizontal)).perform(swipeRight());
-;
+
         Thread.sleep(1000);
         onView(withId(R.id.location_info_view)).check(matches(not(isDisplayed())));
         onView(withId(R.id.valley_of_monsters)).perform(click());
         onView(withId(R.id.location_info_view)).check(matches(isDisplayed()));
         onView(withId(R.id.location_info_name)).check(matches(withText(GameLocationService.VALLEY_OF_MONSTERS)));
         onView(withId(R.id.travel_button)).perform(click());
-        verify(mockGameStateReadTask, times(2)).addOnCompleteListener(onCompleteListenerArgumentCaptorReadGameState.capture());
+        verify(mockGameStateReadTask, times(3)).addOnCompleteListener(onCompleteListenerArgumentCaptorReadGameState.capture());
         onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
         Thread.sleep(5000);
         verify(mockGameStateDocument).update(eq("gameLocation"), eq(GameLocationService.VALLEY_OF_MONSTERS));

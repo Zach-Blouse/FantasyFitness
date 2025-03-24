@@ -67,7 +67,9 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
             }
         }else if(event.getEventType().equals(EventType.USER_GAME_STATE_FETCH_RESPONSE_EVENT)){
             UserGameState userGameState = ((UserGameStateFetchResponseEvent)event).getUserGameState();
-            loadLocationUi(userGameState.getCurrentGameLocationName());
+            if(userGameState != null) {
+                loadLocationUi(userGameState.getCurrentGameLocationName());
+            }
         }
     }
 

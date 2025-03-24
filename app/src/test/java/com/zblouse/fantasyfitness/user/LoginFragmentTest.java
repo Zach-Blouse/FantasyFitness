@@ -103,6 +103,8 @@ public class LoginFragmentTest {
         FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
         FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
         MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
         mainActivity.setFirebaseAuth(mockAuth);
         mainActivity.setUserService(mockUserService);
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
