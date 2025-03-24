@@ -19,6 +19,7 @@ import com.zblouse.fantasyfitness.activity.ToastDeviceService;
 import com.zblouse.fantasyfitness.settings.SettingsFragment;
 import com.zblouse.fantasyfitness.user.CreateAccountFragment;
 import com.zblouse.fantasyfitness.user.UserExistEvent;
+import com.zblouse.fantasyfitness.user.UserGameStateService;
 import com.zblouse.fantasyfitness.user.UserService;
 
 import org.junit.Rule;
@@ -47,6 +48,8 @@ public class UserHomeFragmentTest {
         MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
         mainActivity.setFirebaseAuth(mockAuth);
         mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);

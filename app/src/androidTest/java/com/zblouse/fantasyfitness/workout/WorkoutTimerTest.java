@@ -12,6 +12,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -197,7 +198,7 @@ public class WorkoutTimerTest {
         onView(withId(R.id.stop_workout_button)).perform(click());
         onView(withId(R.id.workout_time)).check(matches(withText("00:05")));
 
-        verify(mockGameStateReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorReadGameState.capture());
+        verify(mockGameStateReadTask, times(2)).addOnCompleteListener(onCompleteListenerArgumentCaptorReadGameState.capture());
         onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
         verify(mockGameStateUpdateTask).addOnCompleteListener(onCompleteListenerArgumentCaptorUpdateGameState.capture());
         onCompleteListenerArgumentCaptorUpdateGameState.getValue().onComplete(mockGameStateUpdateTask);
