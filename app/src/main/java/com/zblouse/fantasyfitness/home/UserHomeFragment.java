@@ -11,10 +11,17 @@ import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.zblouse.fantasyfitness.actions.ActionResult;
+import com.zblouse.fantasyfitness.actions.ActionResultType;
+import com.zblouse.fantasyfitness.actions.ExploreActionEvent;
+import com.zblouse.fantasyfitness.actions.ExploreActionService;
+import com.zblouse.fantasyfitness.actions.NothingFoundActionResult;
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
@@ -30,6 +37,7 @@ import com.zblouse.fantasyfitness.world.GameLocation;
 import com.zblouse.fantasyfitness.world.GameLocationService;
 
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class UserHomeFragment extends AuthenticationRequiredFragment implements EventListener {
@@ -37,6 +45,8 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
     private LayoutInflater layoutInflater;
     private FrameLayout frameLayout;
     private ViewStub viewStub;
+    private CardView nothingFoundCardView;
+    private TextView nothingFoundFlavorText;
 
     public UserHomeFragment(){
         super(R.layout.user_home_fragment);
@@ -52,9 +62,19 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
         layoutInflater = inflater;
         mainActivity.getUserService().userExistCheck(mainActivity.getCurrentUser().getUid());
         mainActivity.showNavigation();
-        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.user_home_fragment,container,false);
+        ConstraintLayout layout = (ConstraintLayout) inflater.inflate(R.layout.user_home_fragment,container,false);
         mainActivity.getUserGameStateService().fetchUserGameState(mainActivity.getCurrentUser().getUid(), new HashMap<>());
         viewStub = layout.findViewById(R.id.location_view_container);
+        nothingFoundCardView = layout.findViewById(R.id.nothing_found_card_view);
+        nothingFoundFlavorText = layout.findViewById(R.id.nothing_found_flavor_text);
+        Button nothingFoundDismissButton = layout.findViewById(R.id.nothing_found_dismiss_button);
+        nothingFoundDismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nothingFoundCardView.setVisibility(View.GONE);
+            }
+        });
+        nothingFoundCardView.setVisibility(View.GONE);
         return layout;
     }
 
@@ -70,31 +90,65 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
             if(userGameState != null) {
                 loadLocationUi(userGameState.getCurrentGameLocationName());
             }
+        } else if(event.getEventType().equals(EventType.EXPLORE_ACTION_EVENT)){
+            ActionResult actionResult = ((ExploreActionEvent)event).getExploreActionResult();
+            if(actionResult.getActionResultType().equals(ActionResultType.NOTHING)){
+                nothingFoundFlavorText.setText(((NothingFoundActionResult)actionResult).getFlavorText());
+                nothingFoundCardView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     private void loadLocationUi(String currentGameLocation){
-        Log.e("USER_HOME_FRAGMENT", "CURRENT LOCATION IS: " + currentGameLocation);
         switch(currentGameLocation){
-            case GameLocationService.THANADEL_VILLAGE:
-                Log.e("USER_HOME_FRAGMENT", "IN THANADEL VILLAGE");
+            case GameLocationService.THANADEL_VILLAGE: {
                 viewStub.setLayoutResource(R.layout.thanadel_village_layout);
                 View layout = viewStub.inflate();
                 Button innButton = layout.findViewById(R.id.inn_button);
                 innButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((ToastDeviceService)mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Clicked the Inn");
+                        ((ToastDeviceService) mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Clicked the Inn");
                     }
                 });
                 Button generalStoreButton = layout.findViewById(R.id.general_store_button);
                 generalStoreButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((ToastDeviceService)mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Clicked the General Store");
+                        ((ToastDeviceService) mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Clicked the General Store");
                     }
                 });
                 break;
+            }
+            case GameLocationService.WOODLANDS: {
+                viewStub.setLayoutResource(R.layout.woodlands_layout);
+                View layout = viewStub.inflate();
+                Button darkForestButton = layout.findViewById(R.id.dark_forest_button);
+                darkForestButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Map<String, Object> metadata = new HashMap<>();
+                        metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                        metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED,R.id.dark_forest_button);
+                        mainActivity.getExploreActionService().exploreAction(metadata);
+                    }
+                });
+                Button cavesButton = layout.findViewById(R.id.cave_button);
+                cavesButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((ToastDeviceService) mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Clicked the Caves");
+                    }
+                });
+                Button marshlandsButton = layout.findViewById(R.id.marsh_button);
+                marshlandsButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((ToastDeviceService) mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Clicked the Marsh");
+                    }
+                });
+                break;
+            }
             default:
                 break;
         }

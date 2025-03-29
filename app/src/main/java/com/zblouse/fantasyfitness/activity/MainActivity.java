@@ -16,6 +16,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.zblouse.fantasyfitness.R;
+import com.zblouse.fantasyfitness.actions.ExploreActionEvent;
+import com.zblouse.fantasyfitness.actions.ExploreActionService;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.home.UserHomeFragment;
 import com.zblouse.fantasyfitness.settings.SettingsFragment;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private GameLocationService gameLocationService;
     private UserGameStateService userGameStateService;
     private WorkoutRecordService workoutRecordService;
+    private ExploreActionService exploreActionService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         userService = new UserService(this);
         workoutService = new WorkoutService(this);
+        exploreActionService = new ExploreActionService(this);
 
         navigationView = findViewById(R.id.bottom_navigation);
         navigationView.setOnItemSelectedListener(navigationListener);
@@ -210,6 +214,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setWorkoutRecordService(WorkoutRecordService workoutRecordService){
         this.workoutRecordService = workoutRecordService;
+    }
+
+    public ExploreActionService getExploreActionService(){
+        return this.exploreActionService;
+    }
+
+    public void setExploreActionService(ExploreActionService exploreActionService){
+        this.exploreActionService = exploreActionService;
     }
 
 }

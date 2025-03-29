@@ -78,9 +78,6 @@
 
             </LinearLayout>
         </ScrollView>
-
-
-
     </androidx.cardview.widget.CardView>
 
     <HorizontalScrollView
