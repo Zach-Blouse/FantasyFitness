@@ -19,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.zblouse.fantasyfitness.actions.ActionResult;
 import com.zblouse.fantasyfitness.actions.ActionResultType;
+import com.zblouse.fantasyfitness.actions.DialogActionResult;
 import com.zblouse.fantasyfitness.actions.ExploreActionEvent;
 import com.zblouse.fantasyfitness.actions.ExploreActionService;
 import com.zblouse.fantasyfitness.actions.NothingFoundActionResult;
@@ -30,6 +31,8 @@ import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
+import com.zblouse.fantasyfitness.dialog.Dialog;
+import com.zblouse.fantasyfitness.dialog.DialogSelectedEvent;
 import com.zblouse.fantasyfitness.user.UserExistEvent;
 import com.zblouse.fantasyfitness.user.UserGameState;
 import com.zblouse.fantasyfitness.user.UserGameStateFetchResponseEvent;
@@ -47,6 +50,12 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
     private ViewStub viewStub;
     private CardView nothingFoundCardView;
     private TextView nothingFoundFlavorText;
+    private CardView dialogCardView;
+    private TextView dialogFlavorText;
+    private Button dialogOption1Button;
+    private Button dialogOption2Button;
+    private Button dialogOption3Button;
+    private Button dialogOption4Button;
 
     public UserHomeFragment(){
         super(R.layout.user_home_fragment);
@@ -75,6 +84,22 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
             }
         });
         nothingFoundCardView.setVisibility(View.GONE);
+
+        dialogCardView = layout.findViewById(R.id.dialog_card_view);
+        dialogFlavorText = layout.findViewById(R.id.dialog_flavor_text);
+        dialogOption1Button = layout.findViewById(R.id.dialog_option_1_button);
+        dialogOption2Button = layout.findViewById(R.id.dialog_option_2_button);
+        dialogOption3Button = layout.findViewById(R.id.dialog_option_3_button);
+        dialogOption4Button = layout.findViewById(R.id.dialog_option_4_button);
+        Button leaveDialogButton = layout.findViewById(R.id.dialog_exit_button);
+        leaveDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogCardView.setVisibility(View.GONE);
+            }
+        });
+
+        dialogCardView.setVisibility(View.GONE);
         return layout;
     }
 
@@ -95,8 +120,70 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
             if(actionResult.getActionResultType().equals(ActionResultType.NOTHING)){
                 nothingFoundFlavorText.setText(((NothingFoundActionResult)actionResult).getFlavorText());
                 nothingFoundCardView.setVisibility(View.VISIBLE);
+            } else if(actionResult.getActionResultType().equals(ActionResultType.DIALOG)){
+                Dialog baseDialog = ((DialogActionResult)actionResult).getInitialDialog();
+                loadDialogs(baseDialog);
             }
+        } else if(event.getEventType().equals(EventType.DIALOG_SELECTED_EVENT)){
+            loadDialogs(((DialogSelectedEvent)event).getNewDialog());
         }
+    }
+
+    private void loadDialogs(Dialog baseDialog){
+        dialogFlavorText.setText(baseDialog.getFlavorText());
+        if(baseDialog.getDialogOption1() != null){
+            Dialog dialogOption1 = mainActivity.getDialogService().fetchDialogOption(baseDialog.getDialogOption1());
+            dialogOption1Button.setText(dialogOption1.getOptionText());
+            dialogOption1Button.setVisibility(View.VISIBLE);
+            dialogOption1Button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption1(), new HashMap<>());
+                }
+            });
+        } else {
+            dialogOption1Button.setVisibility(View.GONE);
+        }
+        if(baseDialog.getDialogOption2() != null){
+            Dialog dialogOption2 = mainActivity.getDialogService().fetchDialogOption(baseDialog.getDialogOption2());
+            dialogOption2Button.setText(dialogOption2.getOptionText());
+            dialogOption2Button.setVisibility(View.VISIBLE);
+            dialogOption2Button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption2(), new HashMap<>());
+                }
+            });
+        } else {
+            dialogOption2Button.setVisibility(View.GONE);
+        }
+        if(baseDialog.getDialogOption3() != null){
+            Dialog dialogOption3 = mainActivity.getDialogService().fetchDialogOption(baseDialog.getDialogOption3());
+            dialogOption3Button.setText(dialogOption3.getOptionText());
+            dialogOption3Button.setVisibility(View.VISIBLE);
+            dialogOption3Button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption3(), new HashMap<>());
+                }
+            });
+        } else {
+            dialogOption3Button.setVisibility(View.GONE);
+        }
+        if(baseDialog.getDialogOption4() != null){
+            Dialog dialogOption4 = mainActivity.getDialogService().fetchDialogOption(baseDialog.getDialogOption4());
+            dialogOption4Button.setText(dialogOption4.getOptionText());
+            dialogOption4Button.setVisibility(View.VISIBLE);
+            dialogOption4Button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption4(), new HashMap<>());
+                }
+            });
+        } else {
+            dialogOption4Button.setVisibility(View.GONE);
+        }
+        dialogCardView.setVisibility(View.VISIBLE);
     }
 
     private void loadLocationUi(String currentGameLocation){
@@ -137,14 +224,20 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 cavesButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((ToastDeviceService) mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Clicked the Caves");
+                        Map<String, Object> metadata = new HashMap<>();
+                        metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                        metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED,R.id.cave_button);
+                        mainActivity.getExploreActionService().exploreAction(metadata);
                     }
                 });
                 Button marshlandsButton = layout.findViewById(R.id.marsh_button);
                 marshlandsButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((ToastDeviceService) mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Clicked the Marsh");
+                        Map<String, Object> metadata = new HashMap<>();
+                        metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                        metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED,R.id.marsh_button);
+                        mainActivity.getExploreActionService().exploreAction(metadata);
                     }
                 });
                 break;

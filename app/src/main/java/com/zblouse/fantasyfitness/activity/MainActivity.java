@@ -19,6 +19,8 @@ import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.actions.ExploreActionEvent;
 import com.zblouse.fantasyfitness.actions.ExploreActionService;
 import com.zblouse.fantasyfitness.core.EventListener;
+import com.zblouse.fantasyfitness.dialog.DialogService;
+import com.zblouse.fantasyfitness.dialog.DialogSqlDatabase;
 import com.zblouse.fantasyfitness.home.UserHomeFragment;
 import com.zblouse.fantasyfitness.settings.SettingsFragment;
 import com.zblouse.fantasyfitness.user.LoginFragment;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private UserGameStateService userGameStateService;
     private WorkoutRecordService workoutRecordService;
     private ExploreActionService exploreActionService;
+    private DialogService dialogService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +86,14 @@ public class MainActivity extends AppCompatActivity {
 
         deleteDatabase(GameLocationSqlDatabase.GAME_LOCATION_DATABASE_NAME);
         deleteDatabase(GameLocationDistanceSqlDatabase.GAME_LOCATION_DISTANCE_DATABASE_NAME);
+        deleteDatabase(DialogSqlDatabase.DATABASE_NAME);
         gameLocationService = new GameLocationService(this);
         userGameStateService = new UserGameStateService(this);
         workoutRecordService = new WorkoutRecordService(this);
+        dialogService = new DialogService(this);
 
         gameLocationService.initializeLocationDatabase();
+        dialogService.initializeDialogs();
         currentUser = firebaseAuth.getCurrentUser();
         if(savedInstanceState == null) {
             if (currentUser == null) {
@@ -222,6 +228,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setExploreActionService(ExploreActionService exploreActionService){
         this.exploreActionService = exploreActionService;
+    }
+
+    public DialogService getDialogService(){
+        return this.dialogService;
+    }
+
+    public void setDeviceService(DialogService dialogService){
+        this.dialogService = dialogService;
     }
 
 }
