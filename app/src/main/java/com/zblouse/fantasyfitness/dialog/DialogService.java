@@ -17,6 +17,11 @@ public class DialogService implements DomainService<Dialog> {
         this.dialogRepository = new DialogRepository(mainActivity);
     }
 
+    public DialogService(MainActivity mainActivity, DialogRepository dialogRepository){
+        this.mainActivity = mainActivity;
+        this.dialogRepository = dialogRepository;
+    }
+
     public Dialog fetchDialogOption(String referenceId){
         return dialogRepository.readDialog(referenceId);
     }
@@ -47,9 +52,9 @@ public class DialogService implements DomainService<Dialog> {
         hermitOption1.setDialogOption1("hermit1_1");
         hermitOption1.setDialogOption2("hermit1_2");
         dialogRepository.writeDialog(hermitOption1);
-        Dialog hermitOption1_1 = new Dialog("hermit1_1", "Stay away from the Valley of Monsters, the monsters there are far too powerful. That's how I lost my whole adventuring party.\" The hermit gets a distance look in his eye and refuses to speak more.","Of course sir");
+        Dialog hermitOption1_1 = new Dialog("hermit1_1", "Stay away from the Valley of Monsters, the monsters there are far too powerful. That's how I lost my whole adventuring party.\" The hermit gets a distant look in his eye and refuses to speak more.","Of course sir");
         dialogRepository.writeDialog(hermitOption1_1);
-        Dialog hermitOption1_2 = new Dialog("hermit1_2", "Well then. You are free to make your own mistakes.","\"I don't think I want advice from a hermit.\"");
+        Dialog hermitOption1_2 = new Dialog("hermit1_2", "Well then. You are free to make your own mistakes.","I don't think I want advice from a hermit.");
         dialogRepository.writeDialog(hermitOption1_2);
         Dialog hermitOption2 = new Dialog("hermit2","\"Well, keep on passing then.\"","I'm just passing through");
         dialogRepository.writeDialog(hermitOption2);

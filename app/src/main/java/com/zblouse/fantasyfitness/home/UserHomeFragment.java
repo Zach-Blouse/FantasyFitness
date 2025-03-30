@@ -24,6 +24,7 @@ import com.zblouse.fantasyfitness.actions.ExploreActionEvent;
 import com.zblouse.fantasyfitness.actions.ExploreActionService;
 import com.zblouse.fantasyfitness.actions.NothingFoundActionResult;
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
+import com.zblouse.fantasyfitness.activity.LocationForegroundDeviceService;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.ToastDeviceService;
@@ -36,6 +37,7 @@ import com.zblouse.fantasyfitness.dialog.DialogSelectedEvent;
 import com.zblouse.fantasyfitness.user.UserExistEvent;
 import com.zblouse.fantasyfitness.user.UserGameState;
 import com.zblouse.fantasyfitness.user.UserGameStateFetchResponseEvent;
+import com.zblouse.fantasyfitness.workout.WorkoutUpdateEvent;
 import com.zblouse.fantasyfitness.world.GameLocation;
 import com.zblouse.fantasyfitness.world.GameLocationService;
 
@@ -111,21 +113,38 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 mainActivity.logout();
             }
         }else if(event.getEventType().equals(EventType.USER_GAME_STATE_FETCH_RESPONSE_EVENT)){
-            UserGameState userGameState = ((UserGameStateFetchResponseEvent)event).getUserGameState();
-            if(userGameState != null) {
-                loadLocationUi(userGameState.getCurrentGameLocationName());
-            }
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    UserGameState userGameState = ((UserGameStateFetchResponseEvent)event).getUserGameState();
+                    if(userGameState != null) {
+                        loadLocationUi(userGameState.getCurrentGameLocationName());
+                    }
+                }
+            });
+
         } else if(event.getEventType().equals(EventType.EXPLORE_ACTION_EVENT)){
-            ActionResult actionResult = ((ExploreActionEvent)event).getExploreActionResult();
-            if(actionResult.getActionResultType().equals(ActionResultType.NOTHING)){
-                nothingFoundFlavorText.setText(((NothingFoundActionResult)actionResult).getFlavorText());
-                nothingFoundCardView.setVisibility(View.VISIBLE);
-            } else if(actionResult.getActionResultType().equals(ActionResultType.DIALOG)){
-                Dialog baseDialog = ((DialogActionResult)actionResult).getInitialDialog();
-                loadDialogs(baseDialog);
-            }
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ActionResult actionResult = ((ExploreActionEvent)event).getExploreActionResult();
+                    if(actionResult.getActionResultType().equals(ActionResultType.NOTHING)){
+                        nothingFoundFlavorText.setText(((NothingFoundActionResult)actionResult).getFlavorText());
+                        nothingFoundCardView.setVisibility(View.VISIBLE);
+                    } else if(actionResult.getActionResultType().equals(ActionResultType.DIALOG)){
+                        Dialog baseDialog = ((DialogActionResult)actionResult).getInitialDialog();
+                        loadDialogs(baseDialog);
+                    }
+                }
+            });
+
         } else if(event.getEventType().equals(EventType.DIALOG_SELECTED_EVENT)){
-            loadDialogs(((DialogSelectedEvent)event).getNewDialog());
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    loadDialogs(((DialogSelectedEvent)event).getNewDialog());
+                }
+            });
         }
     }
 
@@ -195,14 +214,20 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 innButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((ToastDeviceService) mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Clicked the Inn");
+                        Map<String, Object> metadata = new HashMap<>();
+                        metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                        metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED,R.id.inn_button);
+                        mainActivity.getExploreActionService().exploreAction(metadata);
                     }
                 });
                 Button generalStoreButton = layout.findViewById(R.id.general_store_button);
                 generalStoreButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((ToastDeviceService) mainActivity.getDeviceService(DeviceServiceType.TOAST)).sendToast("Clicked the General Store");
+                        Map<String, Object> metadata = new HashMap<>();
+                        metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                        metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED,R.id.general_store_button);
+                        mainActivity.getExploreActionService().exploreAction(metadata);
                     }
                 });
                 break;

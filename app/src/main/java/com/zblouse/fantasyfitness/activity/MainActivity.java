@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         return this.dialogService;
     }
 
-    public void setDeviceService(DialogService dialogService){
+    public void setDialogService(DialogService dialogService){
         this.dialogService = dialogService;
     }
 

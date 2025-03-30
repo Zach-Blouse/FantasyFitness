@@ -25,8 +25,8 @@ public class ExploreActionService {
         this.mainActivity = mainActivity;
     }
 
-    public void setNothingFoundActionResultGenerator(NothingFoundActionResultGenerator nothingFoundActionResultGenerator){
-        this.nothingFoundActionResultGenerator = nothingFoundActionResultGenerator;
+    public void setRandomActionResultTypeGenerator(RandomActionResultTypeGenerator randomActionResultTypeGenerator){
+        this.randomActionResultTypeGenerator = randomActionResultTypeGenerator;
     }
 
     public void exploreAction(Map<String, Object> metadata){

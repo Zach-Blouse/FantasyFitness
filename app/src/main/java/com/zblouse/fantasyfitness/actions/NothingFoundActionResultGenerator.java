@@ -18,9 +18,9 @@ public class NothingFoundActionResultGenerator implements ActionResultGenerator 
                     case GameLocationService.THANADEL_VILLAGE:
                         return new NothingFoundActionResult("You find nothing of note. The village is peaceful.");
                     case GameLocationService.FAOLYN:
-                        return new NothingFoundActionResult("The city is bustling with activity, but nothing in particular catches your eye");
+                        return new NothingFoundActionResult("The city is bustling with activity, but nothing in particular catches your eye.");
                     default:
-                        return new NothingFoundActionResult("Nothing of note catches your attention");
+                        return new NothingFoundActionResult("Nothing of note catches your attention.");
                 }
             }
         }

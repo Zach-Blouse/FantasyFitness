@@ -4,8 +4,17 @@ import java.util.Random;
 
 public class RandomActionResultTypeGenerator {
 
+    private Random random;
+
+    public RandomActionResultTypeGenerator(){
+        this.random = new Random();
+    }
+
+    public void setRandom(Random random){
+        this.random = random;
+    }
+
     public ActionResultType getRandomActionResult(){
-        Random random = new Random();
 
         int result = random.nextInt(4);
         switch(result){

@@ -2,11 +2,7 @@ package com.zblouse.fantasyfitness.actions;
 
 public class NothingFoundActionResult extends ActionResult {
 
-    private String flavorText;
-
-    public NothingFoundActionResult(){
-        super(ActionResultType.NOTHING);
-    }
+    private final String flavorText;
 
     public NothingFoundActionResult(String flavorText){
         super(ActionResultType.NOTHING);
@@ -17,7 +13,4 @@ public class NothingFoundActionResult extends ActionResult {
         return this.flavorText;
     }
 
-    public void setFlavorText(String flavorText){
-        this.flavorText = flavorText;
-    }
 }
