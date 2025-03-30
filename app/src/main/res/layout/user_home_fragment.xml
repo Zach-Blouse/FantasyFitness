@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fantasy_fitness_gray"
@@ -9,17 +10,151 @@
         android:id="@+id/user_home_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="@string/app_name"
         android:textColor="@color/fantasy_fitness_white"
         android:textSize="50sp"
-        android:layout_gravity="center"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ViewStub
         android:id="@+id/location_view_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:paddingBottom="75dp"/>
+        android:paddingBottom="75dp" />
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/nothing_found_card_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
-</LinearLayout>
+        android:backgroundTint="@color/fantasy_fitness_gray"
+        android:maxHeight="350dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <ScrollView
+            android:id="@+id/nothing_found_scroll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nothing_found_flavor_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="fillertext"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:id="@+id/nothing_found_dismiss_button"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="@string/dismiss"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/dialog_card_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:backgroundTint="@color/fantasy_fitness_gray"
+        android:maxHeight="350dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <ScrollView
+            android:id="@+id/dialog_scroll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/dialog_flavor_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="fillertext"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:id="@+id/dialog_option_1_button"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="@string/dismiss"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="15sp" />
+                <Button
+                    android:id="@+id/dialog_option_2_button"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="@string/dismiss"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="15sp" />
+                <Button
+                    android:id="@+id/dialog_option_3_button"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="@string/dismiss"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="15sp" />
+                <Button
+                    android:id="@+id/dialog_option_4_button"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="@string/dismiss"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="15sp" />
+                <Button
+                    android:id="@+id/dialog_exit_button"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/fantasy_fitness_green"
+                    android:text="@string/dismiss"
+                    android:textColor="@color/fantasy_fitness_white"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

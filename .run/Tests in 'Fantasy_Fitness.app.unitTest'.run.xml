@@ -23,6 +23,10 @@
           <option name="PATTERN" value="com.*" />
           <option name="ENABLED" value="true" />
         </pattern>
+        <pattern>
+          <option name="PATTERN" value="com.zblouse.fantasyfitness.world.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
       </extension>
     </EXTENSION>
     <DebugAllEnabled>false</DebugAllEnabled>

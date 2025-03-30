@@ -10,6 +10,7 @@ import com.zblouse.fantasyfitness.user.UserGameState;
 import com.zblouse.fantasyfitness.user.UserGameStateRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -204,5 +205,11 @@ public class GameLocationService implements DomainService<GameLocation> {
         gameLocationRepository.addGameLocationConnection(riverlands,faolyn,5);
         gameLocationRepository.addGameLocationConnection(faolyn,northRoad,5);
         gameLocationRepository.addGameLocationConnection(monastary,northRoad,5);
+    }
+
+    public static boolean isWildernessLocation(String gameLocationName){
+        List<String> wildernessLocations = Arrays.asList(VALLEY_OF_MONSTERS,NORTH_ROAD,RIVERLANDS, WOODLANDS, HILLS);
+
+        return wildernessLocations.contains(gameLocationName);
     }
 }
