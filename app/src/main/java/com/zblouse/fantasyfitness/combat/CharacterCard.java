@@ -10,8 +10,12 @@ public class CharacterCard extends Card {
     private List<Ability> abilities;
     private List<String> permanentCardsAffixedNames;
 
-    public CharacterCard(String cardName, String cardDescription, Ability baseAbility, int maxHealth){
-        super(CardType.CHARACTER, cardName, cardDescription);
+    public CharacterCard(){
+        //used by firebase
+    }
+
+    public CharacterCard(String userId, String cardUuid, String cardName, String cardDescription, Ability baseAbility, int maxHealth){
+        super(userId, cardUuid, CardType.CHARACTER, cardName, cardDescription);
         this.maxHealth = maxHealth;
         this.currentHealth = maxHealth;
         this.abilities = new ArrayList<>();

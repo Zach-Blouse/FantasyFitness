@@ -4,8 +4,8 @@ public class PermanentCard extends Card {
 
     private final Ability ability;
 
-    public PermanentCard(String cardName, String cardDescription, Ability ability){
-        super(CardType.PERMANENT, cardName, cardDescription);
+    public PermanentCard(String userId, String cardUuid, String cardName, String cardDescription, Ability ability){
+        super(userId, cardUuid, CardType.PERMANENT, cardName, cardDescription);
         this.ability = ability;
     }
 

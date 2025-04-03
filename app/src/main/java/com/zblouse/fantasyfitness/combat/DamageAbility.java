@@ -3,12 +3,14 @@ package com.zblouse.fantasyfitness.combat;
 public class DamageAbility extends Ability {
 
     private final DamageType damageType;
+    private final AttackType attackType;
     private final int damageAmount;
 
-    public DamageAbility(String abilityName, String abilityDescription, DamageType damageType, int damageAmount){
-        super(abilityName,abilityDescription,AbilityType.DAMAGE);
+    public DamageAbility(String abilityName, String abilityDescription, AbilityTarget abilityTarget, DamageType damageType, AttackType attackType, int damageAmount){
+        super(abilityName,abilityDescription,AbilityType.DAMAGE, abilityTarget);
         this.damageAmount = damageAmount;
         this.damageType = damageType;
+        this.attackType = attackType;
     }
 
     public DamageType getDamageType(){
@@ -17,5 +19,9 @@ public class DamageAbility extends Ability {
 
     public int getDamageAmount(){
         return this.damageAmount;
+    }
+
+    public AttackType getAttackType(){
+        return this.attackType;
     }
 }

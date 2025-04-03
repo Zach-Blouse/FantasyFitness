@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.actions.ExploreActionEvent;
 import com.zblouse.fantasyfitness.actions.ExploreActionService;
+import com.zblouse.fantasyfitness.combat.CardService;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.dialog.DialogService;
 import com.zblouse.fantasyfitness.dialog.DialogSqlDatabase;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private WorkoutRecordService workoutRecordService;
     private ExploreActionService exploreActionService;
     private DialogService dialogService;
+    private CardService cardService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         userService = new UserService(this);
         workoutService = new WorkoutService(this);
         exploreActionService = new ExploreActionService(this);
+        cardService = new CardService(this);
 
         navigationView = findViewById(R.id.bottom_navigation);
         navigationView.setOnItemSelectedListener(navigationListener);
@@ -236,6 +239,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setDialogService(DialogService dialogService){
         this.dialogService = dialogService;
+    }
+
+    public CardService getCardService(){
+        return this.cardService;
+    }
+
+    public void setCardService(CardService cardService){
+        this.cardService = cardService;
     }
 
 }
