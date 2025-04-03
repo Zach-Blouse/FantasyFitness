@@ -4,6 +4,7 @@ import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.core.DomainService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -15,6 +16,10 @@ public class CardService implements DomainService<Card> {
     public CardService(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         cardRepository = new CardRepository(this);
+    }
+
+    public void getCardList(List<String> cardUuids, Map<String, Object> metadata){
+        cardRepository.fetchCardList(cardUuids, metadata);
     }
 
     @Override

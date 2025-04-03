@@ -11,6 +11,7 @@ import com.zblouse.fantasyfitness.core.FirestoreDatabase;
 import com.zblouse.fantasyfitness.core.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CardFirestoreDatabase extends FirestoreDatabase {
@@ -38,6 +39,10 @@ public class CardFirestoreDatabase extends FirestoreDatabase {
                 }
             }
         });
+    }
+
+    public void fetchListOfCards(List<String> cardUuids, Map<String, Object> metadata){
+
     }
 
     public void read(){
