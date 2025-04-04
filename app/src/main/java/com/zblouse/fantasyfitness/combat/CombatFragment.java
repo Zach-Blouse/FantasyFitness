@@ -60,28 +60,28 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         layout = (ConstraintLayout) inflater.inflate(R.layout.combat_fragment, container, false);
         enemyHand = layout.findViewById(R.id.enemyHand);
         enemyHandList = new ArrayList<>();
-        enemyHandCombatCardStateViewAdapter = new CombatCardStateViewAdapter(enemyHandList, true);
+        enemyHandCombatCardStateViewAdapter = new CombatCardStateViewAdapter(enemyHandList, true, this);
         enemyHand.setAdapter(enemyHandCombatCardStateViewAdapter);
         LinearLayoutManager enemyHandLayoutManager = new LinearLayoutManager(mainActivity);
         enemyHandLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         enemyHand.setLayoutManager(enemyHandLayoutManager);
         enemyBackLine = layout.findViewById(R.id.enemyBackLine);
         enemyBackLineList = new ArrayList<>();
-        enemyBackLineCombatCardStateViewAdapter = new CombatCardStateViewAdapter(enemyBackLineList, false);
+        enemyBackLineCombatCardStateViewAdapter = new CombatCardStateViewAdapter(enemyBackLineList, false, this);
         enemyBackLine.setAdapter(enemyBackLineCombatCardStateViewAdapter);
         LinearLayoutManager enemyBackLineLayoutManager = new LinearLayoutManager(mainActivity);
         enemyBackLineLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         enemyBackLine.setLayoutManager(enemyBackLineLayoutManager);
         enemyFrontLine = layout.findViewById(R.id.enemyFrontLine);
         enemyFrontLineList = new ArrayList<>();
-        enemyFrontLineCombatCardStateViewAdapter = new CombatCardStateViewAdapter(enemyFrontLineList, false);
+        enemyFrontLineCombatCardStateViewAdapter = new CombatCardStateViewAdapter(enemyFrontLineList, false, this);
         enemyFrontLine.setAdapter(enemyFrontLineCombatCardStateViewAdapter);
         LinearLayoutManager enemyFrontLineLayoutManager = new LinearLayoutManager(mainActivity);
         enemyFrontLineLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         enemyFrontLine.setLayoutManager(enemyFrontLineLayoutManager);
         playerFrontLine = layout.findViewById(R.id.playerFrontLine);
         playerFrontLineList = new ArrayList<>();
-        playerFrontLineCombatCardStateViewAdapter = new CombatCardStateViewAdapter(playerFrontLineList, false);
+        playerFrontLineCombatCardStateViewAdapter = new CombatCardStateViewAdapter(playerFrontLineList, false, this);
         playerFrontLine.setAdapter(playerFrontLineCombatCardStateViewAdapter);
         LinearLayoutManager playerFrontLineLayoutManager = new LinearLayoutManager(mainActivity);
         playerFrontLineLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -90,7 +90,7 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         playerFrontLine.setTag("playerFrontLine");
         playerFrontLine.setOnDragListener(new CombatLineDragListener(this, CombatLine.PLAYER_FRONT_LINE));
         playerBackLineList = new ArrayList<>();
-        playerBackLineCombatCardStateViewAdapter = new CombatCardStateViewAdapter(playerBackLineList, false);
+        playerBackLineCombatCardStateViewAdapter = new CombatCardStateViewAdapter(playerBackLineList, false, this);
         playerBackLine.setAdapter(playerBackLineCombatCardStateViewAdapter);
         LinearLayoutManager playerBackLineLayoutManager = new LinearLayoutManager(mainActivity);
         playerBackLineLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -99,7 +99,7 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         playerBackLine.setOnDragListener(new CombatLineDragListener(this,CombatLine.PLAYER_BACK_LINE));
         playerHand = layout.findViewById(R.id.playerHand);
         playerHandList = new ArrayList<>();
-        playerHandCombatCardStateViewAdapter = new CombatCardStateViewAdapter(playerHandList, true);
+        playerHandCombatCardStateViewAdapter = new CombatCardStateViewAdapter(playerHandList, true, this);
         playerHand.setAdapter(playerHandCombatCardStateViewAdapter);
         LinearLayoutManager playerHandLayoutManager = new LinearLayoutManager(mainActivity);
         playerHandLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -111,6 +111,10 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
 
     public void reportLineDrop(CombatCardModel combatCardModel, CombatLine combatLine){
         mainActivity.getCombatService().cardDroppedOnLine(combatCardModel,combatLine);
+    }
+
+    public void reportCardDrop(CombatCardModel droppedCard, CombatCardModel targetCard){
+        mainActivity.getCombatService().cardDroppedOnCard(droppedCard, targetCard);
     }
 
     @Override

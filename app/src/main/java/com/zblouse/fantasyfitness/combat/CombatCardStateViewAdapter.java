@@ -19,11 +19,13 @@ import java.util.List;
 public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardStateViewAdapter.ViewHolder> implements View.OnTouchListener {
 
     private List<CombatCardModel> combatCardModelList;
+    private CombatFragment combatFragment;
     private boolean inHand;
 
-    public CombatCardStateViewAdapter(List<CombatCardModel> combatCardModelList, boolean inHand){
+    public CombatCardStateViewAdapter(List<CombatCardModel> combatCardModelList, boolean inHand, CombatFragment combatFragment){
         this.combatCardModelList = combatCardModelList;
         this.inHand = inHand;
+        this.combatFragment = combatFragment;
     }
 
     @NonNull
@@ -41,8 +43,11 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
         holder.cardDescriptionTextView.setText(combatCardModel.getCardDescription());
         if(combatCardModel.getCardType().equals(CardType.CHARACTER)){
             holder.cardHealthTextView.setText(combatCardModel.getCurrentHealth() + "/" + combatCardModel.getMaxHealth());
+        } else {
+            holder.cardHealthTextView.setText("");
         }
         holder.card.setOnTouchListener(this);
+        holder.card.setOnDragListener(new CombatCardDragListener(combatFragment, combatCardModel, inHand));
         holder.card.setTag(combatCardModel);
     }
 

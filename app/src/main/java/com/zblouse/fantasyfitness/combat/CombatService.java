@@ -3,11 +3,14 @@ package com.zblouse.fantasyfitness.combat;
 import android.util.Log;
 
 import com.zblouse.fantasyfitness.activity.MainActivity;
+import com.zblouse.fantasyfitness.combat.cards.AbilityTarget;
+import com.zblouse.fantasyfitness.combat.cards.BuffAbility;
 import com.zblouse.fantasyfitness.combat.cards.Card;
 import com.zblouse.fantasyfitness.combat.cards.CardType;
 import com.zblouse.fantasyfitness.combat.cards.CharacterCard;
 import com.zblouse.fantasyfitness.combat.cards.Deck;
 import com.zblouse.fantasyfitness.combat.cards.EffectCard;
+import com.zblouse.fantasyfitness.combat.cards.HealAbility;
 import com.zblouse.fantasyfitness.combat.cards.ItemCard;
 
 import java.util.ArrayList;
@@ -35,6 +38,7 @@ public class CombatService {
     public void cardDroppedOnLine(CombatCardModel combatCardModel, CombatLine combatLine){
         if(combatCardModel.getCardType().equals(CardType.CHARACTER)){
             combatStateModel.getPlayerHand().remove(combatCardModel);
+            combatCardModel.setPlayed(true);
             if(combatLine.equals(CombatLine.PLAYER_BACK_LINE)){
                 combatStateModel.addCardToPlayerBackLine(combatCardModel);
             } else if(combatLine.equals(CombatLine.PLAYER_FRONT_LINE)){
@@ -42,6 +46,33 @@ public class CombatService {
             }
         }
         mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel,new HashMap<>()));
+    }
+
+    public void cardDroppedOnCard(CombatCardModel droppedCard, CombatCardModel targetCard){
+        Log.e("CombatService", "Card dropped on card. Dropped Type: " + droppedCard.getCardType() + " Ability target: " + droppedCard.getAbility().getAbilityTarget() + " Target Card Type: " + targetCard.getCardType() + " targetCard played: " + targetCard.isPlayed());
+        if(droppedCard.getCardType().equals(CardType.ITEM) && targetCard.isPlayed() && targetCard.getCardType().equals(CardType.CHARACTER) ){
+            switch (droppedCard.getAbility().getAbilityType()){
+                case BUFF:
+                case DAMAGE: {
+                    targetCard.addAbility(droppedCard.getAbility());
+                    break;
+                }
+                case HEAL:{
+                    if(droppedCard.getAbility().getAbilityTarget().equals(AbilityTarget.SINGLE_ALLY)) {
+                        HealAbility healAbility = (HealAbility) droppedCard.getAbility();
+                        int currentHealth = targetCard.getCurrentHealth();
+                        int newHealth = currentHealth + healAbility.getHealAmount();
+                        if (newHealth <= targetCard.getMaxHealth()) {
+                            targetCard.setCurrentHealth(newHealth);
+                        } else {
+                            targetCard.setCurrentHealth(targetCard.getMaxHealth());
+                        }
+                    }
+                }
+            }
+            combatStateModel.getPlayerHand().remove(droppedCard);
+            mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel,new HashMap<>()));
+        }
     }
 
     public void deckFetchReturned(Deck userDeck){
