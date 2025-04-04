@@ -2,6 +2,9 @@ package com.zblouse.fantasyfitness.combat.cards;
 
 public class ItemCard extends Card {
 
+    public static final String ABILITY_FIELD = "ability";
+    public static final String ITEM_TYPE_FIELD = "itemType";
+
     private Ability ability;
     private ItemType itemType;
 

@@ -2,6 +2,11 @@ package com.zblouse.fantasyfitness.combat.cards;
 
 public abstract class Ability {
 
+    public static final String NAME_FIELD = "abilityName";
+    public static final String DESCRIPTION_FIELD = "abilityDescription";
+    public static final String ABILITY_TYPE_FIELD = "abilityType";
+    public static final String ABILITY_TARGET_FIELD = "abilityTarget";
+
     protected String abilityName;
     protected String abilityDescription;
     protected AbilityType abilityType;

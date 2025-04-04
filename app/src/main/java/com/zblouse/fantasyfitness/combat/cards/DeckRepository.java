@@ -1,5 +1,7 @@
 package com.zblouse.fantasyfitness.combat.cards;
 
+import android.util.Log;
+
 import com.zblouse.fantasyfitness.core.Repository;
 
 import java.util.Map;
@@ -19,11 +21,13 @@ public class DeckRepository implements Repository<Deck> {
     }
 
     public void fetchDeck(String userId, String deckName, Map<String, Object> metadata){
+        Log.e("DeckRepository","fetching deck");
         deckFirestoreDatabase.readDeck(userId, deckName, this, metadata);
     }
 
     @Override
     public void readCallback(Deck deck, Map<String, Object> metadata) {
+        Log.e("DeckRepository", "deck read call back");
         if(deck != null){
             deckService.repositoryResponse(deck, metadata);
         }

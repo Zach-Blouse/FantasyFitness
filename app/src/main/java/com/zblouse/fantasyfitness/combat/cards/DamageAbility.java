@@ -2,6 +2,9 @@ package com.zblouse.fantasyfitness.combat.cards;
 
 public class DamageAbility extends Ability {
 
+    public static final String DAMAGE_TYPE_FIELD = "damageType";
+    public static final String ATTACK_TYPE_FIELD = "attackType";
+    public static final String DAMAGE_AMOUNT_FIELD = "damageAmount";
     private final DamageType damageType;
     private final AttackType attackType;
     private final int damageAmount;

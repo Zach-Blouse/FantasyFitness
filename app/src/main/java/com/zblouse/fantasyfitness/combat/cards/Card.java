@@ -2,6 +2,12 @@ package com.zblouse.fantasyfitness.combat.cards;
 
 public abstract class Card {
 
+    public static final String USER_ID_FIELD = "userId";
+    public static final String CARD_UUID_FIELD = "cardUuid";
+    public static final String CARD_TYPE_FIELD = "cardType";
+    public static final String CARD_NAME_FIELD = "cardName";
+    public static final String CARD_DESCRIPTION_FIELD = "cardDescription";
+
     protected String userId;
     protected String cardUuid;
     protected CardType cardType;

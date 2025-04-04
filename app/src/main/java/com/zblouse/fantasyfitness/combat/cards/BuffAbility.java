@@ -2,6 +2,9 @@ package com.zblouse.fantasyfitness.combat.cards;
 
 public class BuffAbility extends Ability {
 
+    public static final String BUFF_TYPE_FIELD = "buffType";
+    public static final String BUFF_AMOUNT_FIELD = "buffAmount";
+
     private BuffType buffType;
     private int buffAmount;
 

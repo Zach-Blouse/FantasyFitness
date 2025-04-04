@@ -1,5 +1,7 @@
 package com.zblouse.fantasyfitness.combat.cards;
 
+import android.util.Log;
+
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.core.DomainService;
 
@@ -20,13 +22,17 @@ public class CardService implements DomainService<Card> {
     }
 
     public void getCardList(List<String> cardUuids, Map<String, Object> metadata){
+        Log.e("CardService", "Getting card list");
         cardRepository.fetchCardList(mainActivity.getCurrentUser().getUid(), cardUuids, metadata);
     }
 
     public void repositoryResponse(List<Card> cardList, Map<String, Object> metadata){
+        Log.e("CardService", "card list repository response");
         if(metadata.containsKey(INTER_DOMAIN_SERVICE_ORIGIN_KEY)){
             metadata.put(INTER_DOMAIN_SERVICE_RESPONSE_CLASS_KEY,List.class);
             ((DomainService)metadata.get(INTER_DOMAIN_SERVICE_ORIGIN_KEY)).interDomainServiceResponse(cardList,metadata);
+        } else {
+            Log.e("CardService", "Metadata does not contain inter domain service origin");
         }
     }
 

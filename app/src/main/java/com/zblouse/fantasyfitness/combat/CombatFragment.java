@@ -41,6 +41,7 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
 
     @Override
     public void publishEvent(Event event) {
+        Log.e("combatFragment", "publishEventType: " + event.getEventType());
         if (event.getEventType().equals(EventType.DECK_FETCH_EVENT)) {
             Deck userDeck = ((DeckFetchEvent)event).getDeck();
             mainActivity.getCombatService().deckFetchReturned(userDeck);
