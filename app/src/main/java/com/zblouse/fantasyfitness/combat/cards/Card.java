@@ -1,6 +1,4 @@
-package com.zblouse.fantasyfitness.combat;
-
-import java.util.UUID;
+package com.zblouse.fantasyfitness.combat.cards;
 
 public abstract class Card {
 

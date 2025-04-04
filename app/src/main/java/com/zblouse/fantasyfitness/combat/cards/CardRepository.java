@@ -1,8 +1,5 @@
-package com.zblouse.fantasyfitness.combat;
+package com.zblouse.fantasyfitness.combat.cards;
 
-import android.util.Log;
-
-import com.zblouse.fantasyfitness.core.DomainService;
 import com.zblouse.fantasyfitness.core.Repository;
 
 import java.util.List;
@@ -22,8 +19,12 @@ public class CardRepository implements Repository<Card> {
         cardFirestoreDatabase.write(card, this, metadata);
     }
 
-    public void fetchCardList(List<String> cardUuids, Map<String, Object> metadata){
+    public void fetchCardList(String userId, List<String> cardUuids, Map<String, Object> metadata){
+        cardFirestoreDatabase.fetchListOfCards(userId, cardUuids, this, metadata);
+    }
 
+    public void listReadCallback(List<Card> cardList, Map<String, Object> metadata){
+        cardService.repositoryResponse(cardList, metadata);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class CardRepository implements Repository<Card> {
     @Override
     public void updateCallback(boolean success, Map<String, Object> metadata) {
         if(success){
-            cardService.repositoryResponse(null, metadata);
+            cardService.repositoryResponse((Card)null, metadata);
         }
     }
 }

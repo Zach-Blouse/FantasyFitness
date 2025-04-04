@@ -13,11 +13,13 @@ public class ExploreActionService {
     private NothingFoundActionResultGenerator nothingFoundActionResultGenerator;
     private DialogActionResultGenerator dialogActionResultGenerator;
     private RandomActionResultTypeGenerator randomActionResultTypeGenerator;
+    private CombatActionResultGenerator combatActionResultGenerator;
 
     public ExploreActionService(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         this.nothingFoundActionResultGenerator = new NothingFoundActionResultGenerator();
         this.dialogActionResultGenerator = new DialogActionResultGenerator(mainActivity);
+        this.combatActionResultGenerator = new CombatActionResultGenerator();
         this.randomActionResultTypeGenerator = new RandomActionResultTypeGenerator();
     }
 
@@ -38,6 +40,9 @@ public class ExploreActionService {
                 break;
             case DIALOG:
                 actionResult = dialogActionResultGenerator.generate(metadata);
+                break;
+            case COMBAT:
+                actionResult = combatActionResultGenerator.generate(metadata);
                 break;
             default:
                 actionResult = nothingFoundActionResultGenerator.generate(metadata);

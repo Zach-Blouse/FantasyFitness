@@ -1,4 +1,4 @@
-package com.zblouse.fantasyfitness.combat;
+package com.zblouse.fantasyfitness.combat.cards;
 
 public class PermanentCard extends Card {
 

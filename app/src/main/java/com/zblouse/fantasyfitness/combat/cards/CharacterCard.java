@@ -1,4 +1,4 @@
-package com.zblouse.fantasyfitness.combat;
+package com.zblouse.fantasyfitness.combat.cards;
 
 import java.util.ArrayList;
 import java.util.List;

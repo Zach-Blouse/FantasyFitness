@@ -1,4 +1,4 @@
-package com.zblouse.fantasyfitness.combat;
+package com.zblouse.fantasyfitness.combat.cards;
 
 public class DamageAbility extends Ability {
 
@@ -7,7 +7,7 @@ public class DamageAbility extends Ability {
     private final int damageAmount;
 
     public DamageAbility(String abilityName, String abilityDescription, AbilityTarget abilityTarget, DamageType damageType, AttackType attackType, int damageAmount){
-        super(abilityName,abilityDescription,AbilityType.DAMAGE, abilityTarget);
+        super(abilityName,abilityDescription, AbilityType.DAMAGE, abilityTarget);
         this.damageAmount = damageAmount;
         this.damageType = damageType;
         this.attackType = attackType;
