@@ -14,11 +14,13 @@ public class CombatCardModel {
     private int currentHealth;
     private List<Ability> abilities;
     private Ability ability;
+    private boolean played;
 
-    public CombatCardModel(String cardName, String cardDescription, CardType cardType){
+    public CombatCardModel(String cardName, String cardDescription, CardType cardType, boolean played){
         this.cardName = cardName;
         this.cardDescription = cardDescription;
         this.cardType = cardType;
+        this.played = played;
     }
 
     public String getCardName(){
@@ -70,5 +72,13 @@ public class CombatCardModel {
 
     public Ability getAbility(){
         return this.ability;
+    }
+
+    public boolean isPlayed(){
+        return this.played;
+    }
+
+    public void setPlayed(boolean played){
+        this.played = played;
     }
 }

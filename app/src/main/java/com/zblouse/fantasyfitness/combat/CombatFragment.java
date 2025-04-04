@@ -87,12 +87,16 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         playerFrontLineLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         playerFrontLine.setLayoutManager(playerFrontLineLayoutManager);
         playerBackLine = layout.findViewById(R.id.playerBackLine);
+        playerFrontLine.setTag("playerFrontLine");
+        playerFrontLine.setOnDragListener(new CombatLineDragListener(this, CombatLine.PLAYER_FRONT_LINE));
         playerBackLineList = new ArrayList<>();
         playerBackLineCombatCardStateViewAdapter = new CombatCardStateViewAdapter(playerBackLineList, false);
         playerBackLine.setAdapter(playerBackLineCombatCardStateViewAdapter);
         LinearLayoutManager playerBackLineLayoutManager = new LinearLayoutManager(mainActivity);
         playerBackLineLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         playerBackLine.setLayoutManager(playerBackLineLayoutManager);
+        playerBackLine.setTag("playerBackLine");
+        playerBackLine.setOnDragListener(new CombatLineDragListener(this,CombatLine.PLAYER_BACK_LINE));
         playerHand = layout.findViewById(R.id.playerHand);
         playerHandList = new ArrayList<>();
         playerHandCombatCardStateViewAdapter = new CombatCardStateViewAdapter(playerHandList, true);
@@ -105,6 +109,10 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         return layout;
     }
 
+    public void reportLineDrop(CombatCardModel combatCardModel, CombatLine combatLine){
+        mainActivity.getCombatService().cardDroppedOnLine(combatCardModel,combatLine);
+    }
+
     @Override
     public void publishEvent(Event event) {
         if (event.getEventType().equals(EventType.DECK_FETCH_EVENT)) {
@@ -112,12 +120,30 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
             mainActivity.getCombatService().deckFetchReturned(userDeck);
         } else if(event.getEventType().equals(EventType.COMBAT_STATE_UPDATE_EVENT)){
             CombatStateUpdateEvent combatStateUpdateEvent = (CombatStateUpdateEvent) event;
+            CombatStateModel combatStateModel = combatStateUpdateEvent.getCombatStateModel();
             playerHandList.clear();
-            playerHandList.addAll(combatStateUpdateEvent.getCombatStateModel().getPlayerHand());
-            for(CombatCardModel combatCardModel: playerHandList){
-                Log.e("CombatFragment", "player hand card: " + combatCardModel.getCardName());
-            }
+            playerHandList.addAll(combatStateModel.getPlayerHand());
             playerHandCombatCardStateViewAdapter.notifyDataSetChanged();
+
+            playerBackLineList.clear();
+            playerBackLineList.addAll(combatStateModel.getPlayerBackLine());
+            playerBackLineCombatCardStateViewAdapter.notifyDataSetChanged();
+
+            playerFrontLineList.clear();
+            playerFrontLineList.addAll(combatStateModel.getPlayerFrontLine());
+            playerFrontLineCombatCardStateViewAdapter.notifyDataSetChanged();
+
+            enemyFrontLineList.clear();
+            enemyFrontLineList.addAll(combatStateModel.getEnemyFrontLine());
+            enemyFrontLineCombatCardStateViewAdapter.notifyDataSetChanged();
+
+            enemyBackLineList.clear();
+            enemyBackLineList.addAll(combatStateModel.getEnemyBackLine());
+            enemyBackLineCombatCardStateViewAdapter.notifyDataSetChanged();
+
+            enemyHandList.clear();
+            enemyHandList.addAll(combatStateModel.getEnemyHand());
+            enemyHandCombatCardStateViewAdapter.notifyDataSetChanged();
         }
     }
 }

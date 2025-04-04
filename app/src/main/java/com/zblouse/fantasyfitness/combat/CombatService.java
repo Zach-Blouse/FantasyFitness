@@ -32,11 +32,23 @@ public class CombatService {
         combatStateModel = null;
     }
 
+    public void cardDroppedOnLine(CombatCardModel combatCardModel, CombatLine combatLine){
+        if(combatCardModel.getCardType().equals(CardType.CHARACTER)){
+            combatStateModel.getPlayerHand().remove(combatCardModel);
+            if(combatLine.equals(CombatLine.PLAYER_BACK_LINE)){
+                combatStateModel.addCardToPlayerBackLine(combatCardModel);
+            } else if(combatLine.equals(CombatLine.PLAYER_FRONT_LINE)){
+                combatStateModel.addCardToPlayerFrontLine(combatCardModel);
+            }
+        }
+        mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel,new HashMap<>()));
+    }
+
     public void deckFetchReturned(Deck userDeck){
 
         List<CombatCardModel> userDeckCards = new ArrayList<>();
         for(Card card: userDeck.getCards()){
-            CombatCardModel combatCardModel = new CombatCardModel(card.getCardName(), card.getCardDescription(), card.getCardType());
+            CombatCardModel combatCardModel = new CombatCardModel(card.getCardName(), card.getCardDescription(), card.getCardType(), false);
             if(card.getCardType().equals(CardType.CHARACTER)){
                 CharacterCard characterCard = (CharacterCard)card;
                 combatCardModel.setAbilities(characterCard.getAbilities());
