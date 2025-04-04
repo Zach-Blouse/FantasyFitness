@@ -126,7 +126,6 @@ public class CardFirestoreDatabase extends FirestoreDatabase {
         String cardName = (String)data.get(Card.CARD_NAME_FIELD);
         String cardDescription = (String)data.get(Card.CARD_DESCRIPTION_FIELD);
         int maxHealth = ((Long)data.get(CharacterCard.MAX_HEALTH_FIELD)).intValue();
-        int currentHealth = ((Long)data.get(CharacterCard.CURRENT_HEALTH_FIELD)).intValue();
         List<Ability> abilities = new ArrayList<>();
         for(Map<String,Object> abilityData: (List<Map<String,Object>>)data.get(CharacterCard.ABILITIES_FIELD)){
             abilities.add(constructAbilityFromMap(abilityData));
@@ -138,7 +137,7 @@ public class CardFirestoreDatabase extends FirestoreDatabase {
             permanentCardsAffixedNames = new ArrayList<>();
         }
 
-        return new CharacterCard(userId, cardUuid, cardName, cardDescription,maxHealth,currentHealth,abilities,permanentCardsAffixedNames);
+        return new CharacterCard(userId, cardUuid, cardName, cardDescription,maxHealth,abilities,permanentCardsAffixedNames);
     }
 
     private Ability constructAbilityFromMap(Map<String,Object> abilityData){
