@@ -37,14 +37,65 @@ public class CombatService {
 
     public void cardDroppedOnLine(CombatCardModel combatCardModel, CombatLine combatLine){
         if(combatCardModel.getCardType().equals(CardType.CHARACTER)){
-            combatStateModel.getPlayerHand().remove(combatCardModel);
             combatCardModel.setPlayed(true);
             if(combatLine.equals(CombatLine.PLAYER_BACK_LINE)){
                 combatStateModel.addCardToPlayerBackLine(combatCardModel);
             } else if(combatLine.equals(CombatLine.PLAYER_FRONT_LINE)){
                 combatStateModel.addCardToPlayerFrontLine(combatCardModel);
             }
+        } else if(combatCardModel.getAbility().getAbilityTarget().equals(AbilityTarget.ROW_ALLY)){
+            switch(combatLine) {
+                case PLAYER_BACK_LINE: {
+                    switch (combatCardModel.getAbility().getAbilityType()) {
+                        case BUFF:
+                        case DEBUFF: {
+                            for(CombatCardModel cardModel: combatStateModel.getPlayerBackLine()){
+                                cardModel.addAbility(combatCardModel.getAbility());
+                            }
+                        }
+                        case HEAL:{
+                            for(CombatCardModel cardModel: combatStateModel.getPlayerBackLine()){
+                                HealAbility healAbility = (HealAbility) combatCardModel.getAbility();
+                                int currentHealth = cardModel.getCurrentHealth();
+                                int newHealth = currentHealth + healAbility.getHealAmount();
+                                if (newHealth <= cardModel.getMaxHealth()) {
+                                    cardModel.setCurrentHealth(newHealth);
+                                } else {
+                                    cardModel.setCurrentHealth(cardModel.getMaxHealth());
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+                case PLAYER_FRONT_LINE: {
+                    switch (combatCardModel.getAbility().getAbilityType()) {
+                        case BUFF:
+                        case DEBUFF: {
+                            for(CombatCardModel cardModel: combatStateModel.getPlayerFrontLine()){
+                                cardModel.addAbility(combatCardModel.getAbility());
+                            }
+                        }
+                        case HEAL:{
+                            for(CombatCardModel cardModel: combatStateModel.getPlayerFrontLine()){
+                                HealAbility healAbility = (HealAbility) combatCardModel.getAbility();
+                                int currentHealth = cardModel.getCurrentHealth();
+                                int newHealth = currentHealth + healAbility.getHealAmount();
+                                if (newHealth <= cardModel.getMaxHealth()) {
+                                    cardModel.setCurrentHealth(newHealth);
+                                } else {
+                                    cardModel.setCurrentHealth(cardModel.getMaxHealth());
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        } else if(combatCardModel.getAbility().getAbilityTarget().equals(AbilityTarget.ALL_ALLY)){
+
         }
+        combatStateModel.getPlayerHand().remove(combatCardModel);
         mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel,new HashMap<>()));
     }
 
