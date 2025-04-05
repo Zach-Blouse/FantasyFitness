@@ -143,7 +143,7 @@ public class CombatService {
 
         List<CombatCardModel> enemyDeckCards = new ArrayList<>();
         for(Card card: encounter.getEnemyCards()){
-            CombatCardModel combatCardModel = new CombatCardModel(card.getCardName(), card.getCardDescription(), card.getCardType(), false);
+            CombatCardModel combatCardModel = new CombatCardModel(card.getCardName(), card.getCardDescription(), card.getCardType(), false,false);
             if(card.getCardType().equals(CardType.CHARACTER)){
                 CharacterCard characterCard = (CharacterCard)card;
                 combatCardModel.setAbilities(characterCard.getAbilities());
@@ -186,7 +186,7 @@ public class CombatService {
 
         List<CombatCardModel> userDeckCards = new ArrayList<>();
         for(Card card: userDeck.getCards()){
-            CombatCardModel combatCardModel = new CombatCardModel(card.getCardName(), card.getCardDescription(), card.getCardType(), false);
+            CombatCardModel combatCardModel = new CombatCardModel(card.getCardName(), card.getCardDescription(), card.getCardType(), true,false);
             if(card.getCardType().equals(CardType.CHARACTER)){
                 CharacterCard characterCard = (CharacterCard)card;
                 combatCardModel.setAbilities(characterCard.getAbilities());
@@ -228,5 +228,9 @@ public class CombatService {
 
     public boolean isPlayerTurn(){
         return this.playerTurn;
+    }
+
+    public void endPlayerTurn(){
+        this.playerTurn = false;
     }
 }

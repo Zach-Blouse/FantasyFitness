@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -48,6 +49,8 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
     private RecyclerView playerHand;
     private List<CombatCardModel> playerHandList;
     private CombatCardStateViewAdapter playerHandCombatCardStateViewAdapter;
+
+    private Button endPlayerTurnButton;
 
     public CombatFragment(){
         super(R.layout.combat_fragment);
@@ -110,6 +113,16 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         playerHandLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         playerHand.setLayoutManager(playerHandLayoutManager);
 
+        endPlayerTurnButton = layout.findViewById(R.id.end_turn_button);
+        endPlayerTurnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                endPlayerTurnButton.setClickable(false);
+                endPlayerTurnButton.setText(getString(R.string.enemy_turn));
+                mainActivity.getCombatService().endPlayerTurn();
+            }
+        });
+
         mainActivity.getCombatService().initializeCombat();
         return layout;
     }
@@ -130,6 +143,9 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         } else if(event.getEventType().equals(EventType.ENCOUNTER_FETCH_EVENT)){
             Encounter encounter = ((EncounterFetchEvent)event).getEncounter();
             mainActivity.getCombatService().encounterFetchReturned(encounter);
+        }else if(event.getEventType().equals(EventType.ENEMY_TURN_COMPLETE_EVENT)){
+            endPlayerTurnButton.setClickable(true);
+            endPlayerTurnButton.setText(getString(R.string.end_turn));
         }else if(event.getEventType().equals(EventType.COMBAT_STATE_UPDATE_EVENT)){
             CombatStateUpdateEvent combatStateUpdateEvent = (CombatStateUpdateEvent) event;
             CombatStateModel combatStateModel = combatStateUpdateEvent.getCombatStateModel();
@@ -157,5 +173,9 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
             enemyHandList.addAll(combatStateModel.getEnemyHand());
             enemyHandCombatCardStateViewAdapter.notifyDataSetChanged();
         }
+    }
+
+    public boolean isPlayerTurn(){
+        return mainActivity.getCombatService().isPlayerTurn();
     }
 }

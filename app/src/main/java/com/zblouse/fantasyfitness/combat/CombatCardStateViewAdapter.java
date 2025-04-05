@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.zblouse.fantasyfitness.R;
@@ -38,15 +39,21 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
     @Override
     public void onBindViewHolder(@NonNull CombatCardStateViewAdapter.ViewHolder holder, int position) {
         CombatCardModel combatCardModel = combatCardModelList.get(position);
-
-        holder.cardNameTextView.setText(combatCardModel.getCardName());
-        holder.cardDescriptionTextView.setText(combatCardModel.getCardDescription());
-        if(combatCardModel.getCardType().equals(CardType.CHARACTER)){
-            holder.cardHealthTextView.setText(combatCardModel.getCurrentHealth() + "/" + combatCardModel.getMaxHealth());
+        ContextCompat.getColor(combatFragment.getActivity(), R.color.fantasy_fitness_white);
+        if(combatCardModel.isPlayerCard() || combatCardModel.isPlayed()) {
+            holder.cardNameTextView.setText(combatCardModel.getCardName());
+            holder.cardDescriptionTextView.setText(combatCardModel.getCardDescription());
+            if (combatCardModel.getCardType().equals(CardType.CHARACTER)) {
+                holder.cardHealthTextView.setText(combatCardModel.getCurrentHealth() + "/" + combatCardModel.getMaxHealth());
+            } else {
+                holder.cardHealthTextView.setText("");
+            }
         } else {
-            holder.cardHealthTextView.setText("");
+            holder.card.setCardBackgroundColor(ContextCompat.getColor(combatFragment.getActivity(), R.color.fantasy_fitness_red));
         }
-        holder.card.setOnTouchListener(this);
+        if(combatCardModel.isPlayerCard()){
+            holder.card.setOnTouchListener(this);
+        }
         holder.card.setOnDragListener(new CombatCardDragListener(combatFragment, combatCardModel, inHand));
         holder.card.setTag(combatCardModel);
     }
@@ -58,14 +65,16 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                if(inHand) {
-                    ClipData data = ClipData.newPlainText("", "");
-                    View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-                    view.startDragAndDrop(data, shadowBuilder, view, 0);
-                    return true;
-                }
+        if(combatFragment.isPlayerTurn()) {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    if (inHand) {
+                        ClipData data = ClipData.newPlainText("", "");
+                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                        view.startDragAndDrop(data, shadowBuilder, view, 0);
+                        return true;
+                    }
+            }
         }
         return false;
     }

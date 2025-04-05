@@ -28,7 +28,7 @@ public class EncounterService implements DomainService<Encounter> {
     public EncounterService(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         this.encounterRepository = new EncounterRepository(this);
-        initializeEncounters();
+        //initializeEncounters();
     }
 
     public void fetchEncounter(String encounterName, Map<String, Object> metadata){
