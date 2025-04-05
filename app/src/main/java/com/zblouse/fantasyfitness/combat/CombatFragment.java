@@ -223,4 +223,8 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
     public void abilityUsed(Ability ability){
 
     }
+
+    public boolean isInitialSetup(){
+        return mainActivity.getCombatService().isInSetup();
+    }
 }

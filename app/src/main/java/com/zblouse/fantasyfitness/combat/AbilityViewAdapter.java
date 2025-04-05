@@ -50,7 +50,7 @@ public class AbilityViewAdapter extends RecyclerView.Adapter<AbilityViewAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull AbilityViewAdapter.ViewHolder holder, int position) {
-        if(!cardAttachedTo.isPlayerCard() && !cardAttachedTo.isPlayed()){
+        if(!cardAttachedTo.isPlayerCard() && (!cardAttachedTo.isPlayed() || combatFragment.isInitialSetup())){
             holder.abilityCard.setVisibility(View.GONE);
         }
         Ability ability = abilities.get(position);
