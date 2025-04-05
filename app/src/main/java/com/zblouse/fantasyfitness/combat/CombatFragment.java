@@ -17,6 +17,7 @@ import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.actions.CombatActionResult;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.combat.cards.Ability;
+import com.zblouse.fantasyfitness.combat.cards.AbilityTarget;
 import com.zblouse.fantasyfitness.combat.cards.Card;
 import com.zblouse.fantasyfitness.combat.cards.CardType;
 import com.zblouse.fantasyfitness.combat.cards.Deck;
@@ -127,9 +128,7 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         endPlayerTurnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                endPlayerTurnButton.setClickable(false);
-                endPlayerTurnButton.setText(getString(R.string.enemy_turn));
-                mainActivity.getCombatService().endPlayerTurn();
+                setupComplete();
             }
         });
 
@@ -147,7 +146,6 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
                 detailedCardView.setVisibility(View.GONE);
             }
         });
-
         mainActivity.getCombatService().initializeCombat();
         return layout;
     }
@@ -169,8 +167,7 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
             Encounter encounter = ((EncounterFetchEvent)event).getEncounter();
             mainActivity.getCombatService().encounterFetchReturned(encounter);
         }else if(event.getEventType().equals(EventType.ENEMY_TURN_COMPLETE_EVENT)){
-            endPlayerTurnButton.setClickable(true);
-            endPlayerTurnButton.setText(getString(R.string.end_turn));
+            startPlayerTurn();
         }else if(event.getEventType().equals(EventType.COMBAT_STATE_UPDATE_EVENT)){
             CombatStateUpdateEvent combatStateUpdateEvent = (CombatStateUpdateEvent) event;
             CombatStateModel combatStateModel = combatStateUpdateEvent.getCombatStateModel();
@@ -220,11 +217,49 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         detailedCardView.setVisibility(View.VISIBLE);
     }
 
-    public void abilityUsed(Ability ability){
+    public void abilityUsed(CombatCardModel cardUsingAbility, Ability ability){
+        Log.e("CombatFragment","Using ability, " + ability.getAbilityName());
+        detailedCardView.setVisibility(View.GONE);
+        mainActivity.getCombatService().abilityUsed(cardUsingAbility, ability);
+    }
 
+    public void attemptCardAbilityTarget(CombatCardModel combatCardModel){
+        Log.e("CombatFragment", "card: " + combatCardModel.getCardName() + " attempting to target");
+        mainActivity.getCombatService().attemptCardAbilityTarget(combatCardModel);
+    }
+
+    public boolean isWaitingForAbilityTargeting(){
+        return mainActivity.getCombatService().isWaitingForAbilityTargeting();
     }
 
     public boolean isInitialSetup(){
         return mainActivity.getCombatService().isInSetup();
+    }
+
+    private void setupComplete(){
+        boolean playerTurn = mainActivity.getCombatService().endSetup();
+        if(playerTurn){
+            startPlayerTurn();
+        } else {
+            endPlayerTurnButton.setClickable(false);
+            endPlayerTurnButton.setText(getString(R.string.enemy_turn));
+        }
+    }
+
+    public void startPlayerTurn(){
+        endPlayerTurnButton.setClickable(true);
+        endPlayerTurnButton.setText(getString(R.string.end_turn));
+        endPlayerTurnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                endPlayerTurn();
+            }
+        });
+    }
+
+    private void endPlayerTurn(){
+        endPlayerTurnButton.setClickable(false);
+        endPlayerTurnButton.setText(getString(R.string.enemy_turn));
+        mainActivity.getCombatService().endPlayerTurn();
     }
 }

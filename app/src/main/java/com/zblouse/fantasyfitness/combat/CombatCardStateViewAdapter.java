@@ -1,6 +1,7 @@
 package com.zblouse.fantasyfitness.combat;
 
 import android.content.ClipData;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,6 +50,7 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
             } else {
                 holder.cardHealthTextView.setText("");
             }
+            holder.card.setCardBackgroundColor(ContextCompat.getColor(combatFragment.getActivity(), R.color.fantasy_fitness_white));
         } else {
             holder.card.setCardBackgroundColor(ContextCompat.getColor(combatFragment.getActivity(), R.color.fantasy_fitness_red));
         }
@@ -62,6 +64,15 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
                     combatFragment.cardHeld(combatCardModel);
                 }
                 return true;
+            }
+        });
+        holder.card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("CombatCardStateViewAdapter", combatCardModel.getCardName() + " has been clicked");
+                if(combatFragment.isWaitingForAbilityTargeting() && !inHand){
+                    combatFragment.attemptCardAbilityTarget(combatCardModel);
+                }
             }
         });
         holder.card.setOnDragListener(new CombatCardDragListener(combatFragment, combatCardModel, inHand));

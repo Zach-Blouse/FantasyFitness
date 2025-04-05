@@ -63,8 +63,7 @@ public class AbilityViewAdapter extends RecyclerView.Adapter<AbilityViewAdapter.
                         @Override
                         public void onClick(View view) {
                             if (!cardAttachedTo.hasUsedAbilityThisTurn()) {
-                                cardAttachedTo.setUsedAbilityThisTurn(true);
-                                combatFragment.abilityUsed(ability);
+                                combatFragment.abilityUsed(cardAttachedTo, ability);
                             }
                         }
                     });
