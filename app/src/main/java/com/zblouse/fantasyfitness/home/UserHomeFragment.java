@@ -19,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.zblouse.fantasyfitness.actions.ActionResult;
 import com.zblouse.fantasyfitness.actions.ActionResultType;
+import com.zblouse.fantasyfitness.actions.CombatActionResult;
 import com.zblouse.fantasyfitness.actions.DialogActionResult;
 import com.zblouse.fantasyfitness.actions.ExploreActionEvent;
 import com.zblouse.fantasyfitness.actions.ExploreActionService;
@@ -137,8 +138,9 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                         Dialog baseDialog = ((DialogActionResult)actionResult).getInitialDialog();
                         loadDialogs(baseDialog);
                     } else if(actionResult.getActionResultType().equals(ActionResultType.COMBAT)){
+                        CombatActionResult combatActionResult = (CombatActionResult)actionResult;
                         mainActivity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container, new CombatFragment(mainActivity)).commit();
+                                .replace(R.id.fragment_container, new CombatFragment(mainActivity, combatActionResult.getEncounterName())).commit();
                     }
                 }
             });

@@ -19,6 +19,7 @@ import com.zblouse.fantasyfitness.actions.ExploreActionService;
 import com.zblouse.fantasyfitness.combat.CombatService;
 import com.zblouse.fantasyfitness.combat.cards.CardService;
 import com.zblouse.fantasyfitness.combat.cards.DeckService;
+import com.zblouse.fantasyfitness.combat.encounter.EncounterService;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.dialog.DialogService;
 import com.zblouse.fantasyfitness.dialog.DialogSqlDatabase;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private CardService cardService;
     private DeckService deckService;
     private CombatService combatService;
+    private EncounterService encounterService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         dialogService = new DialogService(this);
         deckService = new DeckService(this);
         combatService = new CombatService(this);
+        encounterService = new EncounterService(this);
 
         gameLocationService.initializeLocationDatabase();
         dialogService.initializeDialogs();
@@ -266,6 +269,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setCombatService(CombatService combatService){
         this.combatService = combatService;
+    }
+
+    public EncounterService getEncounterService(){
+        return this.encounterService;
+    }
+
+    public void setEncounterService(EncounterService encounterService){
+        this.encounterService = encounterService;
     }
 
 }

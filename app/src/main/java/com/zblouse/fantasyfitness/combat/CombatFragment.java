@@ -11,16 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.zblouse.fantasyfitness.R;
+import com.zblouse.fantasyfitness.actions.CombatActionResult;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.combat.cards.Card;
 import com.zblouse.fantasyfitness.combat.cards.Deck;
 import com.zblouse.fantasyfitness.combat.cards.DeckFetchEvent;
+import com.zblouse.fantasyfitness.combat.encounter.Encounter;
+import com.zblouse.fantasyfitness.combat.encounter.EncounterFetchEvent;
 import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CombatFragment extends AuthenticationRequiredFragment implements EventListener {
@@ -49,8 +53,9 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         super(R.layout.combat_fragment);
     }
 
-    public CombatFragment(MainActivity mainActivity){
+    public CombatFragment(MainActivity mainActivity, String encounter){
         super(R.layout.combat_fragment, mainActivity);
+        mainActivity.getEncounterService().fetchEncounter(encounter, new HashMap<>());
     }
 
     @Override
@@ -122,7 +127,10 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         if (event.getEventType().equals(EventType.DECK_FETCH_EVENT)) {
             Deck userDeck = ((DeckFetchEvent)event).getDeck();
             mainActivity.getCombatService().deckFetchReturned(userDeck);
-        } else if(event.getEventType().equals(EventType.COMBAT_STATE_UPDATE_EVENT)){
+        } else if(event.getEventType().equals(EventType.ENCOUNTER_FETCH_EVENT)){
+            Encounter encounter = ((EncounterFetchEvent)event).getEncounter();
+            mainActivity.getCombatService().encounterFetchReturned(encounter);
+        }else if(event.getEventType().equals(EventType.COMBAT_STATE_UPDATE_EVENT)){
             CombatStateUpdateEvent combatStateUpdateEvent = (CombatStateUpdateEvent) event;
             CombatStateModel combatStateModel = combatStateUpdateEvent.getCombatStateModel();
             playerHandList.clear();

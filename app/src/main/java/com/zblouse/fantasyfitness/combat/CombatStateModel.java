@@ -1,5 +1,7 @@
 package com.zblouse.fantasyfitness.combat;
 
+import com.zblouse.fantasyfitness.actions.CombatActionResult;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,15 +16,25 @@ public class CombatStateModel {
     private List<CombatCardModel> playerHand;
     private List<CombatCardModel> enemyHand;
 
-    public CombatStateModel(CombatDeckModel userDeck, CombatDeckModel enemyDeck, List<CombatCardModel> playerHand, List<CombatCardModel> enemyHand){
+    public CombatStateModel(){
+        this.playerHand = new ArrayList<>();
+        this.enemyHand = new ArrayList<>();
+        this.enemyBackLine = new ArrayList<>();
+        this.enemyFrontLine = new ArrayList<>();
+        this.playerFrontLine = new ArrayList<>();
+        this.playerBackLine = new ArrayList<>();
+    }
+
+    public CombatStateModel(CombatDeckModel userDeck, CombatDeckModel enemyDeck, List<CombatCardModel> playerHand, List<CombatCardModel> playerBackLine,
+                            List<CombatCardModel> playerFrontLine, List<CombatCardModel> enemyHand, List<CombatCardModel> enemyFrontLine, List<CombatCardModel> enemyBackLine){
         this.userDeck = userDeck;
         this.enemyDeck = enemyDeck;
         this.playerHand = playerHand;
         this.enemyHand = enemyHand;
-        enemyBackLine = new ArrayList<>();
-        enemyFrontLine = new ArrayList<>();
-        playerFrontLine = new ArrayList<>();
-        playerBackLine = new ArrayList<>();
+        this.enemyBackLine = enemyBackLine;
+        this.enemyFrontLine = enemyFrontLine;
+        this.playerFrontLine = playerFrontLine;
+        this.playerBackLine = playerBackLine;
     }
 
     public List<CombatCardModel> getEnemyBackLine(){
@@ -65,6 +77,10 @@ public class CombatStateModel {
         this.playerHand.add(combatCardModel);
     }
 
+    public void initialPlayerHand(List<CombatCardModel> playerHand){
+        this.playerHand = playerHand;
+    }
+
     public List<CombatCardModel> getEnemyHand(){
         return this.enemyHand;
     }
@@ -73,11 +89,26 @@ public class CombatStateModel {
         this.enemyHand.add(combatCardModel);
     }
 
+    public void initialEnemyHand(List<CombatCardModel> enemyHand){
+        this.enemyHand = enemyHand;
+    }
+
     public CombatDeckModel getUserDeck(){
         return this.userDeck;
+    }
+    public void setUserDeck(CombatDeckModel userDeck){
+        this.userDeck = userDeck;
     }
 
     public CombatDeckModel getEnemyDeck(){
         return this.enemyDeck;
+    }
+
+    public void setEnemyDeck(CombatDeckModel enemyDeck){
+        this.enemyDeck = enemyDeck;
+    }
+
+    public boolean fullyInitialized(){
+        return userDeck != null && enemyDeck != null;
     }
 }

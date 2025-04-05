@@ -34,7 +34,7 @@ public class ExploreActionService {
     public void exploreAction(Map<String, Object> metadata){
         //TODO add other action result types as they are implemented on a random basis
         ActionResult actionResult;
-        switch(randomActionResultTypeGenerator.getRandomActionResult()){
+        switch(randomActionResultTypeGenerator.getRandomActionResult((String)metadata.get(EXPLORE_ACTION_LOCATION_KEY))){
             case NOTHING:
                 actionResult = nothingFoundActionResultGenerator.generate(metadata);
                 break;

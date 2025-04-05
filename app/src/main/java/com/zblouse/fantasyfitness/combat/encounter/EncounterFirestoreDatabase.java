@@ -1,5 +1,7 @@
 package com.zblouse.fantasyfitness.combat.encounter;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -58,22 +60,22 @@ public class EncounterFirestoreDatabase extends FirestoreDatabase {
                             CardType cardType = CardType.valueOf((String) cardData.get(Card.CARD_TYPE_FIELD));
                             switch(cardType){
                                 case ITEM:{
-                                    Card card = CardFirestoreDatabase.constructItemCardFromMap(documentData);
+                                    Card card = CardFirestoreDatabase.constructItemCardFromMap(cardData);
                                     enemyDeck.add(card);
                                     break;
                                 }
                                 case EFFECT:{
-                                    Card card = CardFirestoreDatabase.constructEffectCardFromMap(documentData);
+                                    Card card = CardFirestoreDatabase.constructEffectCardFromMap(cardData);
                                     enemyDeck.add(card);
                                     break;
                                 }
                                 case CHARACTER:{
-                                    Card card = CardFirestoreDatabase.constructCharacterCardFromMap(documentData);
+                                    Card card = CardFirestoreDatabase.constructCharacterCardFromMap(cardData);
                                     enemyDeck.add(card);
                                     break;
                                 }
                                 case PERMANENT:{
-                                    Card card = CardFirestoreDatabase.constructPermanentCardFromMap(documentData);
+                                    Card card = CardFirestoreDatabase.constructPermanentCardFromMap(cardData);
                                     enemyDeck.add(card);
                                     break;
                                 }

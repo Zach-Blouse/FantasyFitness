@@ -30,7 +30,6 @@ public class DeckService implements DomainService<Deck> {
     }
 
     public void fetchDeck(String userId, String deckName){
-        Log.e("DeckService", "fetchDeck: " + deckName);
         Map<String, Object> metadata = new HashMap<>();
         metadata.put(DECK_SERVICE_ORIGINAL_METHOD,"fetchDeck");
         deckRepository.fetchDeck(userId,deckName,metadata);
@@ -38,14 +37,12 @@ public class DeckService implements DomainService<Deck> {
 
     @Override
     public void repositoryResponse(Deck deck, Map<String, Object> metadata) {
-        Log.e("DeckService", "repositoryResponse Deck is empty: " + deck.isEmpty());
         if(deck != null && !deck.isEmpty()){
             if(deck.needToLoadCards()){
                 metadata.put(DomainService.INTER_DOMAIN_SERVICE_ORIGIN_KEY,this);
                 metadata.put(DECK_METADATA_KEY,deck);
                 mainActivity.getCardService().getCardList(deck.getCardUuids(), metadata);
             } else {
-                Log.e("DeckService", "deck does not need to load cards");
                 mainActivity.publishEvent(new DeckFetchEvent(deck, metadata));
             }
         }
@@ -53,7 +50,6 @@ public class DeckService implements DomainService<Deck> {
 
     @Override
     public void interDomainServiceResponse(Object responseObject, Map<String, Object> metadata) {
-        Log.e("DeckService", "inter domain service response class: " + metadata.get(INTER_DOMAIN_SERVICE_RESPONSE_CLASS_KEY));
         if(metadata.get(INTER_DOMAIN_SERVICE_RESPONSE_CLASS_KEY).equals(List.class)){
             if(metadata.get(DECK_SERVICE_ORIGINAL_METHOD).equals("fetchDeck")){
                 List<Card> cardList = (List) responseObject;
