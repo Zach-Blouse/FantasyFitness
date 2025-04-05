@@ -88,11 +88,7 @@ public class CardFirestoreDatabase extends FirestoreDatabase {
         });
     }
 
-    public void read(){
-
-    }
-
-    private ItemCard constructItemCardFromMap(Map<String,Object> data){
+    public static ItemCard constructItemCardFromMap(Map<String,Object> data){
         String userId = (String)data.get(Card.USER_ID_FIELD);
         String cardUuid = (String)data.get(Card.CARD_UUID_FIELD);
         String cardName = (String)data.get(Card.CARD_NAME_FIELD);
@@ -102,7 +98,7 @@ public class CardFirestoreDatabase extends FirestoreDatabase {
         return new ItemCard(userId, cardUuid, cardName, cardDescription,itemType,ability);
     }
 
-    private EffectCard constructEffectCardFromMap(Map<String,Object> data){
+    public static EffectCard constructEffectCardFromMap(Map<String,Object> data){
         String userId = (String)data.get(Card.USER_ID_FIELD);
         String cardUuid = (String)data.get(Card.CARD_UUID_FIELD);
         String cardName = (String)data.get(Card.CARD_NAME_FIELD);
@@ -111,7 +107,7 @@ public class CardFirestoreDatabase extends FirestoreDatabase {
         return new EffectCard(userId, cardUuid, cardName, cardDescription,ability);
     }
 
-    private PermanentCard constructPermanentCardFromMap(Map<String,Object> data){
+    public static PermanentCard constructPermanentCardFromMap(Map<String,Object> data){
         String userId = (String)data.get(Card.USER_ID_FIELD);
         String cardUuid = (String)data.get(Card.CARD_UUID_FIELD);
         String cardName = (String)data.get(Card.CARD_NAME_FIELD);
@@ -120,7 +116,7 @@ public class CardFirestoreDatabase extends FirestoreDatabase {
         return new PermanentCard(userId, cardUuid, cardName, cardDescription,ability);
     }
 
-    private CharacterCard constructCharacterCardFromMap(Map<String,Object> data){
+    public static CharacterCard constructCharacterCardFromMap(Map<String,Object> data){
         String userId = (String)data.get(Card.USER_ID_FIELD);
         String cardUuid = (String)data.get(Card.CARD_UUID_FIELD);
         String cardName = (String)data.get(Card.CARD_NAME_FIELD);
@@ -140,7 +136,7 @@ public class CardFirestoreDatabase extends FirestoreDatabase {
         return new CharacterCard(userId, cardUuid, cardName, cardDescription,maxHealth,abilities,permanentCardsAffixedNames);
     }
 
-    private Ability constructAbilityFromMap(Map<String,Object> abilityData){
+    public static Ability constructAbilityFromMap(Map<String,Object> abilityData){
         AbilityType abilityType = AbilityType.valueOf((String)abilityData.get(Ability.ABILITY_TYPE_FIELD));
         String abilityName = (String)abilityData.get(Ability.NAME_FIELD);
         String abilityDescription = (String)abilityData.get(Ability.DESCRIPTION_FIELD);

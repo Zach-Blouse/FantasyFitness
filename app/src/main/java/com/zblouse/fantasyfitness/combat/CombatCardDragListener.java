@@ -31,11 +31,8 @@ public class CombatCardDragListener implements View.OnDragListener {
                     View draggedView = (View) dragEvent.getLocalState();
                     CombatCardModel combatCardModel = (CombatCardModel) draggedView.getTag();
                     if (combatCardModel.getCardType().equals(CardType.ITEM) && !combatCardModel.getAbility().getAbilityTarget().equals(AbilityTarget.ALL_ALLY) && !combatCardModel.getAbility().getAbilityTarget().equals(AbilityTarget.ROW_ALLY)) {
-                        Log.e("DRAGLISTENER","ITEM DROP");
                         view.setBackgroundColor(ContextCompat.getColor(combatFragment.getActivity(), R.color.fantasy_fitness_white));
                         combatFragment.reportCardDrop(combatCardModel, thisCard);
-                    } else {
-                        Log.e("DRAGLISTENER",combatCardModel.getCardType().toString());
                     }
                     return true;
                 }
