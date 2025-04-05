@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.actions.CombatActionResult;
 import com.zblouse.fantasyfitness.activity.MainActivity;
+import com.zblouse.fantasyfitness.combat.cards.Ability;
 import com.zblouse.fantasyfitness.combat.cards.Card;
+import com.zblouse.fantasyfitness.combat.cards.CardType;
 import com.zblouse.fantasyfitness.combat.cards.Deck;
 import com.zblouse.fantasyfitness.combat.cards.DeckFetchEvent;
 import com.zblouse.fantasyfitness.combat.encounter.Encounter;
@@ -49,6 +53,12 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
     private RecyclerView playerHand;
     private List<CombatCardModel> playerHandList;
     private CombatCardStateViewAdapter playerHandCombatCardStateViewAdapter;
+
+    private CardView detailedCardView;
+    private TextView detailedCardName;
+    private TextView detailedCardHealth;
+    private TextView detailedCardDescription;
+    private RecyclerView detailedAbilitiesRecycler;
 
     private Button endPlayerTurnButton;
 
@@ -123,6 +133,21 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
             }
         });
 
+        detailedCardView = layout.findViewById(R.id.detailed_card);
+        detailedCardName = layout.findViewById(R.id.detailed_card_name);
+        detailedCardHealth = layout.findViewById(R.id.detailedcard_health);
+        detailedCardDescription = layout.findViewById(R.id.detailed_card_description);
+        detailedAbilitiesRecycler = layout.findViewById(R.id.detailed_ability_recycler_view);
+        detailedCardView.setVisibility(View.GONE);
+
+        Button closeDetailViewButton = layout.findViewById(R.id.close_detailed_card_button);
+        closeDetailViewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                detailedCardView.setVisibility(View.GONE);
+            }
+        });
+
         mainActivity.getCombatService().initializeCombat();
         return layout;
     }
@@ -177,5 +202,25 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
 
     public boolean isPlayerTurn(){
         return mainActivity.getCombatService().isPlayerTurn();
+    }
+
+    public void cardHeld(CombatCardModel cardHeld){
+        Log.e("CombatFragment", cardHeld.getCardName() + " has been held");
+        detailedCardName.setText(cardHeld.getCardName());
+        if(cardHeld.getCardType().equals(CardType.CHARACTER)){
+            detailedCardHealth.setText(cardHeld.getCurrentHealth() + "/" + cardHeld.getMaxHealth());
+        } else {
+            detailedCardHealth.setText("");
+        }
+        detailedCardDescription.setText(cardHeld.getCardDescription());
+        detailedAbilitiesRecycler.setAdapter(new AbilityViewAdapter(cardHeld,this, true));
+        LinearLayoutManager abilitiesViewLayoutManager = new LinearLayoutManager(mainActivity);
+        abilitiesViewLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        detailedAbilitiesRecycler.setLayoutManager(abilitiesViewLayoutManager);
+        detailedCardView.setVisibility(View.VISIBLE);
+    }
+
+    public void abilityUsed(Ability ability){
+
     }
 }

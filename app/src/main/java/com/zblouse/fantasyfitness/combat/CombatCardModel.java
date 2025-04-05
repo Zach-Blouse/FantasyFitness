@@ -16,6 +16,7 @@ public class CombatCardModel {
     private Ability ability;
     private boolean played;
     private boolean playerCard;
+    private boolean usedAbilityThisTurn;
 
     public CombatCardModel(String cardName, String cardDescription, CardType cardType, boolean playerCard, boolean played){
         this.cardName = cardName;
@@ -23,6 +24,7 @@ public class CombatCardModel {
         this.cardType = cardType;
         this.played = played;
         this.playerCard = playerCard;
+        this.usedAbilityThisTurn = false;
     }
 
     public String getCardName(){
@@ -86,5 +88,13 @@ public class CombatCardModel {
 
     public boolean isPlayerCard(){
         return this.playerCard;
+    }
+
+    public boolean hasUsedAbilityThisTurn(){
+        return this.usedAbilityThisTurn;
+    }
+
+    public void setUsedAbilityThisTurn(boolean usedAbilityThisTurn){
+        this.usedAbilityThisTurn = usedAbilityThisTurn;
     }
 }

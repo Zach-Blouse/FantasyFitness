@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.zblouse.fantasyfitness.R;
@@ -54,8 +55,23 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
         if(combatCardModel.isPlayerCard()){
             holder.card.setOnTouchListener(this);
         }
+        holder.card.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(combatCardModel.isPlayerCard() || combatCardModel.isPlayed()) {
+                    combatFragment.cardHeld(combatCardModel);
+                }
+                return true;
+            }
+        });
         holder.card.setOnDragListener(new CombatCardDragListener(combatFragment, combatCardModel, inHand));
         holder.card.setTag(combatCardModel);
+
+        holder.abilitiesRecyclerView.setAdapter(new AbilityViewAdapter(combatCardModel, combatFragment, false));
+        LinearLayoutManager abilitiesViewLayoutManager = new LinearLayoutManager(combatFragment.getContext());
+        abilitiesViewLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        holder.abilitiesRecyclerView.setLayoutManager(abilitiesViewLayoutManager);
+
     }
 
     @Override

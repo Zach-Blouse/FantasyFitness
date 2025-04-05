@@ -232,5 +232,10 @@ public class CombatService {
 
     public void endPlayerTurn(){
         this.playerTurn = false;
+        enemyTurn();
+    }
+
+    private void enemyTurn(){
+
     }
 }
