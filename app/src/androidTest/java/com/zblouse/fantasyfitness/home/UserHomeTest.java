@@ -111,7 +111,7 @@ public class UserHomeTest {
 
         LocationDeviceService mockLocationDeviceService = Mockito.mock(LocationDeviceService.class);
         RandomActionResultTypeGenerator mockRandomActionResultTypeGenerator = Mockito.mock(RandomActionResultTypeGenerator.class);
-        when(mockRandomActionResultTypeGenerator.getRandomActionResult()).thenReturn(ActionResultType.DIALOG);
+        when(mockRandomActionResultTypeGenerator.getRandomActionResult(GameLocationService.WOODLANDS)).thenReturn(ActionResultType.DIALOG);
 
         UserGameStateService userGameStateService = new UserGameStateService();
 

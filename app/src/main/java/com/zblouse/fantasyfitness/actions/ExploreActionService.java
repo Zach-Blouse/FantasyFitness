@@ -13,11 +13,13 @@ public class ExploreActionService {
     private NothingFoundActionResultGenerator nothingFoundActionResultGenerator;
     private DialogActionResultGenerator dialogActionResultGenerator;
     private RandomActionResultTypeGenerator randomActionResultTypeGenerator;
+    private CombatActionResultGenerator combatActionResultGenerator;
 
     public ExploreActionService(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         this.nothingFoundActionResultGenerator = new NothingFoundActionResultGenerator();
         this.dialogActionResultGenerator = new DialogActionResultGenerator(mainActivity);
+        this.combatActionResultGenerator = new CombatActionResultGenerator();
         this.randomActionResultTypeGenerator = new RandomActionResultTypeGenerator();
     }
 
@@ -32,12 +34,15 @@ public class ExploreActionService {
     public void exploreAction(Map<String, Object> metadata){
         //TODO add other action result types as they are implemented on a random basis
         ActionResult actionResult;
-        switch(randomActionResultTypeGenerator.getRandomActionResult()){
+        switch(randomActionResultTypeGenerator.getRandomActionResult((String)metadata.get(EXPLORE_ACTION_LOCATION_KEY))){
             case NOTHING:
                 actionResult = nothingFoundActionResultGenerator.generate(metadata);
                 break;
             case DIALOG:
                 actionResult = dialogActionResultGenerator.generate(metadata);
+                break;
+            case COMBAT:
+                actionResult = combatActionResultGenerator.generate(metadata);
                 break;
             default:
                 actionResult = nothingFoundActionResultGenerator.generate(metadata);

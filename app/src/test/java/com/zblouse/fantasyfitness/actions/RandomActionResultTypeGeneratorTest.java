@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
+import com.zblouse.fantasyfitness.world.GameLocationService;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -18,7 +20,7 @@ public class RandomActionResultTypeGeneratorTest {
         RandomActionResultTypeGenerator randomActionResultTypeGenerator = new RandomActionResultTypeGenerator();
         randomActionResultTypeGenerator.setRandom(mockRandom);
 
-        ActionResultType result = randomActionResultTypeGenerator.getRandomActionResult();
+        ActionResultType result = randomActionResultTypeGenerator.getRandomActionResult(GameLocationService.WOODLANDS);
         assertEquals(ActionResultType.NOTHING, result);
     }
 
@@ -29,7 +31,7 @@ public class RandomActionResultTypeGeneratorTest {
         RandomActionResultTypeGenerator randomActionResultTypeGenerator = new RandomActionResultTypeGenerator();
         randomActionResultTypeGenerator.setRandom(mockRandom);
 
-        ActionResultType result = randomActionResultTypeGenerator.getRandomActionResult();
+        ActionResultType result = randomActionResultTypeGenerator.getRandomActionResult(GameLocationService.WOODLANDS);
         assertEquals(ActionResultType.DIALOG, result);
     }
 
@@ -40,7 +42,7 @@ public class RandomActionResultTypeGeneratorTest {
         RandomActionResultTypeGenerator randomActionResultTypeGenerator = new RandomActionResultTypeGenerator();
         randomActionResultTypeGenerator.setRandom(mockRandom);
 
-        ActionResultType result = randomActionResultTypeGenerator.getRandomActionResult();
+        ActionResultType result = randomActionResultTypeGenerator.getRandomActionResult(GameLocationService.WOODLANDS);
         assertEquals(ActionResultType.SECRET, result);
     }
 
@@ -51,7 +53,7 @@ public class RandomActionResultTypeGeneratorTest {
         RandomActionResultTypeGenerator randomActionResultTypeGenerator = new RandomActionResultTypeGenerator();
         randomActionResultTypeGenerator.setRandom(mockRandom);
 
-        ActionResultType result = randomActionResultTypeGenerator.getRandomActionResult();
+        ActionResultType result = randomActionResultTypeGenerator.getRandomActionResult(GameLocationService.WOODLANDS);
         assertEquals(ActionResultType.COMBAT, result);
     }
 }

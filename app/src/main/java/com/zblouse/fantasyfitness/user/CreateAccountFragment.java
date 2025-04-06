@@ -53,6 +53,7 @@ public class CreateAccountFragment extends AuthenticationRequiredFragment implem
                     mainActivity.getUserService().registerUser(mainActivity.getCurrentUser().getUid(),username);
                     mainActivity.getUserGameStateService().initializeUserGameState();
                     mainActivity.getWorkoutRecordService().initializeWorkoutRecords();
+                    mainActivity.getCardService().initializeCards();
                 }
             }
         });

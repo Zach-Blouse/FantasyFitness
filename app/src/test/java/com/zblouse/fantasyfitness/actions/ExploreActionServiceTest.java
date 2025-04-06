@@ -25,7 +25,7 @@ public class ExploreActionServiceTest {
     public void exploreActionNothingTest(){
         MainActivity mockMainActivity = Mockito.mock(MainActivity.class);
         RandomActionResultTypeGenerator mockRandomActionResultTypeGenerator = Mockito.mock(RandomActionResultTypeGenerator.class);
-        when(mockRandomActionResultTypeGenerator.getRandomActionResult()).thenReturn(ActionResultType.NOTHING);
+        when(mockRandomActionResultTypeGenerator.getRandomActionResult(GameLocationService.WOODLANDS)).thenReturn(ActionResultType.NOTHING);
         ExploreActionService testedService = new ExploreActionService(mockMainActivity);
         testedService.setRandomActionResultTypeGenerator(mockRandomActionResultTypeGenerator);
 
@@ -48,7 +48,7 @@ public class ExploreActionServiceTest {
         Dialog testDialog = new Dialog(DialogService.HERMIT_DIALOG_INIT,"hermit","hermit");
         when(mockDialogService.fetchDialogOption(DialogService.HERMIT_DIALOG_INIT)).thenReturn(testDialog);
         RandomActionResultTypeGenerator mockRandomActionResultTypeGenerator = Mockito.mock(RandomActionResultTypeGenerator.class);
-        when(mockRandomActionResultTypeGenerator.getRandomActionResult()).thenReturn(ActionResultType.DIALOG);
+        when(mockRandomActionResultTypeGenerator.getRandomActionResult(GameLocationService.WOODLANDS)).thenReturn(ActionResultType.DIALOG);
         ExploreActionService testedService = new ExploreActionService(mockMainActivity);
         testedService.setRandomActionResultTypeGenerator(mockRandomActionResultTypeGenerator);
 

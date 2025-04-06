@@ -19,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.zblouse.fantasyfitness.actions.ActionResult;
 import com.zblouse.fantasyfitness.actions.ActionResultType;
+import com.zblouse.fantasyfitness.actions.CombatActionResult;
 import com.zblouse.fantasyfitness.actions.DialogActionResult;
 import com.zblouse.fantasyfitness.actions.ExploreActionEvent;
 import com.zblouse.fantasyfitness.actions.ExploreActionService;
@@ -28,6 +29,7 @@ import com.zblouse.fantasyfitness.activity.LocationForegroundDeviceService;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.ToastDeviceService;
+import com.zblouse.fantasyfitness.combat.CombatFragment;
 import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
@@ -37,6 +39,7 @@ import com.zblouse.fantasyfitness.dialog.DialogSelectedEvent;
 import com.zblouse.fantasyfitness.user.UserExistEvent;
 import com.zblouse.fantasyfitness.user.UserGameState;
 import com.zblouse.fantasyfitness.user.UserGameStateFetchResponseEvent;
+import com.zblouse.fantasyfitness.workout.WorkoutRecordsFragment;
 import com.zblouse.fantasyfitness.workout.WorkoutUpdateEvent;
 import com.zblouse.fantasyfitness.world.GameLocation;
 import com.zblouse.fantasyfitness.world.GameLocationService;
@@ -134,6 +137,10 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                     } else if(actionResult.getActionResultType().equals(ActionResultType.DIALOG)){
                         Dialog baseDialog = ((DialogActionResult)actionResult).getInitialDialog();
                         loadDialogs(baseDialog);
+                    } else if(actionResult.getActionResultType().equals(ActionResultType.COMBAT)){
+                        CombatActionResult combatActionResult = (CombatActionResult)actionResult;
+                        mainActivity.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container, new CombatFragment(mainActivity, combatActionResult.getEncounterName())).commit();
                     }
                 }
             });

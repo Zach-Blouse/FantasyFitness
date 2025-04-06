@@ -5,6 +5,7 @@ import android.util.Log;
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.activity.ToastDeviceService;
+import com.zblouse.fantasyfitness.combat.encounter.EncounterDifficultyLevel;
 import com.zblouse.fantasyfitness.core.DomainService;
 import com.zblouse.fantasyfitness.user.UserGameState;
 import com.zblouse.fantasyfitness.user.UserGameStateRepository;
@@ -211,5 +212,21 @@ public class GameLocationService implements DomainService<GameLocation> {
         List<String> wildernessLocations = Arrays.asList(VALLEY_OF_MONSTERS,NORTH_ROAD,RIVERLANDS, WOODLANDS, HILLS);
 
         return wildernessLocations.contains(gameLocationName);
+    }
+
+    public static EncounterDifficultyLevel getLocationDifficulty(String gameLocationName){
+        //TODO update these to use the correct difficulty when encounters with that difficulty are implemented
+        if(gameLocationName.equals(VALLEY_OF_MONSTERS)){
+            return EncounterDifficultyLevel.MEDIUM;
+        } else if(gameLocationName.equals(NORTH_ROAD)){
+            return EncounterDifficultyLevel.MEDIUM;
+        } else if(gameLocationName.equals(RIVERLANDS)){
+            return EncounterDifficultyLevel.MEDIUM;
+        } else if(gameLocationName.equals(HILLS)){
+            return EncounterDifficultyLevel.MEDIUM;
+        } else if(gameLocationName.equals(WOODLANDS)){
+            return EncounterDifficultyLevel.EASY;
+        }
+        return EncounterDifficultyLevel.EASY;
     }
 }

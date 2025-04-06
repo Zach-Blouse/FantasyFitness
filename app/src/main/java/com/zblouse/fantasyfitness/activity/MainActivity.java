@@ -1,7 +1,6 @@
 package com.zblouse.fantasyfitness.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 
 import androidx.activity.EdgeToEdge;
@@ -16,15 +15,17 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.zblouse.fantasyfitness.R;
-import com.zblouse.fantasyfitness.actions.ExploreActionEvent;
 import com.zblouse.fantasyfitness.actions.ExploreActionService;
+import com.zblouse.fantasyfitness.combat.CombatService;
+import com.zblouse.fantasyfitness.combat.cards.CardService;
+import com.zblouse.fantasyfitness.combat.cards.DeckService;
+import com.zblouse.fantasyfitness.combat.encounter.EncounterService;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.dialog.DialogService;
 import com.zblouse.fantasyfitness.dialog.DialogSqlDatabase;
 import com.zblouse.fantasyfitness.home.UserHomeFragment;
 import com.zblouse.fantasyfitness.settings.SettingsFragment;
 import com.zblouse.fantasyfitness.user.LoginFragment;
-import com.zblouse.fantasyfitness.user.UserGameStateRepository;
 import com.zblouse.fantasyfitness.user.UserGameStateService;
 import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.core.Event;
@@ -53,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
     private WorkoutRecordService workoutRecordService;
     private ExploreActionService exploreActionService;
     private DialogService dialogService;
+    private CardService cardService;
+    private DeckService deckService;
+    private CombatService combatService;
+    private EncounterService encounterService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         userService = new UserService(this);
         workoutService = new WorkoutService(this);
         exploreActionService = new ExploreActionService(this);
+        cardService = new CardService(this);
 
         navigationView = findViewById(R.id.bottom_navigation);
         navigationView.setOnItemSelectedListener(navigationListener);
@@ -91,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
         userGameStateService = new UserGameStateService(this);
         workoutRecordService = new WorkoutRecordService(this);
         dialogService = new DialogService(this);
+        deckService = new DeckService(this);
+        combatService = new CombatService(this);
+        encounterService = new EncounterService(this);
 
         gameLocationService.initializeLocationDatabase();
         dialogService.initializeDialogs();
@@ -236,6 +245,38 @@ public class MainActivity extends AppCompatActivity {
 
     public void setDialogService(DialogService dialogService){
         this.dialogService = dialogService;
+    }
+
+    public CardService getCardService(){
+        return this.cardService;
+    }
+
+    public void setCardService(CardService cardService){
+        this.cardService = cardService;
+    }
+
+    public DeckService getDeckService(){
+        return this.deckService;
+    }
+
+    public void setDeckService(DeckService deckService){
+        this.deckService = deckService;
+    }
+
+    public CombatService getCombatService(){
+        return this.combatService;
+    }
+
+    public void setCombatService(CombatService combatService){
+        this.combatService = combatService;
+    }
+
+    public EncounterService getEncounterService(){
+        return this.encounterService;
+    }
+
+    public void setEncounterService(EncounterService encounterService){
+        this.encounterService = encounterService;
     }
 
 }
