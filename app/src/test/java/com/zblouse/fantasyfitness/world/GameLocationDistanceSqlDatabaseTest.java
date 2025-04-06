@@ -43,13 +43,10 @@ public class GameLocationDistanceSqlDatabaseTest {
         when(mockCursor2.getInt(eq(2))).thenReturn(testLocationId);
         when(mockCursor2.getDouble(eq(3))).thenReturn(testDistance);
 
-
-
         GameLocationDistanceSqlDatabase testedDatabase = Mockito.spy(new GameLocationDistanceSqlDatabase(mockContext));
         when(testedDatabase.getReadableDatabase()).thenReturn(mockDatabase);
         when(mockDatabase.rawQuery(eq("SELECT * FROM location_distance WHERE location1=" + testLocationId), eq(null))).thenReturn(mockCursor);
         when(mockDatabase.rawQuery(eq("SELECT * FROM location_distance WHERE location2=" + testLocationId), eq(null))).thenReturn(mockCursor2);
-
 
         List<GameLocationDistance> returnedLocationDistances = testedDatabase.getAllLocationDistancesForLocation(testLocation1);
 

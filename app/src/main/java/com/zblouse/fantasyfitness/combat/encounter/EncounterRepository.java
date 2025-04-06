@@ -14,6 +14,11 @@ public class EncounterRepository implements Repository<Encounter> {
         this.encounterFirestoreDatabase = new EncounterFirestoreDatabase();
     }
 
+    public EncounterRepository(EncounterService encounterService, EncounterFirestoreDatabase encounterFirestoreDatabase){
+        this.encounterService = encounterService;
+        this.encounterFirestoreDatabase = encounterFirestoreDatabase;
+    }
+
     public void fetchEncounter(String encounterName, Map<String, Object> metadata){
         encounterFirestoreDatabase.read(encounterName, this, metadata);
     }
