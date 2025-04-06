@@ -187,31 +187,36 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         }else if(event.getEventType().equals(EventType.ENEMY_TURN_COMPLETE_EVENT)){
             startPlayerTurn();
         }else if(event.getEventType().equals(EventType.COMBAT_STATE_UPDATE_EVENT)){
-            CombatStateUpdateEvent combatStateUpdateEvent = (CombatStateUpdateEvent) event;
-            CombatStateModel combatStateModel = combatStateUpdateEvent.getCombatStateModel();
-            playerHandList.clear();
-            playerHandList.addAll(combatStateModel.getPlayerHand());
-            playerHandCombatCardStateViewAdapter.notifyDataSetChanged();
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    CombatStateUpdateEvent combatStateUpdateEvent = (CombatStateUpdateEvent) event;
+                    CombatStateModel combatStateModel = combatStateUpdateEvent.getCombatStateModel();
+                    playerHandList.clear();
+                    playerHandList.addAll(combatStateModel.getPlayerHand());
+                    playerHandCombatCardStateViewAdapter.notifyDataSetChanged();
 
-            playerBackLineList.clear();
-            playerBackLineList.addAll(combatStateModel.getPlayerBackLine());
-            playerBackLineCombatCardStateViewAdapter.notifyDataSetChanged();
+                    playerBackLineList.clear();
+                    playerBackLineList.addAll(combatStateModel.getPlayerBackLine());
+                    playerBackLineCombatCardStateViewAdapter.notifyDataSetChanged();
 
-            playerFrontLineList.clear();
-            playerFrontLineList.addAll(combatStateModel.getPlayerFrontLine());
-            playerFrontLineCombatCardStateViewAdapter.notifyDataSetChanged();
+                    playerFrontLineList.clear();
+                    playerFrontLineList.addAll(combatStateModel.getPlayerFrontLine());
+                    playerFrontLineCombatCardStateViewAdapter.notifyDataSetChanged();
 
-            enemyFrontLineList.clear();
-            enemyFrontLineList.addAll(combatStateModel.getEnemyFrontLine());
-            enemyFrontLineCombatCardStateViewAdapter.notifyDataSetChanged();
+                    enemyFrontLineList.clear();
+                    enemyFrontLineList.addAll(combatStateModel.getEnemyFrontLine());
+                    enemyFrontLineCombatCardStateViewAdapter.notifyDataSetChanged();
 
-            enemyBackLineList.clear();
-            enemyBackLineList.addAll(combatStateModel.getEnemyBackLine());
-            enemyBackLineCombatCardStateViewAdapter.notifyDataSetChanged();
+                    enemyBackLineList.clear();
+                    enemyBackLineList.addAll(combatStateModel.getEnemyBackLine());
+                    enemyBackLineCombatCardStateViewAdapter.notifyDataSetChanged();
 
-            enemyHandList.clear();
-            enemyHandList.addAll(combatStateModel.getEnemyHand());
-            enemyHandCombatCardStateViewAdapter.notifyDataSetChanged();
+                    enemyHandList.clear();
+                    enemyHandList.addAll(combatStateModel.getEnemyHand());
+                    enemyHandCombatCardStateViewAdapter.notifyDataSetChanged();
+                }
+            });
         } else if(event.getEventType().equals(EventType.PLAYER_VICTORY_EVENT)){
             playerWins();
         } else if(event.getEventType().equals(EventType.ENEMY_VICTORY_EVENT)){

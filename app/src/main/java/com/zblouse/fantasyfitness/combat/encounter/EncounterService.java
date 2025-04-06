@@ -31,6 +31,18 @@ public class EncounterService implements DomainService<Encounter> {
         //initializeEncounters();
     }
 
+    public EncounterService(){
+
+    }
+
+    public void setMainActivity(MainActivity mainActivity){
+        this.mainActivity = mainActivity;
+    }
+
+    public void setEncounterRepository(EncounterRepository encounterRepository){
+        this.encounterRepository = encounterRepository;
+    }
+
     public void fetchEncounter(String encounterName, Map<String, Object> metadata){
         encounterRepository.fetchEncounter(encounterName, metadata);
     }
@@ -70,13 +82,13 @@ public class EncounterService implements DomainService<Encounter> {
         banditAttackEncounterDeck.add(banditSpearCard2);
         Card banditSpearCard3 = new ItemCard("fantasyFitness", UUID.randomUUID().toString(),"Goblin Spear","A crudely built spear.", ItemType.EQUIPPABLE, new DamageAbility("Stab","The goblin stabs with its spear.", AbilityTarget.SINGLE_ENEMY, DamageType.NORMAL, AttackType.MELEE,3));
         banditAttackEncounterDeck.add(banditSpearCard3);
-        ItemCard banditHelmetCard1 = new ItemCard(mainActivity.getCurrentUser().getUid(),UUID.randomUUID().toString(),"Helmet", "Makes it harder to hit your head.",ItemType.EQUIPPABLE,new BuffAbility("Helmet","Helmet protects your head.",AbilityTarget.SINGLE_ALLY, BuffType.HEALTH,3));
+        ItemCard banditHelmetCard1 = new ItemCard("fantasyFitness",UUID.randomUUID().toString(),"Helmet", "Makes it harder to hit your head.",ItemType.EQUIPPABLE,new BuffAbility("Helmet","Helmet protects your head.",AbilityTarget.SINGLE_ALLY, BuffType.HEALTH,3));
         banditAttackEncounterDeck.add(banditHelmetCard1);
-        ItemCard banditHelmetCard2 = new ItemCard(mainActivity.getCurrentUser().getUid(),UUID.randomUUID().toString(),"Helmet", "Makes it harder to hit your head.",ItemType.EQUIPPABLE,new BuffAbility("Helmet","Helmet protects your head.",AbilityTarget.SINGLE_ALLY, BuffType.HEALTH,3));
+        ItemCard banditHelmetCard2 = new ItemCard("fantasyFitness",UUID.randomUUID().toString(),"Helmet", "Makes it harder to hit your head.",ItemType.EQUIPPABLE,new BuffAbility("Helmet","Helmet protects your head.",AbilityTarget.SINGLE_ALLY, BuffType.HEALTH,3));
         banditAttackEncounterDeck.add(banditHelmetCard2);
-        ItemCard banditHealingPotion1 = new ItemCard(mainActivity.getCurrentUser().getUid(), UUID.randomUUID().toString(),"Basic Healing Potion", "Heals a character by 5hp.", ItemType.CONSUMABLE, new HealAbility("Healing Potion","heals",AbilityTarget.SINGLE_ALLY, 5));
+        ItemCard banditHealingPotion1 = new ItemCard("fantasyFitness", UUID.randomUUID().toString(),"Basic Healing Potion", "Heals a character by 5hp.", ItemType.CONSUMABLE, new HealAbility("Healing Potion","heals",AbilityTarget.SINGLE_ALLY, 5));
         banditAttackEncounterDeck.add(banditHealingPotion1);
-        ItemCard banditHealingPotion2 = new ItemCard(mainActivity.getCurrentUser().getUid(), UUID.randomUUID().toString(),"Basic Healing Potion", "Heals a character by 5hp.", ItemType.CONSUMABLE, new HealAbility("Healing Potion","heals",AbilityTarget.SINGLE_ALLY, 5));
+        ItemCard banditHealingPotion2 = new ItemCard("fantasyFitness", UUID.randomUUID().toString(),"Basic Healing Potion", "Heals a character by 5hp.", ItemType.CONSUMABLE, new HealAbility("Healing Potion","heals",AbilityTarget.SINGLE_ALLY, 5));
         banditAttackEncounterDeck.add(banditHealingPotion2);
 
         Encounter banditAttackEncounter = new Encounter("Bandit", EncounterDifficultyLevel.MEDIUM,banditAttackEncounterDeck);
@@ -102,9 +114,9 @@ public class EncounterService implements DomainService<Encounter> {
         goblinAttackEncounterDeck.add(spearCard2);
         Card spearCard3 = new ItemCard("fantasyFitness", UUID.randomUUID().toString(),"Goblin Spear","A crudely built spear.", ItemType.EQUIPPABLE, new DamageAbility("Stab","The goblin stabs with its spear.", AbilityTarget.SINGLE_ENEMY, DamageType.NORMAL, AttackType.MELEE,3));
         goblinAttackEncounterDeck.add(spearCard3);
-        ItemCard helmetCard1 = new ItemCard(mainActivity.getCurrentUser().getUid(),UUID.randomUUID().toString(),"Helmet", "Makes it harder to hit your head.",ItemType.EQUIPPABLE,new BuffAbility("Helmet","Helmet protects your head.",AbilityTarget.SINGLE_ALLY, BuffType.HEALTH,3));
+        ItemCard helmetCard1 = new ItemCard("fantasyFitness",UUID.randomUUID().toString(),"Helmet", "Makes it harder to hit your head.",ItemType.EQUIPPABLE,new BuffAbility("Helmet","Helmet protects your head.",AbilityTarget.SINGLE_ALLY, BuffType.HEALTH,3));
         goblinAttackEncounterDeck.add(helmetCard1);
-        ItemCard helmetCard2 = new ItemCard(mainActivity.getCurrentUser().getUid(),UUID.randomUUID().toString(),"Helmet", "Makes it harder to hit your head.",ItemType.EQUIPPABLE,new BuffAbility("Helmet","Helmet protects your head.",AbilityTarget.SINGLE_ALLY, BuffType.HEALTH,3));
+        ItemCard helmetCard2 = new ItemCard("fantasyFitness",UUID.randomUUID().toString(),"Helmet", "Makes it harder to hit your head.",ItemType.EQUIPPABLE,new BuffAbility("Helmet","Helmet protects your head.",AbilityTarget.SINGLE_ALLY, BuffType.HEALTH,3));
         goblinAttackEncounterDeck.add(helmetCard2);
 
         Encounter goblinAttackEncounter = new Encounter("Goblin Attack", EncounterDifficultyLevel.EASY,goblinAttackEncounterDeck);

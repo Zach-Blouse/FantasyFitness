@@ -16,6 +16,11 @@ public class DeckRepository implements Repository<Deck> {
         this.deckFirestoreDatabase = new DeckFirestoreDatabase();
     }
 
+    public DeckRepository(DeckFirestoreDatabase deckFirestoreDatabase, DeckService deckService){
+        this.deckFirestoreDatabase = deckFirestoreDatabase;
+        this.deckService = deckService;
+    }
+
     public void writeDeck(Deck deck, Map<String, Object> metadata){
         deckFirestoreDatabase.writeDeck(deck, this, metadata);
     }

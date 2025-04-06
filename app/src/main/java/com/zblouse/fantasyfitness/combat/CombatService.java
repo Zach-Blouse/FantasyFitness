@@ -45,6 +45,12 @@ public class CombatService {
         this.mainActivity = mainActivity;
     }
 
+    public CombatService(){}
+
+    public void setMainActivity(MainActivity mainActivity){
+        this.mainActivity = mainActivity;
+    }
+
     public void initializeCombat(){
         Log.e("CombatService", "Initializing Combat");
         mainActivity.getDeckService().fetchDeck(mainActivity.getCurrentUser().getUid(),"userDeck");
@@ -175,7 +181,6 @@ public class CombatService {
 
     public void encounterFetchReturned(Encounter encounter){
 
-
         List<CombatCardModel> enemyDeckCards = new ArrayList<>();
         for(Card card: encounter.getEnemyCards()){
             CombatCardModel combatCardModel = new CombatCardModel(card.getCardName(), card.getCardDescription(), card.getCardType(), false,false);
@@ -213,8 +218,9 @@ public class CombatService {
         combatStateModel.setEnemyDeck(enemyDeckModel);
         combatStateModel.initialEnemyHand(initialEnemyHand);
         if(combatStateModel.fullyInitialized()) {
-            enemyTurn(true);
             mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
+            mainActivity.publishEvent(new InitialCombatStateEvent(combatStateModel));
+            enemyTurn(true);
         }
     }
 
@@ -258,8 +264,10 @@ public class CombatService {
         combatStateModel.initialPlayerHand(initialUserHand);
 
         if(combatStateModel.fullyInitialized()) {
-            enemyTurn(true);
+
             mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
+            mainActivity.publishEvent(new InitialCombatStateEvent(combatStateModel));
+            enemyTurn(true);
         }
     }
 
@@ -284,7 +292,6 @@ public class CombatService {
     }
 
     private void endEnemyTurn(){
-        Log.e("CombatSErvice","EndEmenyTurn");
         this.playerTurn = true;
         if(combatStateModel.getPlayerDeck().hasCardsRemaining()){
             combatStateModel.addCardToPlayerHand(combatStateModel.getPlayerDeck().draw());
@@ -348,7 +355,7 @@ public class CombatService {
                 }
             }
         }
-
+        //play all melee cards in front line
         for(CombatCardModel characterCard: characterCardsInHand){
             for(Ability ability:characterCard.getAbilities()){
                 if(ability.getAbilityType().equals(AbilityType.DAMAGE)){
@@ -360,6 +367,14 @@ public class CombatService {
         }
 
         characterCardsInHand.clear();
+
+        for(CombatCardModel card: combatStateModel.getEnemyHand()) {
+            if (card.getCardType().equals(CardType.CHARACTER)) {
+                if(!card.isPlayed()) {
+                    characterCardsInHand.add(card);
+                }
+            }
+        }
 
         for(CombatCardModel characterCard: characterCardsInHand){
             for(Ability ability:characterCard.getAbilities()){
@@ -625,7 +640,7 @@ public class CombatService {
                     }.start();
                 }
             }
-            new CountDownTimer(2500, 500) {
+            new CountDownTimer(2500, 2500) {
                 public void onFinish() {
                     endEnemyTurn();
                 }

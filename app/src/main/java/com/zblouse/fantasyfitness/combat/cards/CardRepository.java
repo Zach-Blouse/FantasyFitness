@@ -17,6 +17,11 @@ public class CardRepository implements Repository<Card> {
         this.cardFirestoreDatabase = new CardFirestoreDatabase();
     }
 
+    public CardRepository(CardFirestoreDatabase cardFirestoreDatabase, CardService cardService){
+        this.cardFirestoreDatabase = cardFirestoreDatabase;
+        this.cardService = cardService;
+    }
+
     public void writeCard(Card card, Map<String, Object> metadata){
         cardFirestoreDatabase.write(card, this, metadata);
     }

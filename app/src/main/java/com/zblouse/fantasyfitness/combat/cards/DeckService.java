@@ -22,6 +22,18 @@ public class DeckService implements DomainService<Deck> {
         this.deckRepository = new DeckRepository(this);
     }
 
+    public DeckService(){
+
+    }
+
+    public void setMainActivity(MainActivity mainActivity){
+        this.mainActivity = mainActivity;
+    }
+
+    public void setDeckRepository(DeckRepository deckRepository){
+        this.deckRepository = deckRepository;
+    }
+
     public void writeNewDeck(String deckName, List<String> cardUuids){
         Deck deck = new Deck(mainActivity.getCurrentUser().getUid(),deckName, cardUuids);
         Map<String, Object> metadata = new HashMap<>();

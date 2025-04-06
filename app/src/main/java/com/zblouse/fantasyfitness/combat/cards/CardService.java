@@ -21,6 +21,18 @@ public class CardService implements DomainService<Card> {
         cardRepository = new CardRepository(this);
     }
 
+    public CardService(){
+
+    }
+
+    public void setMainActivity(MainActivity mainActivity){
+        this.mainActivity = mainActivity;
+    }
+
+    public void setCardRepository(CardRepository cardRepository){
+        this.cardRepository = cardRepository;
+    }
+
     public void getCardList(List<String> cardUuids, Map<String, Object> metadata){
         cardRepository.fetchCardList(mainActivity.getCurrentUser().getUid(), cardUuids, metadata);
     }
