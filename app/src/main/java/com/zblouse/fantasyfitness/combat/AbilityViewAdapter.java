@@ -50,6 +50,7 @@ public class AbilityViewAdapter extends RecyclerView.Adapter<AbilityViewAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull AbilityViewAdapter.ViewHolder holder, int position) {
+        holder.abilityCard.setVisibility(View.VISIBLE);
         if(!cardAttachedTo.isPlayerCard() && (!cardAttachedTo.isPlayed() || combatFragment.isInitialSetup())){
             holder.abilityCard.setVisibility(View.GONE);
         }
@@ -67,6 +68,7 @@ public class AbilityViewAdapter extends RecyclerView.Adapter<AbilityViewAdapter.
                             }
                         }
                     });
+                    holder.abilityImpactTextView.setTextSize(16);
                 }
             }
         } else {
@@ -95,15 +97,19 @@ public class AbilityViewAdapter extends RecyclerView.Adapter<AbilityViewAdapter.
                     }
                     holder.abilityImpactTextView.setText(damageItemImpactString);
                 } else if(ability.getAbilityType().equals(AbilityType.BUFF)){
-                    BuffAbility buffAbility = (BuffAbility) ability;
-                    String buffItemImpactString = "Gives the card this is attached to ";
-                    if(buffAbility.getBuffType().equals(BuffType.HEALTH)){
-                        buffItemImpactString += buffAbility.getBuffAmount() + " extra max HP";
-                    } else if(buffAbility.getBuffType().equals(BuffType.ATTACK)){
-                        buffItemImpactString += buffAbility.getBuffAmount() + "extra damage on each attack";
-                    }
+                    if(!inDetailedView) {
+                        BuffAbility buffAbility = (BuffAbility) ability;
+                        String buffItemImpactString = "Gives the card this is attached to ";
+                        if (buffAbility.getBuffType().equals(BuffType.HEALTH)) {
+                            buffItemImpactString += buffAbility.getBuffAmount() + " extra max HP";
+                        } else if (buffAbility.getBuffType().equals(BuffType.ATTACK)) {
+                            buffItemImpactString += buffAbility.getBuffAmount() + "extra damage on each attack";
+                        }
 
-                    holder.abilityImpactTextView.setText(buffItemImpactString);
+                        holder.abilityImpactTextView.setText(buffItemImpactString);
+                    } else {
+                        holder.abilityCard.setVisibility(View.GONE);
+                    }
                 }
             }
         }

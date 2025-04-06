@@ -39,6 +39,7 @@ public class CombatService {
 
     private boolean waitingForAbilityTargeting;
     private Ability abilityToUse;
+    private CombatCardModel cardUsingAbility;
 
     public CombatService(MainActivity mainActivity){
         this.mainActivity = mainActivity;
@@ -552,7 +553,7 @@ public class CombatService {
                                 enemyVictory();
                             } else {
                                 attackingCard.setUsedAbilityThisTurn(true);
-                                damage(targetPlayerCard, damageAbility);
+                                damage(targetPlayerCard, damageAbility,getCardsBuffAbilities(attackingCard));
                                 if (targetPlayerCard.getCurrentHealth() <= 0) {
                                     CombatLine cardLine = findWhichCombatLineCardIsIn(targetPlayerCard);
                                     if (cardLine.equals(CombatLine.PLAYER_FRONT_LINE)) {
@@ -568,7 +569,7 @@ public class CombatService {
                                 enemyVictory();
                             } else {
                                 attackingCard.setUsedAbilityThisTurn(true);
-                                damage(targetPlayerCard, damageAbility);
+                                damage(targetPlayerCard, damageAbility,getCardsBuffAbilities(attackingCard));
                                 if (targetPlayerCard.getCurrentHealth() <= 0) {
                                     CombatLine cardLine = findWhichCombatLineCardIsIn(targetPlayerCard);
                                     if (cardLine.equals(CombatLine.PLAYER_FRONT_LINE)) {
@@ -601,7 +602,7 @@ public class CombatService {
                             enemyVictory();
                         } else {
                             attackingCard.setUsedAbilityThisTurn(true);
-                            damage(targetPlayerCard, damageAbility);
+                            damage(targetPlayerCard, damageAbility, getCardsBuffAbilities(attackingCard));
                             if (targetPlayerCard.getCurrentHealth() <= 0) {
                                 CombatLine cardLine = findWhichCombatLineCardIsIn(targetPlayerCard);
                                 if (cardLine.equals(CombatLine.PLAYER_FRONT_LINE)) {
@@ -819,6 +820,7 @@ public class CombatService {
             waitingForAbilityTargeting = true;
             abilityToUse = ability;
             cardUsingAbility.setUsedAbilityThisTurn(true);
+            this.cardUsingAbility = cardUsingAbility;
         }
     }
 
@@ -826,7 +828,7 @@ public class CombatService {
         if(abilityToUse.getAbilityTarget().equals(AbilityTarget.SINGLE_ENEMY)){
             if(!combatCardModel.isPlayerCard() && combatCardModel.isPlayed()){
                 if(abilityToUse.getAbilityType().equals(AbilityType.DAMAGE)) {
-                    damage(combatCardModel, (DamageAbility) abilityToUse);
+                    damage(combatCardModel, (DamageAbility) abilityToUse, getCardsBuffAbilities(cardUsingAbility));
 
                     if(combatCardModel.getCurrentHealth() <= 0){
                         CombatLine cardLine = findWhichCombatLineCardIsIn(combatCardModel);
@@ -851,7 +853,7 @@ public class CombatService {
                         ArrayList<CombatCardModel> cardsInFrontLine = new ArrayList<>();
                         cardsInFrontLine.addAll(combatStateModel.getEnemyFrontLine());
                         for(CombatCardModel cardModel : cardsInFrontLine) {
-                            damage(cardModel, (DamageAbility) abilityToUse);
+                            damage(cardModel, (DamageAbility) abilityToUse, getCardsBuffAbilities(cardUsingAbility));
                             if(cardModel.getCurrentHealth() <= 0){
                                 combatStateModel.getEnemyFrontLine().remove(combatCardModel);
                             }
@@ -861,7 +863,7 @@ public class CombatService {
                         ArrayList<CombatCardModel> cardsInBackLine = new ArrayList<>();
                         cardsInBackLine.addAll(combatStateModel.getEnemyBackLine());
                         for(CombatCardModel cardModel : cardsInBackLine) {
-                            damage(cardModel, (DamageAbility) abilityToUse);
+                            damage(cardModel, (DamageAbility) abilityToUse, getCardsBuffAbilities(cardUsingAbility));
                             if(cardModel.getCurrentHealth() <= 0){
                                 combatStateModel.getEnemyBackLine().remove(combatCardModel);
                             }
@@ -922,10 +924,17 @@ public class CombatService {
         }
     }
 
-    private void damage(CombatCardModel targetCard, DamageAbility damageAbility){
+    private void damage(CombatCardModel targetCard, DamageAbility damageAbility, List<BuffAbility> attackersBuffs){
         Log.e("CombatService", "Damaging Card: "+  targetCard.getCardName() + " by " + damageAbility.getDamageType());
+        int damageDone = damageAbility.getDamageAmount();
+        for(BuffAbility buffAbility: attackersBuffs){
+            if(buffAbility.getBuffType().equals(BuffType.ATTACK)){
+                damageDone+=buffAbility.getBuffAmount();
+            }
+        }
+
         int currentHealth = targetCard.getCurrentHealth();
-        int newHealth = currentHealth - damageAbility.getDamageAmount();
+        int newHealth = currentHealth - damageDone;
         targetCard.setCurrentHealth(newHealth);
     }
 
@@ -972,6 +981,18 @@ public class CombatService {
 
     private void enemyVictory(){
         mainActivity.publishEvent(new EnemyVictoryEvent());
+    }
+
+    private List<BuffAbility> getCardsBuffAbilities(CombatCardModel combatCardModel){
+        List<BuffAbility> buffAbilities = new ArrayList<>();
+        if(combatCardModel.getCardType().equals(CardType.CHARACTER)){
+            for(Ability ability: combatCardModel.getAbilities()){
+                if(ability.getAbilityType().equals(AbilityType.BUFF)){
+                    buffAbilities.add((BuffAbility) ability);
+                }
+            }
+        }
+        return buffAbilities;
     }
 
 }
