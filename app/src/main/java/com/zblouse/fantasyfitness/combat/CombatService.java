@@ -20,11 +20,13 @@ import com.zblouse.fantasyfitness.combat.cards.EffectCard;
 import com.zblouse.fantasyfitness.combat.cards.HealAbility;
 import com.zblouse.fantasyfitness.combat.cards.ItemCard;
 import com.zblouse.fantasyfitness.combat.encounter.Encounter;
+import com.zblouse.fantasyfitness.combat.encounter.EncounterFetchEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class CombatService {
@@ -116,7 +118,24 @@ public class CombatService {
                 }
             }
         } else if(combatCardModel.getAbility().getAbilityTarget().equals(AbilityTarget.ALL_ALLY)){
-
+            List<CombatCardModel> allPlayerCards = new ArrayList<>();
+            allPlayerCards.addAll(combatStateModel.getPlayerBackLine());
+            allPlayerCards.addAll(combatStateModel.getPlayerFrontLine());
+            switch (combatCardModel.getAbility().getAbilityType()) {
+                case HEAL:{
+                    for(CombatCardModel cardModel: allPlayerCards){
+                        HealAbility healAbility = (HealAbility) combatCardModel.getAbility();
+                        int currentHealth = cardModel.getCurrentHealth();
+                        int newHealth = currentHealth + healAbility.getHealAmount();
+                        if (newHealth <= cardModel.getMaxHealth()) {
+                            cardModel.setCurrentHealth(newHealth);
+                        } else {
+                            cardModel.setCurrentHealth(cardModel.getMaxHealth());
+                        }
+                    }
+                    break;
+                }
+            }
         }
         combatStateModel.getPlayerHand().remove(combatCardModel);
         mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel,new HashMap<>()));
@@ -255,13 +274,33 @@ public class CombatService {
         for(CombatCardModel card: combatStateModel.getPlayerFrontLine()){
             card.setUsedAbilityThisTurn(false);
         }
+
+        if(combatStateModel.getEnemyDeck().hasCardsRemaining()) {
+            combatStateModel.addCardToEnemyHand(combatStateModel.getEnemyDeck().draw());
+        }
+        mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
         enemyTurn(false);
     }
 
     private void endEnemyTurn(){
         Log.e("CombatSErvice","EndEmenyTurn");
         this.playerTurn = true;
-        mainActivity.publishEvent(new EnemyTurnCompleteEvent());
+        if(combatStateModel.getPlayerDeck().hasCardsRemaining()){
+            combatStateModel.addCardToPlayerHand(combatStateModel.getPlayerDeck().draw());
+        }
+        for(CombatCardModel combatCardModel: combatStateModel.getEnemyFrontLine()){
+            combatCardModel.setUsedAbilityThisTurn(false);
+        }
+        for(CombatCardModel combatCardModel: combatStateModel.getEnemyBackLine()){
+            combatCardModel.setUsedAbilityThisTurn(false);
+        }
+        if(combatStateModel.getPlayerFrontLine().isEmpty() && combatStateModel.getPlayerBackLine().isEmpty())
+        {
+            enemyVictory();
+        } else {
+            mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
+            mainActivity.publishEvent(new EnemyTurnCompleteEvent());
+        }
     }
 
     public boolean endSetup(){
@@ -457,9 +496,135 @@ public class CombatService {
         }
 
         if(!initialSetup){
-            Log.e("CombatService", "ending enemy turn soon");
-            //TODO implement targeting player's cards
-            new CountDownTimer(3000, 1000) {
+            Map<CombatCardModel, HealAbility> enemyCardWithHeal = new HashMap<>();
+            for(CombatCardModel enemyCard: allEnemyCards){
+                for(Ability ability: enemyCard.getAbilities()){
+                    if(ability.getAbilityType().equals(AbilityType.HEAL)){
+                        if(!enemyCardWithHeal.keySet().contains(enemyCard)){
+                            enemyCardWithHeal.put(enemyCard, (HealAbility)ability);
+                        } else if(((HealAbility)ability).getHealAmount() > enemyCardWithHeal.get(enemyCard).getHealAmount()){
+                            enemyCardWithHeal.remove(enemyCard);
+                            enemyCardWithHeal.put(enemyCard,(HealAbility) ability);
+                        }
+                    }
+                }
+            }
+
+            for(CombatCardModel healingCard: enemyCardWithHeal.keySet()){
+                CombatCardModel mostHurt = null;
+                for(CombatCardModel playedCard: allEnemyCards){
+                    if(playedCard.getCurrentHealth()<playedCard.getMaxHealth()){
+                        if(mostHurt == null){
+                            mostHurt = playedCard;
+                        } else {
+                            if(playedCard.getCurrentHealth() < mostHurt.getCurrentHealth()){
+                                mostHurt = playedCard;
+                            }
+                        }
+                    }
+                }
+                if(mostHurt != null){
+                    //TODO consider adding logic for not healing if only a few hit points below max, not MVP though
+                    healingCard.setUsedAbilityThisTurn(true);
+                    heal(mostHurt,enemyCardWithHeal.get(healingCard));
+                    new CountDownTimer(250, 250) {
+                        public void onFinish() {
+                            mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
+                        }
+
+                        public void onTick(long millisUntilFinished) {
+                            // millisUntilFinished    The amount of time until finished.
+                        }
+                    }.start();
+                }
+            }
+
+            for(CombatCardModel attackingCard: combatStateModel.getEnemyFrontLine()){
+                if(!attackingCard.hasUsedAbilityThisTurn()) {
+                    DamageAbility damageAbility = getHighestAttack(attackingCard);
+                    if (damageAbility != null) {
+                        if (damageAbility.getAttackType().equals(AttackType.MELEE)) {
+                            CombatCardModel targetPlayerCard = findPlayerFrontLineCardWithTheLowestHp();
+                            if (targetPlayerCard == null) {
+                                targetPlayerCard = findPlayerCardWithTheLowestHp();
+                            }
+                            if (targetPlayerCard == null) {
+                                enemyVictory();
+                            } else {
+                                attackingCard.setUsedAbilityThisTurn(true);
+                                damage(targetPlayerCard, damageAbility);
+                                if (targetPlayerCard.getCurrentHealth() <= 0) {
+                                    CombatLine cardLine = findWhichCombatLineCardIsIn(targetPlayerCard);
+                                    if (cardLine.equals(CombatLine.PLAYER_FRONT_LINE)) {
+                                        combatStateModel.getPlayerFrontLine().remove(targetPlayerCard);
+                                    } else if (cardLine.equals(CombatLine.PLAYER_BACK_LINE)) {
+                                        combatStateModel.getPlayerBackLine().remove(targetPlayerCard);
+                                    }
+                                }
+                            }
+                        } else if (damageAbility.getAttackType().equals(AttackType.RANGED)) {
+                            CombatCardModel targetPlayerCard = findPlayerCardWithTheLowestHp();
+                            if (targetPlayerCard == null) {
+                                enemyVictory();
+                            } else {
+                                attackingCard.setUsedAbilityThisTurn(true);
+                                damage(targetPlayerCard, damageAbility);
+                                if (targetPlayerCard.getCurrentHealth() <= 0) {
+                                    CombatLine cardLine = findWhichCombatLineCardIsIn(targetPlayerCard);
+                                    if (cardLine.equals(CombatLine.PLAYER_FRONT_LINE)) {
+                                        combatStateModel.getPlayerFrontLine().remove(targetPlayerCard);
+                                    } else if (cardLine.equals(CombatLine.PLAYER_BACK_LINE)) {
+                                        combatStateModel.getPlayerBackLine().remove(targetPlayerCard);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    new CountDownTimer(250, 250) {
+                        public void onFinish() {
+                            mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
+                        }
+
+                        public void onTick(long millisUntilFinished) {
+                            // millisUntilFinished    The amount of time until finished.
+                        }
+                    }.start();
+                }
+            }
+            for(CombatCardModel attackingCard: combatStateModel.getEnemyBackLine()){
+                if(!attackingCard.hasUsedAbilityThisTurn()) {
+                    DamageAbility damageAbility = getHighestRangedAttack(attackingCard);
+                    if (damageAbility != null) {
+
+                        CombatCardModel targetPlayerCard = findPlayerCardWithTheLowestHp();
+                        if (targetPlayerCard == null) {
+                            enemyVictory();
+                        } else {
+                            attackingCard.setUsedAbilityThisTurn(true);
+                            damage(targetPlayerCard, damageAbility);
+                            if (targetPlayerCard.getCurrentHealth() <= 0) {
+                                CombatLine cardLine = findWhichCombatLineCardIsIn(targetPlayerCard);
+                                if (cardLine.equals(CombatLine.PLAYER_FRONT_LINE)) {
+                                    combatStateModel.getPlayerFrontLine().remove(targetPlayerCard);
+                                } else if (cardLine.equals(CombatLine.PLAYER_BACK_LINE)) {
+                                    combatStateModel.getPlayerBackLine().remove(targetPlayerCard);
+                                }
+                            }
+                        }
+
+                    }
+                    new CountDownTimer(250, 250) {
+                        public void onFinish() {
+                            mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
+                        }
+
+                        public void onTick(long millisUntilFinished) {
+                            // millisUntilFinished    The amount of time until finished.
+                        }
+                    }.start();
+                }
+            }
+            new CountDownTimer(2500, 500) {
                 public void onFinish() {
                     endEnemyTurn();
                 }
@@ -468,8 +633,8 @@ public class CombatService {
                     // millisUntilFinished    The amount of time until finished.
                 }
             }.start();
-
         }
+
     }
 
     private void playEnemyCardInLine(CombatCardModel combatCardModel, CombatLine combatLine) {
@@ -675,6 +840,69 @@ public class CombatService {
                     mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
                 }
             }
+        } else if(abilityToUse.getAbilityTarget().equals(AbilityTarget.ROW_ENEMY)){
+            Log.e("CombatService", "targeting a row of enemies");
+            if(!combatCardModel.isPlayerCard() && combatCardModel.isPlayed()){
+
+                if(abilityToUse.getAbilityType().equals(AbilityType.DAMAGE)) {
+                    CombatLine cardLine = findWhichCombatLineCardIsIn(combatCardModel);
+                    if(cardLine.equals(CombatLine.ENEMY_FRONT_LINE)){
+                        Log.e("CombatService", "targeting enemy front line");
+                        ArrayList<CombatCardModel> cardsInFrontLine = new ArrayList<>();
+                        cardsInFrontLine.addAll(combatStateModel.getEnemyFrontLine());
+                        for(CombatCardModel cardModel : cardsInFrontLine) {
+                            damage(cardModel, (DamageAbility) abilityToUse);
+                            if(cardModel.getCurrentHealth() <= 0){
+                                combatStateModel.getEnemyFrontLine().remove(combatCardModel);
+                            }
+                        }
+                    } else if(cardLine.equals(CombatLine.ENEMY_BACK_LINE)){
+                        Log.e("CombatService", "targeting enemy back line");
+                        ArrayList<CombatCardModel> cardsInBackLine = new ArrayList<>();
+                        cardsInBackLine.addAll(combatStateModel.getEnemyBackLine());
+                        for(CombatCardModel cardModel : cardsInBackLine) {
+                            damage(cardModel, (DamageAbility) abilityToUse);
+                            if(cardModel.getCurrentHealth() <= 0){
+                                combatStateModel.getEnemyBackLine().remove(combatCardModel);
+                            }
+                        }
+                    }
+
+                    waitingForAbilityTargeting = false;
+                    mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
+                }
+            }
+        } else if(abilityToUse.getAbilityTarget().equals(AbilityTarget.SINGLE_ALLY)){
+            if(combatCardModel.isPlayerCard() && combatCardModel.isPlayed()){
+                if(abilityToUse.getAbilityType().equals(AbilityType.HEAL)) {
+                    heal(combatCardModel, (HealAbility) abilityToUse);
+                    waitingForAbilityTargeting = false;
+                    mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
+                }
+            }
+        }else if(abilityToUse.getAbilityTarget().equals(AbilityTarget.ROW_ALLY)){
+            if(combatCardModel.isPlayerCard() && combatCardModel.isPlayed()){
+
+                if(abilityToUse.getAbilityType().equals(AbilityType.HEAL)) {
+                    CombatLine cardLine = findWhichCombatLineCardIsIn(combatCardModel);
+                    if(cardLine.equals(CombatLine.PLAYER_BACK_LINE)){
+                        for(CombatCardModel cardModel : combatStateModel.getPlayerBackLine()) {
+                            heal(cardModel, (HealAbility) abilityToUse);
+                        }
+                    } else if(cardLine.equals(CombatLine.PLAYER_FRONT_LINE)){
+                        for(CombatCardModel cardModel : combatStateModel.getPlayerFrontLine()) {
+                            heal(cardModel, (HealAbility) abilityToUse);
+                        }
+                    }
+
+                    waitingForAbilityTargeting = false;
+                    mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
+                }
+            }
+        }
+
+        if(combatStateModel.getEnemyFrontLine().isEmpty() && combatStateModel.getEnemyBackLine().isEmpty()){
+            playerVictory();
         }
     }
 
@@ -695,6 +923,7 @@ public class CombatService {
     }
 
     private void damage(CombatCardModel targetCard, DamageAbility damageAbility){
+        Log.e("CombatService", "Damaging Card: "+  targetCard.getCardName() + " by " + damageAbility.getDamageType());
         int currentHealth = targetCard.getCurrentHealth();
         int newHealth = currentHealth - damageAbility.getDamageAmount();
         targetCard.setCurrentHealth(newHealth);
@@ -708,6 +937,41 @@ public class CombatService {
         } else {
             targetCard.setCurrentHealth(targetCard.getMaxHealth());
         }
+    }
+
+    private CombatCardModel findPlayerFrontLineCardWithTheLowestHp(){
+        CombatCardModel lowestHpPlayerCard = null;
+        for(CombatCardModel card: combatStateModel.getPlayerFrontLine()){
+            if(lowestHpPlayerCard == null){
+                lowestHpPlayerCard = card;
+            } else if(card.getCurrentHealth() < lowestHpPlayerCard.getCurrentHealth()){
+                lowestHpPlayerCard = card;
+            }
+        }
+        return lowestHpPlayerCard;
+    }
+
+    private CombatCardModel findPlayerCardWithTheLowestHp(){
+        CombatCardModel lowestHpPlayerCard = null;
+        List<CombatCardModel> allEnemyCards = new ArrayList<>();
+        allEnemyCards.addAll(combatStateModel.getPlayerFrontLine());
+        allEnemyCards.addAll(combatStateModel.getPlayerBackLine());
+        for(CombatCardModel card: allEnemyCards){
+            if(lowestHpPlayerCard == null){
+                lowestHpPlayerCard = card;
+            } else if(card.getCurrentHealth() < lowestHpPlayerCard.getCurrentHealth()){
+                lowestHpPlayerCard = card;
+            }
+        }
+        return lowestHpPlayerCard;
+    }
+
+    private void playerVictory(){
+        mainActivity.publishEvent(new PlayerVictoryEvent());
+    }
+
+    private void enemyVictory(){
+        mainActivity.publishEvent(new EnemyVictoryEvent());
     }
 
 }

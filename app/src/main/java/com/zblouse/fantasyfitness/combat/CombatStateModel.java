@@ -93,9 +93,10 @@ public class CombatStateModel {
         this.enemyHand = enemyHand;
     }
 
-    public CombatDeckModel getUserDeck(){
+    public CombatDeckModel getPlayerDeck(){
         return this.userDeck;
     }
+
     public void setUserDeck(CombatDeckModel userDeck){
         this.userDeck = userDeck;
     }

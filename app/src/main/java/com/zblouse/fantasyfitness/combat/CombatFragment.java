@@ -28,6 +28,8 @@ import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
+import com.zblouse.fantasyfitness.home.UserHomeFragment;
+import com.zblouse.fantasyfitness.workout.WorkoutRecordsFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,6 +64,9 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
     private RecyclerView detailedAbilitiesRecycler;
 
     private Button endPlayerTurnButton;
+
+    private CardView victoryView;
+    private TextView victoryText;
 
     public CombatFragment(){
         super(R.layout.combat_fragment);
@@ -146,6 +151,19 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
                 detailedCardView.setVisibility(View.GONE);
             }
         });
+
+        victoryView = layout.findViewById(R.id.victory_screen);
+        victoryText = layout.findViewById(R.id.victory_screen_text);
+        Button closeVictoryButton = layout.findViewById(R.id.close_combat_button);
+        closeVictoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new UserHomeFragment(mainActivity)).commit();
+            }
+        });
+        victoryView.setVisibility(View.GONE);
+
         mainActivity.getCombatService().initializeCombat();
         return layout;
     }
@@ -194,6 +212,10 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
             enemyHandList.clear();
             enemyHandList.addAll(combatStateModel.getEnemyHand());
             enemyHandCombatCardStateViewAdapter.notifyDataSetChanged();
+        } else if(event.getEventType().equals(EventType.PLAYER_VICTORY_EVENT)){
+            playerWins();
+        } else if(event.getEventType().equals(EventType.ENEMY_VICTORY_EVENT)){
+            enemyWins();
         }
     }
 
@@ -261,5 +283,15 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         endPlayerTurnButton.setClickable(false);
         endPlayerTurnButton.setText(getString(R.string.enemy_turn));
         mainActivity.getCombatService().endPlayerTurn();
+    }
+
+    public void playerWins(){
+        victoryText.setText("VICTORY");
+        victoryView.setVisibility(View.VISIBLE);
+    }
+
+    public void enemyWins(){
+        victoryText.setText("DEFEAT");
+        victoryView.setVisibility(View.VISIBLE);
     }
 }
