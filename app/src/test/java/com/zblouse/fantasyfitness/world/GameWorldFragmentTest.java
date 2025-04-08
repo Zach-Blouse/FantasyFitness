@@ -4,10 +4,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +22,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.LocationEvent;
 import com.zblouse.fantasyfitness.activity.MainActivity;
+import com.zblouse.fantasyfitness.user.UserGameState;
+import com.zblouse.fantasyfitness.user.UserGameStateFetchResponseEvent;
 import com.zblouse.fantasyfitness.user.UserGameStateService;
+import com.zblouse.fantasyfitness.user.UserGameStateUpdateEvent;
 import com.zblouse.fantasyfitness.user.UserService;
 import com.zblouse.fantasyfitness.workout.WorkoutFragment;
 
@@ -31,6 +38,7 @@ import org.mockito.junit.MockitoRule;
 import org.mockito.quality.Strictness;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -153,4 +161,59 @@ public class GameWorldFragmentTest {
         assert(((TextView)returnedView.findViewById(R.id.location_info_connected_locations)).getText().toString().contains("testLocation2 5.0"));
     }
 
+    @Test
+    public void publishUserGameStateUpdateEventTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        String testUserId = "testUser1";
+        String testUserId2 = "testUserId2";
+        when(mockUser.getUid()).thenReturn(testUserId,testUserId2);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        GameWorldFragment testedFragment = new GameWorldFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+        verify(mockuserGameStateService, times(1)).fetchUserGameState(eq(testUserId), anyMap());
+
+        Map<String, Object> userGameStateUpdateMetadata = new HashMap<>();
+        userGameStateUpdateMetadata.put(UserGameStateService.NEW_LOCATION,UserGameStateService.LOCATION_FIELD);
+        UserGameStateUpdateEvent userGameStateUpdateEvent = new UserGameStateUpdateEvent(userGameStateUpdateMetadata);
+        testedFragment.publishEvent(userGameStateUpdateEvent);
+
+        verify(mockuserGameStateService, times(1)).fetchUserGameState(eq(testUserId2), anyMap());
+    }
+
+    @Test
+    public void publishUserGameStateFetchResponseEventTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        GameLocationService mockGameLocationService = Mockito.mock(GameLocationService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        String testUserId = "testUser1";
+        when(mockUser.getUid()).thenReturn(testUserId);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setGameLocationService(mockGameLocationService);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        GameWorldFragment testedFragment = new GameWorldFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        UserGameState userGameState = new UserGameState(testUserId,GameLocationService.MONASTARY,150);
+
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(userGameState, new HashMap<>());
+
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+        verify(mockGameLocationService).generatePaths(eq(GameLocationService.MONASTARY));
+    }
 }

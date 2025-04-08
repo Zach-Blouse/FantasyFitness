@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.activity.ToastDeviceService;
+import com.zblouse.fantasyfitness.combat.encounter.EncounterDifficultyLevel;
 import com.zblouse.fantasyfitness.core.DomainService;
 import com.zblouse.fantasyfitness.user.UserGameState;
 import com.zblouse.fantasyfitness.user.UserGameStateService;
@@ -255,5 +256,35 @@ public class GameLocationServiceTest {
         GameLocation riverlandsLocation = new GameLocation(6, GameLocationService.RIVERLANDS,"testDescription", riverlandsConnections);
         getAllLocationsResponse.put(6, riverlandsLocation);
         return getAllLocationsResponse;
+    }
+
+    @Test
+    public void getCombatDifficultyWoodlandsTest(){
+        EncounterDifficultyLevel encounterDifficultyLevel = GameLocationService.getLocationDifficulty(GameLocationService.WOODLANDS);
+        assertEquals(EncounterDifficultyLevel.EASY, encounterDifficultyLevel);
+    }
+
+    @Test
+    public void getCombatDifficultyValleyOfMonstersTest(){
+        EncounterDifficultyLevel encounterDifficultyLevel = GameLocationService.getLocationDifficulty(GameLocationService.VALLEY_OF_MONSTERS);
+        assertEquals(EncounterDifficultyLevel.MEDIUM, encounterDifficultyLevel);
+    }
+
+    @Test
+    public void getCombatDifficultyNorthRoadTest(){
+        EncounterDifficultyLevel encounterDifficultyLevel = GameLocationService.getLocationDifficulty(GameLocationService.NORTH_ROAD);
+        assertEquals(EncounterDifficultyLevel.MEDIUM, encounterDifficultyLevel);
+    }
+
+    @Test
+    public void getCombatDifficultyRiverlandsTest(){
+        EncounterDifficultyLevel encounterDifficultyLevel = GameLocationService.getLocationDifficulty(GameLocationService.RIVERLANDS);
+        assertEquals(EncounterDifficultyLevel.MEDIUM, encounterDifficultyLevel);
+    }
+
+    @Test
+    public void getCombatDifficultyHillsTest(){
+        EncounterDifficultyLevel encounterDifficultyLevel = GameLocationService.getLocationDifficulty(GameLocationService.HILLS);
+        assertEquals(EncounterDifficultyLevel.MEDIUM, encounterDifficultyLevel);
     }
 }

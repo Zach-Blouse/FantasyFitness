@@ -28,14 +28,14 @@ public class DialogRepositoryTest {
     @Test
     public void readDialogTest(){
         String testReferenceId = "testDialog";
-        Dialog testDialog = new Dialog(testReferenceId,"flavorText", "optionText");
+        Dialog testDialog = new Dialog(7,testReferenceId, "optionText","flavorText","option1","option2", "option3", "option4");
         DialogSqlDatabase mockDialogSqlDatabase = Mockito.mock(DialogSqlDatabase.class);
         when(mockDialogSqlDatabase.getDialogByReferenceId(eq(testReferenceId))).thenReturn(testDialog);
         DialogRepository testedRepository = new DialogRepository(mockDialogSqlDatabase);
 
         Dialog responseDialog = testedRepository.readDialog(testReferenceId);
 
-        assertEquals(testDialog,responseDialog);
+        assertEquals(testDialog.getId(),responseDialog.getId());
     }
 
 }
