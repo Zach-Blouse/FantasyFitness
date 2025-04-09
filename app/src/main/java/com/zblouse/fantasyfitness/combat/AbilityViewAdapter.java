@@ -87,7 +87,7 @@ public class AbilityViewAdapter extends RecyclerView.Adapter<AbilityViewAdapter.
                     DamageAbility damageAbility = (DamageAbility)ability;
                     String damageItemImpactString = "Gives the card this is attached to the ability to make a "
                             + damageAbility.getAttackType().toString().toLowerCase() + " attack for "
-                            + damageAbility.getDamageAmount() + " " + damageAbility.getDamageType().toString().toLowerCase() + " damage to ";
+                            + damageAbility.getDamageAmount() + " " + damageAbility.getDamageType().toString().toLowerCase() + " damage to";
                     if(ability.getAbilityTarget().equals(AbilityTarget.SINGLE_ENEMY)){
                         damageItemImpactString += " one enemy";
                     } else if(ability.getAbilityTarget().equals(AbilityTarget.ROW_ENEMY)){
@@ -103,7 +103,7 @@ public class AbilityViewAdapter extends RecyclerView.Adapter<AbilityViewAdapter.
                         if (buffAbility.getBuffType().equals(BuffType.HEALTH)) {
                             buffItemImpactString += buffAbility.getBuffAmount() + " extra max HP";
                         } else if (buffAbility.getBuffType().equals(BuffType.ATTACK)) {
-                            buffItemImpactString += buffAbility.getBuffAmount() + "extra damage on each attack";
+                            buffItemImpactString += buffAbility.getBuffAmount() + " extra damage on each attack";
                         }
 
                         holder.abilityImpactTextView.setText(buffItemImpactString);
@@ -131,12 +131,6 @@ public class AbilityViewAdapter extends RecyclerView.Adapter<AbilityViewAdapter.
             abilityCard = itemView.findViewById(R.id.ability_card);
             abilityNameTextView = itemView.findViewById(R.id.ability_name);
             abilityImpactTextView = itemView.findViewById(R.id.ability_impact);
-            if(abilityNameTextView == null){
-                Log.e("AbilityViewAdapter","name view null");
-            }
-            if(abilityImpactTextView == null){
-                Log.e("AbilityViewAdapter","impact view null");
-            }
         }
     }
 
@@ -159,7 +153,7 @@ public class AbilityViewAdapter extends RecyclerView.Adapter<AbilityViewAdapter.
         } else if(ability.getAbilityTarget().equals(AbilityTarget.ALL_ALLY)){
             impactText += " to all of your cards";
         } else if(ability.getAbilityTarget().equals(AbilityTarget.ALL_ENEMY)){
-            impactText += " to all opponent's cards";
+            impactText += " to all of your opponent's cards";
         } else if(ability.getAbilityTarget().equals(AbilityTarget.SELF)){
             impactText += " to this card";
         }

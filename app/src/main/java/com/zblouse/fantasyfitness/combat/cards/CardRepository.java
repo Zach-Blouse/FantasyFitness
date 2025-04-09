@@ -27,12 +27,10 @@ public class CardRepository implements Repository<Card> {
     }
 
     public void fetchCardList(String userId, List<String> cardUuids, Map<String, Object> metadata){
-        Log.e("CardRepository", "Getting card list");
         cardFirestoreDatabase.fetchListOfCards(userId, cardUuids, this, metadata);
     }
 
     public void listReadCallback(List<Card> cardList, Map<String, Object> metadata){
-        Log.e("CardRepository", "listReadCallBack list size: " + cardList.size());
         cardService.repositoryResponse(cardList, metadata);
     }
 

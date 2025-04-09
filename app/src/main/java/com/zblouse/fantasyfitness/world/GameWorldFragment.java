@@ -267,10 +267,10 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
         locationInfoCardView.setVisibility(View.INVISIBLE);
         this.lastKnownGameLocation = lastKnownGameLocation;
         for(Button button: locationButtonMap.values()){
-            button.setBackgroundColor(getColor(getContext(), R.color.fantasy_fitness_green));
+            button.setBackgroundColor(getColor(mainActivity, R.color.fantasy_fitness_green));
         }
 
-        locationButtonMap.get(lastKnownGameLocation).setBackgroundColor(getColor(getContext(), R.color.fantasy_fitness_red));
+        locationButtonMap.get(lastKnownGameLocation).setBackgroundColor(getColor(mainActivity, R.color.fantasy_fitness_red));
         int buttonTop = locationButtonMap.get(lastKnownGameLocation).getTop();
         int buttonBottom = locationButtonMap.get(lastKnownGameLocation).getBottom();
         if(!loadedFromSavedInstance) {
@@ -313,7 +313,7 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
                         travelButton.setBackgroundColor(getColor(mainActivity, R.color.fantasy_fitness_gray));
                     }else if(lastKnownGameLocationPaths.getPath(gameLocation.getLocationName()).getDistanceKm() <= (lastKnownSavedDistanceMeters/1000)) {
                         travelButton.setClickable(true);
-                        travelButton.setBackgroundColor(getColor(getContext(), R.color.fantasy_fitness_green));
+                        travelButton.setBackgroundColor(getColor(mainActivity, R.color.fantasy_fitness_green));
                         travelButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -322,7 +322,7 @@ public class GameWorldFragment extends AuthenticationRequiredFragment implements
                         });
                     } else {
                         travelButton.setClickable(false);
-                        travelButton.setBackgroundColor(getColor(getContext(), R.color.fantasy_fitness_gray));
+                        travelButton.setBackgroundColor(getColor(mainActivity, R.color.fantasy_fitness_gray));
                     }
                 }
 

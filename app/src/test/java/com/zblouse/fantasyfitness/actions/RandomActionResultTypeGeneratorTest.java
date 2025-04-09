@@ -56,4 +56,37 @@ public class RandomActionResultTypeGeneratorTest {
         ActionResultType result = randomActionResultTypeGenerator.getRandomActionResult(GameLocationService.WOODLANDS);
         assertEquals(ActionResultType.COMBAT, result);
     }
+
+    @Test
+    public void nothingResultNonWildernessTest(){
+        Random mockRandom = Mockito.mock(Random.class);
+        when(mockRandom.nextInt(eq(3))).thenReturn(0);
+        RandomActionResultTypeGenerator randomActionResultTypeGenerator = new RandomActionResultTypeGenerator();
+        randomActionResultTypeGenerator.setRandom(mockRandom);
+
+        ActionResultType result = randomActionResultTypeGenerator.getRandomActionResult(GameLocationService.THANADEL_VILLAGE);
+        assertEquals(ActionResultType.NOTHING, result);
+    }
+
+    @Test
+    public void dialogResultNonWildernessTest(){
+        Random mockRandom = Mockito.mock(Random.class);
+        when(mockRandom.nextInt(eq(3))).thenReturn(1);
+        RandomActionResultTypeGenerator randomActionResultTypeGenerator = new RandomActionResultTypeGenerator();
+        randomActionResultTypeGenerator.setRandom(mockRandom);
+
+        ActionResultType result = randomActionResultTypeGenerator.getRandomActionResult(GameLocationService.THANADEL_VILLAGE);
+        assertEquals(ActionResultType.DIALOG, result);
+    }
+
+    @Test
+    public void secretResultNonWildernessTest(){
+        Random mockRandom = Mockito.mock(Random.class);
+        when(mockRandom.nextInt(eq(3))).thenReturn(2);
+        RandomActionResultTypeGenerator randomActionResultTypeGenerator = new RandomActionResultTypeGenerator();
+        randomActionResultTypeGenerator.setRandom(mockRandom);
+
+        ActionResultType result = randomActionResultTypeGenerator.getRandomActionResult(GameLocationService.THANADEL_VILLAGE);
+        assertEquals(ActionResultType.SECRET, result);
+    }
 }
