@@ -41,7 +41,8 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
     @Override
     public void onBindViewHolder(@NonNull CombatCardStateViewAdapter.ViewHolder holder, int position) {
         CombatCardModel combatCardModel = combatCardModelList.get(position);
-        ContextCompat.getColor(combatFragment.getActivity(), R.color.fantasy_fitness_white);
+
+        ContextCompat.getColor(combatFragment.getMainActivity(), R.color.fantasy_fitness_white);
         if(combatCardModel.isPlayerCard() || (combatCardModel.isPlayed() && !combatFragment.isInitialSetup())) {
             holder.cardNameTextView.setText(combatCardModel.getCardName());
             holder.cardDescriptionTextView.setText(combatCardModel.getCardDescription());
@@ -50,9 +51,9 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
             } else {
                 holder.cardHealthTextView.setText("");
             }
-            holder.card.setCardBackgroundColor(ContextCompat.getColor(combatFragment.getActivity(), R.color.fantasy_fitness_white));
+            holder.card.setCardBackgroundColor(ContextCompat.getColor(combatFragment.getMainActivity(), R.color.fantasy_fitness_white));
         } else {
-            holder.card.setCardBackgroundColor(ContextCompat.getColor(combatFragment.getActivity(), R.color.fantasy_fitness_red));
+            holder.card.setCardBackgroundColor(ContextCompat.getColor(combatFragment.getMainActivity(), R.color.fantasy_fitness_red));
         }
         if(combatCardModel.isPlayerCard()){
             holder.card.setOnTouchListener(this);
@@ -79,7 +80,7 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
         holder.card.setTag(combatCardModel);
 
         holder.abilitiesRecyclerView.setAdapter(new AbilityViewAdapter(combatCardModel, combatFragment, false));
-        LinearLayoutManager abilitiesViewLayoutManager = new LinearLayoutManager(combatFragment.getContext());
+        LinearLayoutManager abilitiesViewLayoutManager = new LinearLayoutManager(combatFragment.getMainActivity());
         abilitiesViewLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         holder.abilitiesRecyclerView.setLayoutManager(abilitiesViewLayoutManager);
 

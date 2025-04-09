@@ -384,6 +384,7 @@ public class CombatTest {
         cardMap.put(Card.CARD_UUID_FIELD, card.getCardUuid());
         cardMap.put(Card.CARD_DESCRIPTION_FIELD, card.getCardDescription());
         cardMap.put(Card.CARD_TYPE_FIELD, card.getCardType().toString());
+        cardMap.put(Card.CARD_NAME_FIELD, card.getCardName());
         if(card.getCardType().equals(CardType.CHARACTER)){
             CharacterCard characterCard = (CharacterCard)card;
             cardMap.put(CharacterCard.MAX_HEALTH_FIELD, (long)characterCard.getMaxHealth());

@@ -45,7 +45,6 @@ public class CardFirestoreDatabase extends FirestoreDatabase {
     }
 
     public void fetchListOfCards(String userId, List<String> cardUuids, CardRepository cardRepository, Map<String, Object> metadata){
-        Log.e("CardFirestoreDatabase", "Getting card list");
         firestore.collection(TOP_COLLECTION).document(userId).collection(USER_COLLECTION).whereIn("cardUuid", cardUuids).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

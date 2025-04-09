@@ -229,7 +229,6 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
     }
 
     public void cardHeld(CombatCardModel cardHeld){
-        Log.e("CombatFragment", cardHeld.getCardName() + " has been held");
         detailedCardName.setText(cardHeld.getCardName());
         if(cardHeld.getCardType().equals(CardType.CHARACTER)){
             detailedCardHealth.setText(cardHeld.getCurrentHealth() + "/" + cardHeld.getMaxHealth());
@@ -245,13 +244,11 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
     }
 
     public void abilityUsed(CombatCardModel cardUsingAbility, Ability ability){
-        Log.e("CombatFragment","Using ability, " + ability.getAbilityName());
         detailedCardView.setVisibility(View.GONE);
         mainActivity.getCombatService().abilityUsed(cardUsingAbility, ability);
     }
 
     public void attemptCardAbilityTarget(CombatCardModel combatCardModel){
-        Log.e("CombatFragment", "card: " + combatCardModel.getCardName() + " attempting to target");
         mainActivity.getCombatService().attemptCardAbilityTarget(combatCardModel);
     }
 
@@ -269,13 +266,13 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
             startPlayerTurn();
         } else {
             endPlayerTurnButton.setClickable(false);
-            endPlayerTurnButton.setText(getString(R.string.enemy_turn));
+            endPlayerTurnButton.setText(mainActivity.getString(R.string.enemy_turn));
         }
     }
 
     public void startPlayerTurn(){
         endPlayerTurnButton.setClickable(true);
-        endPlayerTurnButton.setText(getString(R.string.end_turn));
+        endPlayerTurnButton.setText(mainActivity.getString(R.string.end_turn));
         endPlayerTurnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -286,7 +283,7 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
 
     private void endPlayerTurn(){
         endPlayerTurnButton.setClickable(false);
-        endPlayerTurnButton.setText(getString(R.string.enemy_turn));
+        endPlayerTurnButton.setText(mainActivity.getString(R.string.enemy_turn));
         mainActivity.getCombatService().endPlayerTurn();
     }
 
@@ -298,5 +295,9 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
     public void enemyWins(){
         victoryText.setText("DEFEAT");
         victoryView.setVisibility(View.VISIBLE);
+    }
+
+    public MainActivity getMainActivity(){
+        return this.mainActivity;
     }
 }
