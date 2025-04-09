@@ -843,6 +843,15 @@ public class CombatService {
         if(abilityToUse.getAbilityTarget().equals(AbilityTarget.SINGLE_ENEMY)){
             if(!combatCardModel.isPlayerCard() && combatCardModel.isPlayed()){
                 if(abilityToUse.getAbilityType().equals(AbilityType.DAMAGE)) {
+                    DamageAbility damageAbility = (DamageAbility)abilityToUse;
+                    if(damageAbility.getAttackType().equals(AttackType.MELEE)){
+                        if(findWhichCombatLineCardIsIn(combatCardModel).equals(CombatLine.ENEMY_BACK_LINE)){
+                            if(!combatStateModel.getEnemyFrontLine().isEmpty()){
+                                //cant target back row with melee if front line is empty
+                                return;
+                            }
+                        }
+                    }
                     damage(combatCardModel, (DamageAbility) abilityToUse, getCardsBuffAbilities(cardUsingAbility));
 
                     if(combatCardModel.getCurrentHealth() <= 0){
