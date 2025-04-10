@@ -70,6 +70,8 @@ public class AbilityViewAdapter extends RecyclerView.Adapter<AbilityViewAdapter.
                     });
                     holder.abilityImpactTextView.setTextSize(16);
                 }
+            } else {
+                holder.abilityCard.setVisibility(View.GONE);
             }
         } else {
             if(cardAttachedTo.getCardType().equals(CardType.CHARACTER)) {

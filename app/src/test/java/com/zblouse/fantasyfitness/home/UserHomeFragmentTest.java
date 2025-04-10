@@ -412,4 +412,44 @@ public class UserHomeFragmentTest {
         verify(mockDialogService).selectDialogOption(eq(dialog4.getReferenceId()), anyMap());
 
     }
+
+    @Test
+    public void verifyCantStartNewExploreActionWhenOneIsActiveTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        ExploreActionService mockExploreActionService = Mockito.mock(ExploreActionService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setExploreActionService(mockExploreActionService);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.THANADEL_VILLAGE,51);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.general_store_button).getVisibility());
+
+        returnedView.findViewById(R.id.general_store_button).performClick();
+        String nothingFoundFlavorText = "Nothing found flavor text";
+        NothingFoundActionResult nothingFoundActionResult = new NothingFoundActionResult(nothingFoundFlavorText);
+        ExploreActionEvent exploreActionEvent = new ExploreActionEvent(nothingFoundActionResult, new HashMap<>());
+        testedFragment.publishEvent(exploreActionEvent);
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.nothing_found_card_view).getVisibility());
+
+        returnedView.findViewById(R.id.general_store_button).performClick();
+        returnedView.findViewById(R.id.general_store_button).performClick();
+        returnedView.findViewById(R.id.general_store_button).performClick();
+        returnedView.findViewById(R.id.general_store_button).performClick();
+        returnedView.findViewById(R.id.general_store_button).performClick();
+        verify(mockExploreActionService, times(1)).exploreAction(anyMap());
+
+    }
 }

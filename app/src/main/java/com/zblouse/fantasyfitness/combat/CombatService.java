@@ -829,6 +829,7 @@ public class CombatService {
                 if (ability.getAbilityType().equals(AbilityType.HEAL)) {
                     heal(cardUsingAbility, (HealAbility) ability);
                     mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
+                    cardUsingAbility.setUsedAbilityThisTurn(true);
                     return;
                 }
             }
@@ -843,6 +844,15 @@ public class CombatService {
         if(abilityToUse.getAbilityTarget().equals(AbilityTarget.SINGLE_ENEMY)){
             if(!combatCardModel.isPlayerCard() && combatCardModel.isPlayed()){
                 if(abilityToUse.getAbilityType().equals(AbilityType.DAMAGE)) {
+                    DamageAbility damageAbility = (DamageAbility)abilityToUse;
+                    if(damageAbility.getAttackType().equals(AttackType.MELEE)){
+                        if(findWhichCombatLineCardIsIn(combatCardModel).equals(CombatLine.ENEMY_BACK_LINE)){
+                            if(!combatStateModel.getEnemyFrontLine().isEmpty()){
+                                //cant target back row with melee if front line is empty
+                                return;
+                            }
+                        }
+                    }
                     damage(combatCardModel, (DamageAbility) abilityToUse, getCardsBuffAbilities(cardUsingAbility));
 
                     if(combatCardModel.getCurrentHealth() <= 0){
@@ -858,29 +868,31 @@ public class CombatService {
                 }
             }
         } else if(abilityToUse.getAbilityTarget().equals(AbilityTarget.ROW_ENEMY)){
-            Log.e("CombatService", "targeting a row of enemies");
             if(!combatCardModel.isPlayerCard() && combatCardModel.isPlayed()){
-
+                DamageAbility damageAbility = (DamageAbility)abilityToUse;
                 if(abilityToUse.getAbilityType().equals(AbilityType.DAMAGE)) {
                     CombatLine cardLine = findWhichCombatLineCardIsIn(combatCardModel);
                     if(cardLine.equals(CombatLine.ENEMY_FRONT_LINE)){
-                        Log.e("CombatService", "targeting enemy front line");
                         ArrayList<CombatCardModel> cardsInFrontLine = new ArrayList<>();
                         cardsInFrontLine.addAll(combatStateModel.getEnemyFrontLine());
                         for(CombatCardModel cardModel : cardsInFrontLine) {
-                            damage(cardModel, (DamageAbility) abilityToUse, getCardsBuffAbilities(cardUsingAbility));
+                            damage(cardModel, damageAbility, getCardsBuffAbilities(cardUsingAbility));
+
                             if(cardModel.getCurrentHealth() <= 0){
-                                combatStateModel.getEnemyFrontLine().remove(combatCardModel);
+                                combatStateModel.getEnemyFrontLine().remove(cardModel);
                             }
                         }
                     } else if(cardLine.equals(CombatLine.ENEMY_BACK_LINE)){
-                        Log.e("CombatService", "targeting enemy back line");
+                        if(!combatStateModel.getEnemyFrontLine().isEmpty() && damageAbility.getAttackType().equals(AttackType.MELEE)){
+                            //cant target back row with melee if front line is empty
+                            return;
+                        }
                         ArrayList<CombatCardModel> cardsInBackLine = new ArrayList<>();
                         cardsInBackLine.addAll(combatStateModel.getEnemyBackLine());
                         for(CombatCardModel cardModel : cardsInBackLine) {
-                            damage(cardModel, (DamageAbility) abilityToUse, getCardsBuffAbilities(cardUsingAbility));
+                            damage(cardModel, damageAbility, getCardsBuffAbilities(cardUsingAbility));
                             if(cardModel.getCurrentHealth() <= 0){
-                                combatStateModel.getEnemyBackLine().remove(combatCardModel);
+                                combatStateModel.getEnemyBackLine().remove(cardModel);
                             }
                         }
                     }
@@ -921,6 +933,7 @@ public class CombatService {
         if(combatStateModel.getEnemyFrontLine().isEmpty() && combatStateModel.getEnemyBackLine().isEmpty()){
             playerVictory();
         }
+
     }
 
     private CombatLine findWhichCombatLineCardIsIn(CombatCardModel targetCard){
@@ -940,7 +953,7 @@ public class CombatService {
     }
 
     private void damage(CombatCardModel targetCard, DamageAbility damageAbility, List<BuffAbility> attackersBuffs){
-        Log.e("CombatService", "Damaging Card: "+  targetCard.getCardName() + " by " + damageAbility.getDamageType());
+        Log.e("CombatService", "Damaging Card: "+  targetCard.getCardName() + " by " + damageAbility.getDamageAmount());
         int damageDone = damageAbility.getDamageAmount();
         for(BuffAbility buffAbility: attackersBuffs){
             if(buffAbility.getBuffType().equals(BuffType.ATTACK)){

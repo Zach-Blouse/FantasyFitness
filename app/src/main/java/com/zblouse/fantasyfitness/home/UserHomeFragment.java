@@ -221,20 +221,24 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 innButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Map<String, Object> metadata = new HashMap<>();
-                        metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
-                        metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED,R.id.inn_button);
-                        mainActivity.getExploreActionService().exploreAction(metadata);
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.inn_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
                     }
                 });
                 Button generalStoreButton = layout.findViewById(R.id.general_store_button);
                 generalStoreButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Map<String, Object> metadata = new HashMap<>();
-                        metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
-                        metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED,R.id.general_store_button);
-                        mainActivity.getExploreActionService().exploreAction(metadata);
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.general_store_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
                     }
                 });
                 break;
@@ -246,30 +250,36 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 darkForestButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Map<String, Object> metadata = new HashMap<>();
-                        metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
-                        metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED,R.id.dark_forest_button);
-                        mainActivity.getExploreActionService().exploreAction(metadata);
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.dark_forest_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
                     }
                 });
                 Button cavesButton = layout.findViewById(R.id.cave_button);
                 cavesButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Map<String, Object> metadata = new HashMap<>();
-                        metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
-                        metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED,R.id.cave_button);
-                        mainActivity.getExploreActionService().exploreAction(metadata);
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.cave_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
                     }
                 });
                 Button marshlandsButton = layout.findViewById(R.id.marsh_button);
                 marshlandsButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Map<String, Object> metadata = new HashMap<>();
-                        metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
-                        metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED,R.id.marsh_button);
-                        mainActivity.getExploreActionService().exploreAction(metadata);
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.marsh_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
                     }
                 });
                 break;
@@ -277,5 +287,9 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
             default:
                 break;
         }
+    }
+
+    public boolean actionResultDisplayed(){
+        return (View.VISIBLE == dialogCardView.getVisibility()) || (View.VISIBLE == nothingFoundCardView.getVisibility());
     }
 }
