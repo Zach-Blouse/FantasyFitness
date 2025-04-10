@@ -69,7 +69,6 @@ public class CombatCardStateViewAdapterTest {
 
         CombatCardStateViewAdapter combatCardStateViewAdapter = new CombatCardStateViewAdapter(Arrays.asList(testModel),true, testedFragment);
         CombatCardStateViewAdapter.ViewHolder viewHolder = combatCardStateViewAdapter.onCreateViewHolder(returnedView.findViewById(R.id.playerFrontLine),1);
-        assertNotNull(viewHolder.abilitiesRecyclerView);
         assertNotNull(viewHolder.card);
         assertNotNull(viewHolder.cardHealthTextView);
         assertNotNull(viewHolder.cardNameTextView);
@@ -156,7 +155,6 @@ public class CombatCardStateViewAdapterTest {
         mainActivity.setCombatService(mockCombatService);
         mainActivity.setUserService(mockUserService);
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
-        when(mockCombatService.isPlayerTurn()).thenReturn(true);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
 
@@ -176,7 +174,7 @@ public class CombatCardStateViewAdapterTest {
         combatCardStateViewAdapter.onBindViewHolder(viewHolder,0);
 
         MotionEvent touchMotionEvent = MotionEvent.obtain(1,1,MotionEvent.ACTION_DOWN,5,5,1,1,1,1,1,1,1);
-        assertTrue(combatCardStateViewAdapter.onTouch(viewHolder.card,touchMotionEvent));
+        assertTrue(viewHolder.card.onTouchEvent(touchMotionEvent));
     }
 
     @Test
@@ -190,7 +188,6 @@ public class CombatCardStateViewAdapterTest {
         mainActivity.setCombatService(mockCombatService);
         mainActivity.setUserService(mockUserService);
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
-        when(mockCombatService.isPlayerTurn()).thenReturn(true);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
 
@@ -210,7 +207,7 @@ public class CombatCardStateViewAdapterTest {
         combatCardStateViewAdapter.onBindViewHolder(viewHolder,0);
 
         MotionEvent touchMotionEvent = MotionEvent.obtain(1,1,MotionEvent.ACTION_DOWN,5,5,1,1,1,1,1,1,1);
-        assertFalse(combatCardStateViewAdapter.onTouch(viewHolder.card,touchMotionEvent));
+        assertTrue(viewHolder.card.onTouchEvent(touchMotionEvent));
     }
 
     @Test
@@ -224,7 +221,6 @@ public class CombatCardStateViewAdapterTest {
         mainActivity.setCombatService(mockCombatService);
         mainActivity.setUserService(mockUserService);
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
-        when(mockCombatService.isPlayerTurn()).thenReturn(false);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
 
@@ -244,7 +240,7 @@ public class CombatCardStateViewAdapterTest {
         combatCardStateViewAdapter.onBindViewHolder(viewHolder,0);
 
         MotionEvent touchMotionEvent = MotionEvent.obtain(1,1,MotionEvent.ACTION_DOWN,5,5,1,1,1,1,1,1,1);
-        assertFalse(combatCardStateViewAdapter.onTouch(viewHolder.card,touchMotionEvent));
+        assertTrue(viewHolder.card.onTouchEvent(touchMotionEvent));
     }
 
     @Test

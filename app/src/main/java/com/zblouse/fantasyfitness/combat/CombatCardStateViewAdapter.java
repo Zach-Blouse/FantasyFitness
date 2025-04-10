@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,9 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.combat.cards.CardType;
 
+import java.time.Instant;
 import java.util.List;
 
-public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardStateViewAdapter.ViewHolder> implements View.OnTouchListener {
+public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardStateViewAdapter.ViewHolder> {
 
     private List<CombatCardModel> combatCardModelList;
     private CombatFragment combatFragment;
@@ -56,7 +58,48 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
             holder.card.setCardBackgroundColor(ContextCompat.getColor(combatFragment.getMainActivity(), R.color.fantasy_fitness_red));
         }
         if(combatCardModel.isPlayerCard()){
-            holder.card.setOnTouchListener(this);
+            holder.card.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                        switch (motionEvent.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                holder.timeTouchStarted = Instant.now();
+                                if (inHand) {
+                                    if (holder.velocityTracker == null) {
+                                        holder.velocityTracker = VelocityTracker.obtain();
+                                    } else {
+                                        holder.velocityTracker.clear();
+                                    }
+                                } else {
+                                    if(combatFragment.isWaitingForAbilityTargeting()){
+                                        combatFragment.attemptCardAbilityTarget(combatCardModel);
+                                    }
+                                }
+                                break;
+                            case MotionEvent.ACTION_MOVE:
+                                if (!combatFragment.isCombatScreenCovered()) {
+                                    if (holder.velocityTracker == null) {
+                                        holder.velocityTracker = VelocityTracker.obtain();
+                                    }
+                                    holder.velocityTracker.addMovement(motionEvent);
+                                    holder.velocityTracker.computeCurrentVelocity(100);
+                                    Log.e("VELOCITY", "X VELOCITY: " + holder.velocityTracker.getXVelocity());
+                                    Log.e("VELOCITY", "Y VELOCITY: " + holder.velocityTracker.getYVelocity());
+                                    if(Math.abs(holder.velocityTracker.getYVelocity()) > Math.abs(holder.velocityTracker.getXVelocity()) && inHand && combatFragment.isPlayerTurn()) {
+                                        ClipData data = ClipData.newPlainText("", "");
+                                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                                        view.startDragAndDrop(data, shadowBuilder, view, 0);
+                                    } else if(Instant.now().isAfter(holder.timeTouchStarted.plusMillis(350))){
+                                        combatFragment.cardHeld(combatCardModel);
+                                    }
+                                }
+                        }
+
+
+                    return true;
+                }
+
+            });
         }
         holder.card.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -79,11 +122,6 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
         holder.card.setOnDragListener(new CombatCardDragListener(combatFragment, combatCardModel, inHand));
         holder.card.setTag(combatCardModel);
 
-        holder.abilitiesRecyclerView.setAdapter(new AbilityViewAdapter(combatCardModel, combatFragment, false));
-        LinearLayoutManager abilitiesViewLayoutManager = new LinearLayoutManager(combatFragment.getMainActivity());
-        abilitiesViewLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        holder.abilitiesRecyclerView.setLayoutManager(abilitiesViewLayoutManager);
-
     }
 
     @Override
@@ -91,28 +129,13 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
         return combatCardModelList.size();
     }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        if(combatFragment.isPlayerTurn()) {
-            switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    if (inHand) {
-                        ClipData data = ClipData.newPlainText("", "");
-                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-                        view.startDragAndDrop(data, shadowBuilder, view, 0);
-                        return true;
-                    }
-            }
-        }
-        return false;
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         public CardView card;
         public TextView cardNameTextView;
         public TextView cardHealthTextView;
         public TextView cardDescriptionTextView;
-        public RecyclerView abilitiesRecyclerView;
+        public VelocityTracker velocityTracker;
+        public Instant timeTouchStarted;
 
         public ViewHolder(View itemView){
             super(itemView);
@@ -120,7 +143,7 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
             cardNameTextView = itemView.findViewById(R.id.card_name);
             cardHealthTextView = itemView.findViewById(R.id.card_health);
             cardDescriptionTextView = itemView.findViewById(R.id.card_description);
-            abilitiesRecyclerView = itemView.findViewById(R.id.ability_recycler_view);
+            velocityTracker = null;
         }
     }
 }

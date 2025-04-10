@@ -829,6 +829,7 @@ public class CombatService {
                 if (ability.getAbilityType().equals(AbilityType.HEAL)) {
                     heal(cardUsingAbility, (HealAbility) ability);
                     mainActivity.publishEvent(new CombatStateUpdateEvent(combatStateModel, new HashMap<>()));
+                    cardUsingAbility.setUsedAbilityThisTurn(true);
                     return;
                 }
             }

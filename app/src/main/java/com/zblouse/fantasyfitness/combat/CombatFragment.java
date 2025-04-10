@@ -205,9 +205,7 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
                     playerFrontLineCombatCardStateViewAdapter.notifyDataSetChanged();
 
                     enemyFrontLineList.clear();
-                    for(CombatCardModel combatCardModel: combatStateModel.getEnemyFrontLine()){
-                        Log.e("CombatFragment", "Front Line Modelhealth " + combatCardModel.getCurrentHealth());
-                    }
+
                     enemyFrontLineList.addAll(combatStateModel.getEnemyFrontLine());
                     enemyFrontLineCombatCardStateViewAdapter.notifyDataSetChanged();
 
@@ -302,5 +300,9 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
 
     public MainActivity getMainActivity(){
         return this.mainActivity;
+    }
+
+    public boolean isCombatScreenCovered(){
+        return (victoryView.getVisibility() == View.VISIBLE || detailedCardView.getVisibility() == View.VISIBLE);
     }
 }

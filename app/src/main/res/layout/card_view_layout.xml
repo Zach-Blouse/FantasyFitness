@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card"
     android:layout_width="100dp"
-    android:layout_height="match_parent"
+    android:layout_height="75dp"
     android:layout_margin="5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/fantasy_fitness_white"
@@ -10,7 +10,7 @@
     app:cardElevation="8dp"
     app:cardMaxElevation="10dp">
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_margin="5dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -23,24 +23,21 @@
                 android:id="@+id/card_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:textColor="@color/black"/>
             <TextView
                 android:id="@+id/card_health"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:textSize="8sp"/>
+                android:textSize="8sp"
+                android:textColor="@color/black"/>
         </LinearLayout>
         <TextView
             android:id="@+id/card_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="10sp"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ability_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            />
     </LinearLayout>
 
 

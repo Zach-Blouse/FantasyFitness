@@ -12,8 +12,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_margin="5dp"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <TextView
             android:id="@+id/ability_name"
             android:layout_width="match_parent"
@@ -24,7 +24,6 @@
             android:id="@+id/ability_impact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
             android:textColor="@color/fantasy_fitness_white"
             android:textSize="8sp"/>
 
