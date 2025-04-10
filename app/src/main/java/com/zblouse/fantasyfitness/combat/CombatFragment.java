@@ -205,6 +205,9 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
                     playerFrontLineCombatCardStateViewAdapter.notifyDataSetChanged();
 
                     enemyFrontLineList.clear();
+                    for(CombatCardModel combatCardModel: combatStateModel.getEnemyFrontLine()){
+                        Log.e("CombatFragment", "Front Line Modelhealth " + combatCardModel.getCurrentHealth());
+                    }
                     enemyFrontLineList.addAll(combatStateModel.getEnemyFrontLine());
                     enemyFrontLineCombatCardStateViewAdapter.notifyDataSetChanged();
 

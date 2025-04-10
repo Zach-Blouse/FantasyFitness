@@ -948,7 +948,7 @@ public class CombatServiceTest {
             ItemCard testItem1 = new ItemCard(mockUserId, UUID.randomUUID().toString(), "test", "test", ItemType.EQUIPPABLE, new BuffAbility("test", "test", AbilityTarget.SINGLE_ALLY, BuffType.HEALTH, 3));
             userCards.add(testItem1);
         }
-        CharacterCard characterCard1 = new CharacterCard(mockUserId, UUID.randomUUID().toString(),"Zach","Zach is a software engineer",new DamageAbility("Slap","slap", AbilityTarget.ROW_ENEMY, DamageType.ICE, AttackType.MELEE,1),30);
+        CharacterCard characterCard1 = new CharacterCard(mockUserId, UUID.randomUUID().toString(),"Zach","Zach is a software engineer",new DamageAbility("Slap","slap", AbilityTarget.ROW_ENEMY, DamageType.ICE, AttackType.RANGED,1),30);
         userCards.add(characterCard1);
         CharacterCard characterCard2 = new CharacterCard(mockUserId, UUID.randomUUID().toString(),"Zach2","Zach is a software engineer",new HealAbility("SelfHeal","slap", AbilityTarget.SELF,2),25);
         userCards.add(characterCard2);
@@ -1017,6 +1017,7 @@ public class CombatServiceTest {
                 zach1AttackAbility = ability;
             }
         }
+        assert(combatStateUpdateEventArgumentCaptor.getValue().getCombatStateModel().getEnemyBackLine().contains(darkRangedZach));
         testedService.abilityUsed(zach1,zach1AttackAbility);
         testedService.attemptCardAbilityTarget(darkRangedZach);
         verify(mockMainActivity,atLeastOnce()).publishEvent(combatStateUpdateEventArgumentCaptor.capture());
