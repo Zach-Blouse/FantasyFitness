@@ -3,6 +3,7 @@ package com.zblouse.fantasyfitness.actions;
 import android.util.Log;
 
 import com.zblouse.fantasyfitness.combat.encounter.EncounterDifficultyLevel;
+import com.zblouse.fantasyfitness.quest.Quest;
 import com.zblouse.fantasyfitness.world.GameLocationService;
 
 import java.util.ArrayList;
@@ -26,15 +27,16 @@ public class CombatActionResultGenerator implements ActionResultGenerator{
     }
 
     @Override
-    public ActionResult generate(Map<String, Object> metadata) {
+    public ActionResult generate(List<Quest> quests, Map<String, Object> metadata) {
         String locationName = (String)metadata.get(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY);
+        int buildingId = (Integer)metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED);
         List<String> encounters = encounterDifficultyMap.get(GameLocationService.getLocationDifficulty(locationName));
         if(!encounters.isEmpty()){
             Collections.shuffle(encounters);
-            return new CombatActionResult(encounters.get(0));
+            return new CombatActionResult(encounters.get(0), locationName, buildingId);
         }
         //Should not fall into this case in ops, just a reminder for me in the future
         Log.e("CombatActionResultGenerator", "No encounters for difficulty: " + GameLocationService.getLocationDifficulty(locationName));
-        return new CombatActionResult("Goblin Attack");
+        return new CombatActionResult("Goblin Attack", locationName, buildingId);
     }
 }

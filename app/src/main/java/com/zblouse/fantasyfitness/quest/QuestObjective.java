@@ -1,16 +1,23 @@
 package com.zblouse.fantasyfitness.quest;
 
+import com.google.firebase.firestore.Exclude;
 import com.zblouse.fantasyfitness.world.GameLocationBuildingUtil;
 
-public class QuestObjective {
+import java.io.Serializable;
+
+public class QuestObjective implements Serializable {
 
     //TODO Future improvement, specify which combat the quest is for, or be able to generate specific combats for quests
-    private final QuestObjectiveType questObjectiveType;
-    private final String questObjectiveUuid;
-    private final String gameLocation;
-    private final int buildingId;
+    private QuestObjectiveType questObjectiveType;
+    private String questObjectiveUuid;
+    private String gameLocation;
+    private int buildingId;
     private boolean objectiveMet;
     private String questDialog;
+
+    public QuestObjective(){
+
+    }
 
     public QuestObjective(QuestObjectiveType questObjectiveType, String questObjectiveUuid, String gameLocation, int buildingId, boolean objectiveMet){
         this.questObjectiveType = questObjectiveType;
@@ -24,6 +31,7 @@ public class QuestObjective {
         return this.questObjectiveUuid;
     }
 
+    @Exclude
     public String getQuestObjectiveDescription(){
         String questObjectiveString = "";
         if(questObjectiveType.equals(QuestObjectiveType.FIGHT)){
@@ -54,8 +62,8 @@ public class QuestObjective {
         return this.buildingId;
     }
 
-    public void objectiveCompleted(){
-        objectiveMet = true;
+    public void setObjectiveMet(boolean objectiveMet){
+        this.objectiveMet = objectiveMet;
     }
 
     public boolean isObjectiveMet(){

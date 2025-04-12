@@ -86,6 +86,4 @@ public class Dialog implements Serializable {
     public DialogAffect getDialogAffect(){
         return dialogAffect;
     }
-
-
 }

@@ -1,13 +1,20 @@
 package com.zblouse.fantasyfitness.quest;
 
+import com.google.firebase.firestore.Exclude;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class Quest {
+public class Quest implements Serializable {
 
-    private final String questName;
-    private final String questUuid;
-    private final int questReward;
-    private final List<QuestObjective> questObjectives;
+    private String questName;
+    private String questUuid;
+    private int questReward;
+    private List<QuestObjective> questObjectives;
+
+    public Quest(){
+
+    }
 
     public Quest(String questName, String questUuid, int questReward, List<QuestObjective> questObjectives){
         this.questName = questName;
@@ -18,6 +25,29 @@ public class Quest {
 
     public String getQuestName(){
         return this.questName;
+    }
+
+    @Exclude
+    public String getQuestDescription(){
+        String description = "";
+        for(QuestObjective objective: questObjectives){
+            if(description.equals("")){
+                if(objective.getQuestObjectiveType().equals(QuestObjectiveType.VISIT)){
+                    description += "Travel to " + objective.getGameLocation();
+                } else if(objective.getQuestObjectiveType().equals(QuestObjectiveType.FIGHT)){
+                    description += "Fight monsters in the " + objective.getGameLocation();
+                }
+            } else {
+                description += " and then ";
+                if(objective.getQuestObjectiveType().equals(QuestObjectiveType.VISIT)){
+                    description += "travel to " + objective.getGameLocation();
+                } else if(objective.getQuestObjectiveType().equals(QuestObjectiveType.FIGHT)){
+                    description += "fight monsters in the " + objective.getGameLocation();
+                }
+            }
+        }
+
+        return description;
     }
 
     public String getQuestUuid(){

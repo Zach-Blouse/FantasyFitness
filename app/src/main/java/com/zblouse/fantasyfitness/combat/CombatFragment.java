@@ -68,13 +68,18 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
     private CardView victoryView;
     private TextView victoryText;
 
+    private String combatGameLocation;
+    private int combatGameBuilding;
+
     public CombatFragment(){
         super(R.layout.combat_fragment);
     }
 
-    public CombatFragment(MainActivity mainActivity, String encounter){
+    public CombatFragment(MainActivity mainActivity, String encounter, String combatLocation, int combatBuildingId){
         super(R.layout.combat_fragment, mainActivity);
         mainActivity.getEncounterService().fetchEncounter(encounter, new HashMap<>());
+        this.combatGameBuilding = combatBuildingId;
+        this.combatGameLocation = combatLocation;
     }
 
     @Override
@@ -164,7 +169,7 @@ public class CombatFragment extends AuthenticationRequiredFragment implements Ev
         });
         victoryView.setVisibility(View.GONE);
 
-        mainActivity.getCombatService().initializeCombat();
+        mainActivity.getCombatService().initializeCombat(combatGameLocation, combatGameBuilding);
         return layout;
     }
 

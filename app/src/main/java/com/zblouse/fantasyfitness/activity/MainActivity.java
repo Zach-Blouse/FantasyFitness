@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
 
         deleteDatabase(GameLocationSqlDatabase.GAME_LOCATION_DATABASE_NAME);
         deleteDatabase(GameLocationDistanceSqlDatabase.GAME_LOCATION_DISTANCE_DATABASE_NAME);
-        deleteDatabase(DialogSqlDatabase.DATABASE_NAME);
         gameLocationService = new GameLocationService(this);
         userGameStateService = new UserGameStateService(this);
         workoutRecordService = new WorkoutRecordService(this);
@@ -105,7 +104,10 @@ public class MainActivity extends AppCompatActivity {
         questService = new QuestService(this);
 
         gameLocationService.initializeLocationDatabase();
-        dialogService.initializeDialogs();
+        if(!dialogService.hasBeenInitialized()) {
+            dialogService.initializeDialogs();
+        }
+
         currentUser = firebaseAuth.getCurrentUser();
         if(savedInstanceState == null) {
             if (currentUser == null) {

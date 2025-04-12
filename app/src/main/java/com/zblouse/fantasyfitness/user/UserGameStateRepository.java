@@ -11,6 +11,7 @@ public class UserGameStateRepository implements Repository<UserGameState> {
     private final DomainService<UserGameState> userGameStateDomainService;
     private static final String MULTI_STAGE_UPDATE = "multiStageUpdate";
     private static final String USER_DISTANCE = "userDistance";
+    private static final String USER_CURRENCY = "userCurrency";
     private static final String MODIFY_VALUE = "modifyValue";
 
     public UserGameStateRepository(DomainService<UserGameState> userGameStateDomainService){
@@ -29,17 +30,28 @@ public class UserGameStateRepository implements Repository<UserGameState> {
         database.read(userId,this,metadata);
     }
 
+    public void addUserCurrency(String userId, int currency, Map<String, Object> metadata){
+        metadata.put(MULTI_STAGE_UPDATE, USER_CURRENCY);
+        metadata.put(MODIFY_VALUE, currency);
+        database.read(userId,this,metadata);
+    }
+
     private void modifyUserDistance(UserGameState userGameState, Map<String, Object> metadata){
         double modifyValue = (Double)metadata.get(MODIFY_VALUE);
         database.updateField(userGameState.getUserId(), UserGameStateFirestoreDatabase.USER_SAVED_DISTANCE,userGameState.getSavedWorkoutDistanceMeters()+modifyValue,this,metadata);
+    }
+
+    private void modifyUserCurrency(UserGameState userGameState, Map<String, Object> metadata){
+        int modifyValue = (Integer)metadata.get(MODIFY_VALUE);
+        database.updateField(userGameState.getUserId(), UserGameStateFirestoreDatabase.USER_GAME_CURRENCY,userGameState.getUserGameCurrency()+modifyValue,this,metadata);
     }
 
     public void getUserGameState(String userId, Map<String, Object> metadata){
         database.read(userId,this,metadata);
     }
 
-    public void writeUserGameState(String userId, String userLocation, double savedDistance, Map<String, Object> metadata){
-        database.write(new UserGameState(userId,userLocation,savedDistance), this, metadata);
+    public void writeUserGameState(String userId, String userLocation, double savedDistance, int userGameCurrency, Map<String, Object> metadata){
+        database.write(new UserGameState(userId,userLocation,savedDistance, userGameCurrency), this, metadata);
     }
 
     public void updateUserGameLocation(String userId, String userLocation, Map<String, Object> metadata){
@@ -51,6 +63,8 @@ public class UserGameStateRepository implements Repository<UserGameState> {
         if(metadata.containsKey(MULTI_STAGE_UPDATE)){
             if(metadata.get(MULTI_STAGE_UPDATE).equals(USER_DISTANCE)){
                 modifyUserDistance(userGameState,metadata);
+            } else if(metadata.get(MULTI_STAGE_UPDATE).equals(USER_CURRENCY)){
+                modifyUserCurrency(userGameState, metadata);
             }
         } else {
             userGameStateDomainService.repositoryResponse(userGameState, metadata);

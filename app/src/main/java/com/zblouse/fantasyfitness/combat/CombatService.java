@@ -33,6 +33,9 @@ public class CombatService {
 
     private MainActivity mainActivity;
 
+    private String combatTakingPlaceInLocation;
+    private int combatTakingPlaceInBuilding;
+
     private CombatStateModel combatStateModel;
     private boolean playerTurn = true;
     private boolean inSetup;
@@ -51,8 +54,9 @@ public class CombatService {
         this.mainActivity = mainActivity;
     }
 
-    public void initializeCombat(){
-        Log.e("CombatService", "Initializing Combat");
+    public void initializeCombat(String combatTakingPlaceInLocation, int combatTakingPlaceInBuilding){
+        this.combatTakingPlaceInLocation = combatTakingPlaceInLocation;
+        this.combatTakingPlaceInBuilding = combatTakingPlaceInBuilding;
         mainActivity.getDeckService().fetchDeck(mainActivity.getCurrentUser().getUid(),"userDeck");
         combatStateModel = new CombatStateModel();
         inSetup = true;
@@ -1004,6 +1008,7 @@ public class CombatService {
     }
 
     private void playerVictory(){
+        mainActivity.getQuestService().potentialCombatQuestObjectiveCompleted(combatTakingPlaceInLocation, combatTakingPlaceInBuilding);
         mainActivity.publishEvent(new PlayerVictoryEvent());
     }
 

@@ -1,9 +1,14 @@
 package com.zblouse.fantasyfitness.dialog;
 
+import android.util.Log;
+
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.core.DomainService;
+import com.zblouse.fantasyfitness.quest.Quest;
 
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class DialogService implements DomainService<Dialog> {
 
@@ -24,19 +29,44 @@ public class DialogService implements DomainService<Dialog> {
     }
 
     public Dialog fetchDialogOption(String referenceId){
+        Log.e("DialogService", "Fetching dialog: " + referenceId);
         return dialogRepository.readDialog(referenceId);
     }
 
-    public void selectDialogOption(String referenceId, Map<String, Object> metadata){
+    public void selectDialogOption(String referenceId, String currentLocation, Map<String, Object> metadata){
         Dialog dialogSelected = dialogRepository.readDialog(referenceId);
         if(dialogSelected.getDialogAffect().getDialogAffectType().equals(DialogAffectType.QUEST_GENERATE)){
-
+            List<Quest> questsGenerated = mainActivity.getQuestService().generateQuests(currentLocation, 3);
+            for(Quest quest: questsGenerated){
+                DialogAffect questStartDialogAffect = new DialogAffect(DialogAffectType.QUEST_START);
+                questStartDialogAffect.setQuestUuid(quest.getQuestUuid());
+                Dialog questSelectDialog = new Dialog(UUID.randomUUID().toString(),"Good luck on your quest.",quest.getQuestDescription(),questStartDialogAffect);
+                dialogRepository.writeDialog(questSelectDialog);
+                if(dialogSelected.getDialogOption1() == null){
+                    dialogSelected.setDialogOption1(questSelectDialog.getReferenceId());
+                } else if(dialogSelected.getDialogOption2() == null){
+                    dialogSelected.setDialogOption2(questSelectDialog.getReferenceId());
+                } else if(dialogSelected.getDialogOption3() == null){
+                    dialogSelected.setDialogOption3(questSelectDialog.getReferenceId());
+                } else if(dialogSelected.getDialogOption4() == null){
+                    dialogSelected.setDialogOption4(questSelectDialog.getReferenceId());
+                }
+            }
+        } else if(dialogSelected.getDialogAffect().getDialogAffectType().equals(DialogAffectType.QUEST_START)){
+            mainActivity.getQuestService().startQuest(dialogSelected.getDialogAffect().getQuestUuid());
+            cleanUpQuestStartDialogs();
+        }else if(dialogSelected.getDialogAffect().getDialogAffectType().equals(DialogAffectType.QUEST_GOAL)){
+            mainActivity.getQuestService().dialogQuestObjectiveCompleted(dialogSelected.getDialogAffect().getQuestUuid(), dialogSelected.getDialogAffect().getQuestObjectiveUuid());
         }
         mainActivity.publishEvent(new DialogSelectedEvent(dialogSelected, metadata));
     }
 
     public void writeDialog(Dialog dialog){
         dialogRepository.writeDialog(dialog);
+    }
+
+    public boolean hasBeenInitialized(){
+        return dialogRepository.databaseInitialized();
     }
 
     @Override
@@ -72,8 +102,8 @@ public class DialogService implements DomainService<Dialog> {
 
         Dialog innKeeperDialogInit = new Dialog(INNKEEPER_DIALOG_INIT, "The inn is cozy inside. A nice fire is going and the air smells of warm spice drinks. The innkeeper is cleaning a mub behind the bar and a stranger in a long black cloak is sitting alone at a table by the window.","none",new DialogAffect(DialogAffectType.NONE));
         innKeeperDialogInit.setDialogOption1("innkeeper1");
-        innKeeperDialogInit.setDialogOption1("innkeeper2");
-        innKeeperDialogInit.setDialogOption1("innkeeper3");
+        innKeeperDialogInit.setDialogOption2("innkeeper2");
+        innKeeperDialogInit.setDialogOption3("innkeeper3");
         dialogRepository.writeDialog(innKeeperDialogInit);
 
         Dialog innkeeperOption1 = new Dialog("innkeeper1","The innkeeper continues polishing the mug she is cleaning but smiles and says \"Hello fair traveler, how can I help you?\"","Walk up to the innkeeper behind the bar.", new DialogAffect(DialogAffectType.NONE));
@@ -139,5 +169,9 @@ public class DialogService implements DomainService<Dialog> {
 
         Dialog innkeeperDialog3_2_2_1 = new Dialog("innkeeper3_2_2_1", "The cloak flies back as three kobolds burst out of it and run out of the inn. The innkeeper says to you, \"Dammit, they were my best customers. You get out of my inn too! You aren't allowed to bother my patrons.\"","\"No they need to show me who they are.\"", new DialogAffect(DialogAffectType.NONE));
         dialogRepository.writeDialog(innkeeperDialog3_2_2_1);
+    }
+
+    private void cleanUpQuestStartDialogs(){
+
     }
 }

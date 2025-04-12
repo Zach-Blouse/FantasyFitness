@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fantasy_fitness_gray"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/user_home_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/app_name"
-        android:textColor="@color/fantasy_fitness_white"
-        android:textSize="50sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ViewStub
         android:id="@+id/location_view_container"
@@ -25,7 +13,11 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:paddingBottom="75dp" />
+        android:paddingBottom="75dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/nothing_found_card_view"
@@ -74,6 +66,7 @@
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/dialog_card_view"
         android:layout_width="wrap_content"
@@ -118,6 +111,7 @@
                     android:text="@string/dismiss"
                     android:textColor="@color/fantasy_fitness_white"
                     android:textSize="15sp" />
+
                 <Button
                     android:id="@+id/dialog_option_2_button"
                     android:layout_width="200dp"
@@ -127,6 +121,7 @@
                     android:text="@string/dismiss"
                     android:textColor="@color/fantasy_fitness_white"
                     android:textSize="15sp" />
+
                 <Button
                     android:id="@+id/dialog_option_3_button"
                     android:layout_width="200dp"
@@ -136,6 +131,7 @@
                     android:text="@string/dismiss"
                     android:textColor="@color/fantasy_fitness_white"
                     android:textSize="15sp" />
+
                 <Button
                     android:id="@+id/dialog_option_4_button"
                     android:layout_width="200dp"
@@ -145,6 +141,7 @@
                     android:text="@string/dismiss"
                     android:textColor="@color/fantasy_fitness_white"
                     android:textSize="15sp" />
+
                 <Button
                     android:id="@+id/dialog_exit_button"
                     android:layout_width="200dp"
@@ -156,5 +153,151 @@
                     android:textSize="15sp" />
             </LinearLayout>
         </ScrollView>
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/quests_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/fantasy_fitness_gray"
+        android:contentDescription="@string/quests"
+        android:src="@drawable/quest_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/fantasy_fitness_orange" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/quests_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginVertical="50dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/fantasy_fitness_white"
+        app:cardElevation="8dp"
+        app:cardMaxElevation="10dp"
+        app:cardPreventCornerOverlap="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/quests_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quests"
+                android:textSize="32sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/quest_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="93dp"
+                android:minHeight="50dp"
+
+                app:layout_constraintBottom_toTopOf="@+id/close_quests_button"
+                app:layout_constraintTop_toBottomOf="@+id/quests_label"
+                tools:layout_editor_absoluteX="1dp" />
+
+            <Button
+                android:id="@+id/close_quests_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="25dp"
+                android:layout_marginBottom="25dp"
+                android:autoSizeTextType="uniform"
+                android:backgroundTint="@color/fantasy_fitness_green"
+                android:text="@string/close"
+                android:textColor="@color/fantasy_fitness_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/quest_detail_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginVertical="50dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/fantasy_fitness_white"
+        app:cardElevation="8dp"
+        app:cardMaxElevation="10dp"
+        app:cardPreventCornerOverlap="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/quest_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quests"
+                android:textSize="32sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/quest_description_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quests"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/quest_name_label" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/quest_objective_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="93dp"
+                android:minHeight="50dp"
+
+                app:layout_constraintBottom_toTopOf="@+id/close_quest_detail_button"
+                app:layout_constraintTop_toBottomOf="@+id/quest_description_label"
+                tools:layout_editor_absoluteX="1dp" />
+
+            <Button
+                android:id="@+id/close_quest_detail_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="25dp"
+                android:layout_marginBottom="25dp"
+                android:autoSizeTextType="uniform"
+                android:backgroundTint="@color/fantasy_fitness_green"
+                android:text="@string/close"
+                android:textColor="@color/fantasy_fitness_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

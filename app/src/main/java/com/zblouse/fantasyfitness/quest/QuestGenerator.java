@@ -40,18 +40,21 @@ public class QuestGenerator {
 
         List<QuestObjective> questObjectiveList = new ArrayList<>();
         String firstObjectiveLocation = getRandomStringOption(visitLocationOptions);
-        questObjectiveList.add(new QuestObjective(QuestObjectiveType.VISIT,firstObjectiveLocation, UUID.randomUUID().toString(),getRandomIntegerOption(GameLocationBuildingUtil.getBuildingsInLocation(firstObjectiveLocation)),false));
+        questObjectiveList.add(new QuestObjective(QuestObjectiveType.VISIT,UUID.randomUUID().toString(),firstObjectiveLocation,getRandomIntegerOption(GameLocationBuildingUtil.getBuildingsInLocation(firstObjectiveLocation)),false));
 
         for(int i=1; i<objectiveCount; i++){
             QuestObjectiveType questObjectiveType = getRandomObjectiveType();
             if(questObjectiveType.equals(QuestObjectiveType.VISIT)){
                 String objectiveLocation = getRandomStringOption(visitLocationOptions);
-                questObjectiveList.add(new QuestObjective(questObjectiveType,objectiveLocation, UUID.randomUUID().toString(),getRandomIntegerOption(GameLocationBuildingUtil.getBuildingsInLocation(objectiveLocation)),false));
+                questObjectiveList.add(new QuestObjective(questObjectiveType,UUID.randomUUID().toString(),objectiveLocation,getRandomIntegerOption(GameLocationBuildingUtil.getBuildingsInLocation(objectiveLocation)),false));
             } else if(questObjectiveType.equals(QuestObjectiveType.FIGHT)){
                 String objectiveLocation = getRandomStringOption(combatLocationOptions);
-                questObjectiveList.add(new QuestObjective(questObjectiveType,objectiveLocation, UUID.randomUUID().toString(),getRandomIntegerOption(GameLocationBuildingUtil.getBuildingsInLocation(objectiveLocation)),false));
+                questObjectiveList.add(new QuestObjective(questObjectiveType, UUID.randomUUID().toString(),objectiveLocation,getRandomIntegerOption(GameLocationBuildingUtil.getBuildingsInLocation(objectiveLocation)),false));
             }
         }
+
+        questObjectiveList.add(new QuestObjective(QuestObjectiveType.VISIT, UUID.randomUUID().toString(),gameLocationId,getRandomIntegerOption(GameLocationBuildingUtil.getBuildingsInLocation(firstObjectiveLocation)),false));
+
 
         //generate dialogs
         for(int i=0; i<questObjectiveList.size(); i++){
@@ -78,8 +81,8 @@ public class QuestGenerator {
                     DialogAffect questObjectiveDialogAffect = new DialogAffect(DialogAffectType.QUEST_GOAL);
                     questObjectiveDialogAffect.setQuestUuid(questUuid);
                     questObjectiveDialogAffect.setQuestObjectiveUuid(objective.getQuestObjectiveUuid());
-                    String questDialogOptionFlavorText = "";
-                    if(i==questObjectiveList.size()-1){
+                    String questDialogOptionFlavorText = "this did not replace";
+                    if(i==(questObjectiveList.size()-1)){
                         questDialogOptionFlavorText = "Thank you! Here is your reward";
                     } else {
                         questDialogOptionFlavorText = "Thank you! Could you now " + determineDialogOptionForFollowingObjectives(questObjectiveList,i);
@@ -100,9 +103,10 @@ public class QuestGenerator {
 
     private static QuestObjectiveType getRandomObjectiveType(){
         Random random = new Random();
-        int result = random.nextInt(2);
+        int result = random.nextInt(3);
         switch (result) {
             case 0:
+            case 1:
                 return QuestObjectiveType.FIGHT;
             default:
                 return QuestObjectiveType.VISIT;

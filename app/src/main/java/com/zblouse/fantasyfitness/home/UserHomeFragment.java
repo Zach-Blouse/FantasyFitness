@@ -16,7 +16,10 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zblouse.fantasyfitness.actions.ActionResult;
 import com.zblouse.fantasyfitness.actions.ActionResultType;
 import com.zblouse.fantasyfitness.actions.CombatActionResult;
@@ -29,6 +32,8 @@ import com.zblouse.fantasyfitness.activity.LocationForegroundDeviceService;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.ToastDeviceService;
+import com.zblouse.fantasyfitness.combat.CombatCardModel;
+import com.zblouse.fantasyfitness.combat.CombatCardStateViewAdapter;
 import com.zblouse.fantasyfitness.combat.CombatFragment;
 import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 import com.zblouse.fantasyfitness.core.Event;
@@ -36,6 +41,11 @@ import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
 import com.zblouse.fantasyfitness.dialog.Dialog;
 import com.zblouse.fantasyfitness.dialog.DialogSelectedEvent;
+import com.zblouse.fantasyfitness.quest.Quest;
+import com.zblouse.fantasyfitness.quest.QuestFetchResponseEvent;
+import com.zblouse.fantasyfitness.quest.QuestObjective;
+import com.zblouse.fantasyfitness.quest.QuestObjectiveViewAdapter;
+import com.zblouse.fantasyfitness.quest.QuestViewAdapter;
 import com.zblouse.fantasyfitness.user.UserExistEvent;
 import com.zblouse.fantasyfitness.user.UserGameState;
 import com.zblouse.fantasyfitness.user.UserGameStateFetchResponseEvent;
@@ -44,7 +54,9 @@ import com.zblouse.fantasyfitness.workout.WorkoutUpdateEvent;
 import com.zblouse.fantasyfitness.world.GameLocation;
 import com.zblouse.fantasyfitness.world.GameLocationService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -61,6 +73,18 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
     private Button dialogOption2Button;
     private Button dialogOption3Button;
     private Button dialogOption4Button;
+    private String locationDisplayed;
+
+    private CardView questsCardView;
+    private RecyclerView questsRecyclerView;
+    private List<Quest> questsList;
+    private QuestViewAdapter questViewAdapter;
+    private CardView questDetailsCardView;
+    private List<QuestObjective> questObjectives;
+    private QuestObjectiveViewAdapter questObjectiveViewAdapter;
+    private RecyclerView detailedQuestObjectivesRecyclerView;
+    private TextView detailedQuestNameTextView;
+    private TextView detailedQuestDescriptionTextView;
 
     public UserHomeFragment(){
         super(R.layout.user_home_fragment);
@@ -105,6 +129,52 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
         });
 
         dialogCardView.setVisibility(View.GONE);
+        questsList = new ArrayList<>();
+        questsCardView = layout.findViewById(R.id.quests_view);
+        questsRecyclerView = layout.findViewById(R.id.quest_recyclerView);
+        questViewAdapter = new QuestViewAdapter(this, questsList);
+        questsRecyclerView.setAdapter(questViewAdapter);
+        LinearLayoutManager questLayoutManager = new LinearLayoutManager(mainActivity);
+        questLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        questsRecyclerView.setLayoutManager(questLayoutManager);
+        Button closeQuestViewButton = layout.findViewById(R.id.close_quests_button);
+        closeQuestViewButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                questsCardView.setVisibility(View.GONE);
+            }
+        });
+        questsCardView.setVisibility(View.GONE);
+
+        FloatingActionButton floatingQuestButton = layout.findViewById(R.id.quests_button);
+        floatingQuestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.getQuestService().fetchQuests(new HashMap<>());
+                questsCardView.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+        questDetailsCardView = layout.findViewById(R.id.quest_detail_view);
+        detailedQuestNameTextView = layout.findViewById(R.id.quest_name_label);
+        detailedQuestDescriptionTextView = layout.findViewById(R.id.quest_description_label);
+        detailedQuestObjectivesRecyclerView = layout.findViewById(R.id.quest_objective_recyclerView);
+        questObjectives = new ArrayList<>();
+        questObjectiveViewAdapter = new QuestObjectiveViewAdapter(questObjectives);
+        detailedQuestObjectivesRecyclerView.setAdapter(questObjectiveViewAdapter);
+        LinearLayoutManager questObjectivesLayoutManager = new LinearLayoutManager(mainActivity);
+        questObjectivesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        detailedQuestObjectivesRecyclerView.setLayoutManager(questObjectivesLayoutManager);
+        Button closeQuestDetailButton = layout.findViewById(R.id.close_quest_detail_button);
+        closeQuestDetailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                questDetailsCardView.setVisibility(View.GONE);
+            }
+        });
+        questDetailsCardView.setVisibility(View.GONE);
+
         return layout;
     }
 
@@ -140,7 +210,7 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                     } else if(actionResult.getActionResultType().equals(ActionResultType.COMBAT)){
                         CombatActionResult combatActionResult = (CombatActionResult)actionResult;
                         mainActivity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container, new CombatFragment(mainActivity, combatActionResult.getEncounterName())).commit();
+                                .replace(R.id.fragment_container, new CombatFragment(mainActivity, combatActionResult.getEncounterName(), combatActionResult.getCombatLocation(), combatActionResult.getCombatBuilding())).commit();
                     }
                 }
             });
@@ -150,6 +220,21 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 @Override
                 public void run() {
                     loadDialogs(((DialogSelectedEvent)event).getNewDialog());
+                }
+            });
+        } else if(event.getEventType().equals(EventType.QUEST_FETCH_RESPONSE_EVENT)){
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    QuestFetchResponseEvent questFetchResponseEvent = (QuestFetchResponseEvent) event;
+                    if(questFetchResponseEvent.getMetadata().containsKey(ExploreActionService.EXPLORE_ACTION_FETCH_QUESTS)){
+                        mainActivity.getExploreActionService().exploreAction(questFetchResponseEvent.getQuests(), questFetchResponseEvent.getMetadata());
+                    } else {
+                        questsList.clear();
+                        questsList.addAll(questFetchResponseEvent.getQuests());
+                        questViewAdapter.notifyDataSetChanged();
+                    }
+
                 }
             });
         }
@@ -164,7 +249,7 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
             dialogOption1Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption1(), new HashMap<>());
+                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption1(), locationDisplayed, new HashMap<>());
                 }
             });
         } else {
@@ -177,7 +262,7 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
             dialogOption2Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption2(), new HashMap<>());
+                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption2(), locationDisplayed, new HashMap<>());
                 }
             });
         } else {
@@ -190,7 +275,7 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
             dialogOption3Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption3(), new HashMap<>());
+                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption3(), locationDisplayed, new HashMap<>());
                 }
             });
         } else {
@@ -203,7 +288,7 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
             dialogOption4Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption4(), new HashMap<>());
+                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption4(), locationDisplayed, new HashMap<>());
                 }
             });
         } else {
@@ -213,6 +298,7 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
     }
 
     private void loadLocationUi(String currentGameLocation){
+        locationDisplayed = currentGameLocation;
         switch(currentGameLocation){
             case GameLocationService.FARMLANDS: {
                 viewStub.setLayoutResource(R.layout.farmlands);
@@ -308,5 +394,16 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
 
     public boolean actionResultDisplayed(){
         return (View.VISIBLE == dialogCardView.getVisibility()) || (View.VISIBLE == nothingFoundCardView.getVisibility());
+    }
+
+    public void displayQuestDetails(Quest quest){
+        detailedQuestNameTextView.setText(quest.getQuestName());
+        detailedQuestDescriptionTextView.setText(quest.getQuestDescription());
+        questObjectives.clear();
+        questObjectives.addAll(quest.getQuestObjectives());
+        questObjectiveViewAdapter.notifyDataSetChanged();
+
+        questsCardView.setVisibility(View.GONE);
+        questDetailsCardView.setVisibility(View.VISIBLE);
     }
 }

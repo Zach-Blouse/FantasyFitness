@@ -29,7 +29,10 @@ public class GameLocationBuildingUtil {
             return Arrays.asList(R.id.marsh_button, R.id.cave_button, R.id.dark_forest_button);
         } else if(gameLocation.equals(GameLocationService.THANADEL_VILLAGE)){
             return Arrays.asList(R.id.inn_button, R.id.general_store_button);
-        } else {
+        } else if(gameLocation.equals(GameLocationService.FARMLANDS)){
+            return Arrays.asList(R.id.inn_button);
+        }
+        else {
             throw new UnsupportedOperationException("Game Location: " + gameLocation + " has not been implemented in GameLocationBuildingUtil");
         }
     }

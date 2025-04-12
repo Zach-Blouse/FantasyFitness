@@ -1,5 +1,8 @@
 package com.zblouse.fantasyfitness.quest;
 
+import android.util.Log;
+
+import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.core.Repository;
 
 import java.util.List;
@@ -9,9 +12,35 @@ public class QuestRepository implements Repository<Quest> {
 
     private QuestService questService;
     private QuestFirestoreDatabase questFirestoreDatabase;
+    private QuestTemporaryDataCache questTemporaryDataCache;
 
     public QuestRepository(QuestService questService){
         this.questService = questService;
+        this.questFirestoreDatabase = new QuestFirestoreDatabase();
+        this.questTemporaryDataCache = new QuestTemporaryDataCache();
+    }
+
+    public boolean saveTempQuest(MainActivity mainActivity, Quest quest){
+        try {
+            questTemporaryDataCache.saveQuest(quest, mainActivity);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("QuestRepository","ERROR SAVING TEMP QUEST: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public Quest loadTempQuest(MainActivity mainActivity, String questUuid){
+        try {
+            return questTemporaryDataCache.loadQuest(questUuid, mainActivity);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void getQuest(String userId, String questUuid, Map<String, Object> metadata){
+        questFirestoreDatabase.readQuest(userId, questUuid, this, metadata);
     }
 
     public void writeQuest(Quest quest, String userId, Map<String, Object> metadata){
@@ -35,8 +64,8 @@ public class QuestRepository implements Repository<Quest> {
     }
 
     @Override
-    public void readCallback(Quest object, Map<String, Object> metadata) {
-
+    public void readCallback(Quest quest, Map<String, Object> metadata) {
+        questService.repositoryResponse(quest, metadata);
     }
 
     @Override

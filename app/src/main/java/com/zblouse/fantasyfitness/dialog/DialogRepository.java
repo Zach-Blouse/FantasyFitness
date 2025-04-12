@@ -27,6 +27,10 @@ public class DialogRepository implements Repository<Dialog> {
         return this.dialogSqlDatabase.getDialogByReferenceId(referenceId);
     }
 
+    public boolean databaseInitialized(){
+        return dialogSqlDatabase.databaseInitialized();
+    }
+
     @Override
     public void readCallback(Dialog object, Map<String, Object> metadata) {
 

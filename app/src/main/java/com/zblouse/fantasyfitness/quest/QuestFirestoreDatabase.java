@@ -1,9 +1,12 @@
 package com.zblouse.fantasyfitness.quest;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -27,7 +30,28 @@ public class QuestFirestoreDatabase extends FirestoreDatabase {
         super(firestore);
     }
 
+    public void readQuest(String userId, String questUuid, Repository<Quest> questRepository, Map<String, Object> metadata){
+        firestore.collection(COLLECTION).document(userId).collection(QUESTS).document(questUuid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot result = task.getResult();
+                    if(result.exists()) {
+                        questRepository.readCallback(result.toObject(Quest.class), metadata);
+                    }
+                } else {
+                    questRepository.readCallback(null, metadata);
+                }
+            }
+        });
+    }
+
     public void writeQuest(Quest quest, String userId, Repository<Quest> questRepository, Map<String, Object> metadata){
+
+        Log.e("QuestFirestoreDatabase","Writing Quest: " + quest.getQuestUuid());
+        for(QuestObjective objective: quest.getQuestObjectives()){
+            Log.e("QuestFirestoreDatabase", "Objective: " + objective.getQuestObjectiveUuid() + " Type; " + objective.getQuestObjectiveType() + " objective met " + objective.isObjectiveMet());
+        }
         firestore.collection(COLLECTION).document(userId).collection(QUESTS).document(quest.getQuestUuid()).set(quest).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

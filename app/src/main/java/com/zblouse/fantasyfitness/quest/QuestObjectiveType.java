@@ -1,5 +1,7 @@
 package com.zblouse.fantasyfitness.quest;
 
-public enum QuestObjectiveType {
+import java.io.Serializable;
+
+public enum QuestObjectiveType implements Serializable {
     FIGHT,VISIT
 }

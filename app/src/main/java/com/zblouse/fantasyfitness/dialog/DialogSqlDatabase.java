@@ -62,6 +62,7 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
 
         database.insert(TABLE_NAME, null, contentValues);
         database.close();
+
     }
 
     public Dialog getDialogByReferenceId(String referenceId){
@@ -86,4 +87,14 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
+
+    public boolean databaseInitialized(){
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor dialogCursor = database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        boolean initialized = dialogCursor.moveToFirst();
+
+        dialogCursor.close();
+        return initialized;
+    }
+
 }
