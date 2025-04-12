@@ -102,8 +102,8 @@ public class MainActivity extends AppCompatActivity {
         combatService = new CombatService(this);
         encounterService = new EncounterService(this);
         questService = new QuestService(this);
-
         gameLocationService.initializeLocationDatabase();
+
         if(!dialogService.hasBeenInitialized()) {
             dialogService.initializeDialogs();
         }

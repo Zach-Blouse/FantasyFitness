@@ -76,7 +76,7 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
                 dialogAffect.setQuestObjectiveUuid(dialogCursor.getString(10));
                 dialog = new Dialog(dialogCursor.getInt(0),dialogCursor.getString(1),
                         dialogCursor.getString(2), dialogCursor.getString(3), dialogCursor.getString(4),
-                        dialogCursor.getString(5),dialogCursor.getString(6), dialogCursor.getString(7), dialogAffect);
+                        dialogCursor.getString(5),dialogCursor.getString(6), dialogCursor.getString(7), dialogAffect,false);
             } while(dialogCursor.moveToNext());
         }
         dialogCursor.close();

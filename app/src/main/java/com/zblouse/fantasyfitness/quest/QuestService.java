@@ -74,6 +74,7 @@ public class QuestService implements DomainService<Quest> {
                         if(objective.getGameLocation().equals(metadata.get(COMBAT_OBJECTIVE_CHECK_LOCATION_KEY)) && objective.getBuildingId() == (Integer)metadata.get(COMBAT_OBJECTIVE_BUILDING_KEY)){
                             Log.e("QuestService", "Setting Combat Objective Met");
                             objective.setObjectiveMet(true);
+                            questRepository.writeQuest(quest, mainActivity.getCurrentUser().getUid(), metadata);
                         }
                     }
                 }

@@ -48,10 +48,6 @@ public class QuestFirestoreDatabase extends FirestoreDatabase {
 
     public void writeQuest(Quest quest, String userId, Repository<Quest> questRepository, Map<String, Object> metadata){
 
-        Log.e("QuestFirestoreDatabase","Writing Quest: " + quest.getQuestUuid());
-        for(QuestObjective objective: quest.getQuestObjectives()){
-            Log.e("QuestFirestoreDatabase", "Objective: " + objective.getQuestObjectiveUuid() + " Type; " + objective.getQuestObjectiveType() + " objective met " + objective.isObjectiveMet());
-        }
         firestore.collection(COLLECTION).document(userId).collection(QUESTS).document(quest.getQuestUuid()).set(quest).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

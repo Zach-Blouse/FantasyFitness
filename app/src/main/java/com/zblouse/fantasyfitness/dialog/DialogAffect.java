@@ -2,12 +2,16 @@ package com.zblouse.fantasyfitness.dialog;
 
 public class DialogAffect {
 
-    private final DialogAffectType dialogAffectType;
+    private DialogAffectType dialogAffectType;
     private String questUuid;
     private String questObjectiveUuid;
 
     public DialogAffect(DialogAffectType dialogAffectType){
         this.dialogAffectType = dialogAffectType;
+    }
+
+    public DialogAffect(){
+
     }
 
     public DialogAffectType getDialogAffectType(){

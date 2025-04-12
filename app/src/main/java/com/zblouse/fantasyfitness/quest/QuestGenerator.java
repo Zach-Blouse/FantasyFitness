@@ -61,13 +61,14 @@ public class QuestGenerator {
             QuestObjective objective = questObjectiveList.get(i);
             if(objective.getQuestObjectiveType().equals(QuestObjectiveType.VISIT)){
                 if(i==0){
-                    Dialog questObjectiveRootDialog = new Dialog(UUID.randomUUID().toString(),"As you enter the " + objective.getGameLocation() + " " + GameLocationBuildingUtil.getPrintableStringForBuilding(objective.getBuildingId()) + " you see the person you need to talk to.","none", new DialogAffect(DialogAffectType.NONE));
+                    Dialog questObjectiveRootDialog = new Dialog(UUID.randomUUID().toString(),"As you enter the " + objective.getGameLocation() + " " + GameLocationBuildingUtil.getPrintableStringForBuilding(objective.getBuildingId()) + " you see the person you need to talk to.","none", new DialogAffect(DialogAffectType.NONE), true);
                     objective.setQuestDialogId(questObjectiveRootDialog.getReferenceId());
-                    Dialog questDialogOption1 = new Dialog(UUID.randomUUID().toString(),"Ah, yes, could you " + determineDialogOptionForFollowingObjectives(questObjectiveList,i),"Hello, I was told you have a quest for me?", new DialogAffect(DialogAffectType.NONE));
-                    DialogAffect questStartDialogAffect = new DialogAffect(DialogAffectType.QUEST_START);
+                    Dialog questDialogOption1 = new Dialog(UUID.randomUUID().toString(),"Ah, yes, could you " + determineDialogOptionForFollowingObjectives(questObjectiveList,i),"Hello, I was told you have a quest for me?", new DialogAffect(DialogAffectType.NONE), true);
+                    DialogAffect questStartDialogAffect = new DialogAffect(DialogAffectType.QUEST_GOAL);
                     questStartDialogAffect.setQuestUuid(questUuid);
-                    Dialog questDialogOptionAccept = new Dialog(UUID.randomUUID().toString(),"Excellent, good luck!","I'll do it.",questStartDialogAffect);
-                    Dialog questDialogOptionRefuse = new Dialog(UUID.randomUUID().toString(),"That's a shame.","No, I'll pass.", new DialogAffect(DialogAffectType.NONE));
+                    questStartDialogAffect.setQuestObjectiveUuid(objective.getQuestObjectiveUuid());
+                    Dialog questDialogOptionAccept = new Dialog(UUID.randomUUID().toString(),"Excellent, good luck!","I'll do it.",questStartDialogAffect, true);
+                    Dialog questDialogOptionRefuse = new Dialog(UUID.randomUUID().toString(),"That's a shame.","No, I'll pass.", new DialogAffect(DialogAffectType.NONE), true);
                     questObjectiveRootDialog.setDialogOption1(questDialogOption1.getReferenceId());
                     dialogService.writeDialog(questObjectiveRootDialog);
                     questDialogOption1.setDialogOption1(questDialogOptionAccept.getReferenceId());
@@ -76,7 +77,7 @@ public class QuestGenerator {
                     dialogService.writeDialog(questDialogOptionAccept);
                     dialogService.writeDialog(questDialogOptionRefuse);
                 } else {
-                    Dialog questObjectiveRootDialog = new Dialog(UUID.randomUUID().toString(),"As you enter the " + objective.getGameLocation() + " " + GameLocationBuildingUtil.getPrintableStringForBuilding(objective.getBuildingId()) + " you see the person you need to talk to.","none", new DialogAffect(DialogAffectType.NONE));
+                    Dialog questObjectiveRootDialog = new Dialog(UUID.randomUUID().toString(),"As you enter the " + objective.getGameLocation() + " " + GameLocationBuildingUtil.getPrintableStringForBuilding(objective.getBuildingId()) + " you see the person you need to talk to.","none", new DialogAffect(DialogAffectType.NONE), true);
                     objective.setQuestDialogId(questObjectiveRootDialog.getReferenceId());
                     DialogAffect questObjectiveDialogAffect = new DialogAffect(DialogAffectType.QUEST_GOAL);
                     questObjectiveDialogAffect.setQuestUuid(questUuid);
@@ -87,8 +88,8 @@ public class QuestGenerator {
                     } else {
                         questDialogOptionFlavorText = "Thank you! Could you now " + determineDialogOptionForFollowingObjectives(questObjectiveList,i);
                     }
-                    Dialog questDialogOption1 = new Dialog(UUID.randomUUID().toString(), questDialogOptionFlavorText, determineOptionTextForQuestObjectiveOption(questObjectiveList,i),questObjectiveDialogAffect);
-                    Dialog questDialogOptionAccept = new Dialog(UUID.randomUUID().toString(),"Excellent, good luck!","I'll do it.",new DialogAffect(DialogAffectType.NONE));
+                    Dialog questDialogOption1 = new Dialog(UUID.randomUUID().toString(), questDialogOptionFlavorText, determineOptionTextForQuestObjectiveOption(questObjectiveList,i),questObjectiveDialogAffect, true);
+                    Dialog questDialogOptionAccept = new Dialog(UUID.randomUUID().toString(),"Excellent, good luck!","I'll do it.",new DialogAffect(DialogAffectType.NONE), true);
                     questObjectiveRootDialog.setDialogOption1(questDialogOption1.getReferenceId());
                     dialogService.writeDialog(questObjectiveRootDialog);
                     questDialogOption1.setDialogOption1(questDialogOptionAccept.getReferenceId());

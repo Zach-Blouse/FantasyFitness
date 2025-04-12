@@ -39,7 +39,9 @@ import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
+import com.zblouse.fantasyfitness.dialog.BaseDialogFetchEvent;
 import com.zblouse.fantasyfitness.dialog.Dialog;
+import com.zblouse.fantasyfitness.dialog.DialogFetchEvent;
 import com.zblouse.fantasyfitness.dialog.DialogSelectedEvent;
 import com.zblouse.fantasyfitness.quest.Quest;
 import com.zblouse.fantasyfitness.quest.QuestFetchResponseEvent;
@@ -205,8 +207,8 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                         nothingFoundFlavorText.setText(((NothingFoundActionResult)actionResult).getFlavorText());
                         nothingFoundCardView.setVisibility(View.VISIBLE);
                     } else if(actionResult.getActionResultType().equals(ActionResultType.DIALOG)){
-                        Dialog baseDialog = ((DialogActionResult)actionResult).getInitialDialog();
-                        loadDialogs(baseDialog);
+                        mainActivity.getDialogService().fetchBaseDialog(((DialogActionResult)actionResult).getInitialDialogReferenceId(), ((DialogActionResult)actionResult).isQuestDialog(), new HashMap<>());
+
                     } else if(actionResult.getActionResultType().equals(ActionResultType.COMBAT)){
                         CombatActionResult combatActionResult = (CombatActionResult)actionResult;
                         mainActivity.getSupportFragmentManager().beginTransaction()
@@ -234,68 +236,86 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                         questsList.addAll(questFetchResponseEvent.getQuests());
                         questViewAdapter.notifyDataSetChanged();
                     }
-
                 }
             });
+        } else if(event.getEventType().equals(EventType.DIALOG_FETCH_EVENT)){
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    DialogFetchEvent dialogFetchEvent = (DialogFetchEvent) event;
+                    dialogOptionFetchResponse(dialogFetchEvent.getDialogOption1(), dialogFetchEvent.getDialogOption2(), dialogFetchEvent.getDialogOption3(), dialogFetchEvent.getDialogOption4());
+                }
+            });
+        } else if(event.getEventType().equals(EventType.BASE_DIALOG_FETCH_EVENT)){
+
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    BaseDialogFetchEvent baseDialogFetchEvent = (BaseDialogFetchEvent) event;
+                    loadDialogs(baseDialogFetchEvent.getDialog());
+                }
+            });
+
         }
     }
 
     private void loadDialogs(Dialog baseDialog){
         dialogFlavorText.setText(baseDialog.getFlavorText());
-        if(baseDialog.getDialogOption1() != null){
-            Dialog dialogOption1 = mainActivity.getDialogService().fetchDialogOption(baseDialog.getDialogOption1());
+        mainActivity.getDialogService().fetchDialogOptions(baseDialog,new HashMap<>());
+        dialogCardView.setVisibility(View.VISIBLE);
+    }
+
+    private void dialogOptionFetchResponse(Dialog dialogOption1, Dialog dialogOption2, Dialog dialogOption3, Dialog dialogOption4){
+        if(dialogOption1 != null){
             dialogOption1Button.setText(dialogOption1.getOptionText());
             dialogOption1Button.setVisibility(View.VISIBLE);
             dialogOption1Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption1(), locationDisplayed, new HashMap<>());
+                    mainActivity.getDialogService().selectDialogOption(dialogOption1, locationDisplayed, new HashMap<>());
                 }
             });
         } else {
             dialogOption1Button.setVisibility(View.GONE);
         }
-        if(baseDialog.getDialogOption2() != null){
-            Dialog dialogOption2 = mainActivity.getDialogService().fetchDialogOption(baseDialog.getDialogOption2());
+        if(dialogOption2 != null){
             dialogOption2Button.setText(dialogOption2.getOptionText());
             dialogOption2Button.setVisibility(View.VISIBLE);
             dialogOption2Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption2(), locationDisplayed, new HashMap<>());
+                    mainActivity.getDialogService().selectDialogOption(dialogOption2, locationDisplayed, new HashMap<>());
                 }
             });
         } else {
             dialogOption2Button.setVisibility(View.GONE);
         }
-        if(baseDialog.getDialogOption3() != null){
-            Dialog dialogOption3 = mainActivity.getDialogService().fetchDialogOption(baseDialog.getDialogOption3());
+        if(dialogOption3 != null){
             dialogOption3Button.setText(dialogOption3.getOptionText());
             dialogOption3Button.setVisibility(View.VISIBLE);
             dialogOption3Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption3(), locationDisplayed, new HashMap<>());
+                    mainActivity.getDialogService().selectDialogOption(dialogOption3, locationDisplayed, new HashMap<>());
                 }
             });
         } else {
             dialogOption3Button.setVisibility(View.GONE);
         }
-        if(baseDialog.getDialogOption4() != null){
-            Dialog dialogOption4 = mainActivity.getDialogService().fetchDialogOption(baseDialog.getDialogOption4());
+        if(dialogOption4 != null){
             dialogOption4Button.setText(dialogOption4.getOptionText());
             dialogOption4Button.setVisibility(View.VISIBLE);
             dialogOption4Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption4(), locationDisplayed, new HashMap<>());
+                    mainActivity.getDialogService().selectDialogOption(dialogOption4, locationDisplayed, new HashMap<>());
                 }
             });
         } else {
             dialogOption4Button.setVisibility(View.GONE);
         }
-        dialogCardView.setVisibility(View.VISIBLE);
     }
+
 
     private void loadLocationUi(String currentGameLocation){
         locationDisplayed = currentGameLocation;

@@ -7,23 +7,25 @@ import java.io.Serializable;
 public class Dialog implements Serializable {
 
     private Integer id;
-    private final String referenceId;
-    private final String optionText;
-    private final String flavorText;
+    private String referenceId;
+    private String optionText;
+    private String flavorText;
     private String dialogOption1;
     private String dialogOption2;
     private String dialogOption3;
     private String dialogOption4;
-    private final DialogAffect dialogAffect;
+    private DialogAffect dialogAffect;
+    private boolean questDialog;
 
-    public Dialog(String referenceId, String flavorText, String optionText, DialogAffect dialogAffect){
+    public Dialog(String referenceId, String flavorText, String optionText, DialogAffect dialogAffect, boolean questDialog){
         this.referenceId = referenceId;
         this.flavorText = flavorText;
         this.optionText = optionText;
         this.dialogAffect = dialogAffect;
+        this.questDialog = questDialog;
     }
 
-    public Dialog(Integer id, String referenceId, String optionText, String flavorText, String dialogOption1, String dialogOption2, String dialogOption3, String dialogOption4, DialogAffect dialogAffect){
+    public Dialog(Integer id, String referenceId, String optionText, String flavorText, String dialogOption1, String dialogOption2, String dialogOption3, String dialogOption4, DialogAffect dialogAffect, boolean questDialog){
         this.id = id;
         this.referenceId = referenceId;
         this.optionText = optionText;
@@ -33,7 +35,10 @@ public class Dialog implements Serializable {
         this.dialogOption3 = dialogOption3;
         this.dialogOption4 = dialogOption4;
         this.dialogAffect = dialogAffect;
+        this.questDialog = questDialog;
     }
+
+    public Dialog(){}
 
     public Integer getId(){
         return this.id;
@@ -85,5 +90,9 @@ public class Dialog implements Serializable {
 
     public DialogAffect getDialogAffect(){
         return dialogAffect;
+    }
+
+    public boolean isQuestDialog(){
+        return this.questDialog;
     }
 }
