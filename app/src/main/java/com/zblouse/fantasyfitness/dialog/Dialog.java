@@ -1,5 +1,7 @@
 package com.zblouse.fantasyfitness.dialog;
 
+import com.zblouse.fantasyfitness.quest.Quest;
+
 import java.io.Serializable;
 
 public class Dialog implements Serializable {
@@ -12,14 +14,16 @@ public class Dialog implements Serializable {
     private String dialogOption2;
     private String dialogOption3;
     private String dialogOption4;
+    private final DialogAffect dialogAffect;
 
-    public Dialog(String referenceId, String flavorText, String optionText){
+    public Dialog(String referenceId, String flavorText, String optionText, DialogAffect dialogAffect){
         this.referenceId = referenceId;
         this.flavorText = flavorText;
         this.optionText = optionText;
+        this.dialogAffect = dialogAffect;
     }
 
-    public Dialog(Integer id, String referenceId, String optionText, String flavorText, String dialogOption1, String dialogOption2, String dialogOption3, String dialogOption4){
+    public Dialog(Integer id, String referenceId, String optionText, String flavorText, String dialogOption1, String dialogOption2, String dialogOption3, String dialogOption4, DialogAffect dialogAffect){
         this.id = id;
         this.referenceId = referenceId;
         this.optionText = optionText;
@@ -28,6 +32,7 @@ public class Dialog implements Serializable {
         this.dialogOption2 = dialogOption2;
         this.dialogOption3 = dialogOption3;
         this.dialogOption4 = dialogOption4;
+        this.dialogAffect = dialogAffect;
     }
 
     public Integer getId(){
@@ -77,4 +82,10 @@ public class Dialog implements Serializable {
     public void setDialogOption4(String dialogOption4){
         this.dialogOption4 = dialogOption4;
     }
+
+    public DialogAffect getDialogAffect(){
+        return dialogAffect;
+    }
+
+
 }

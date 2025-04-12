@@ -21,6 +21,9 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
     private static final String DIALOG_2_KEY = "dialog2";
     private static final String DIALOG_3_KEY = "dialog3";
     private static final String DIALOG_4_KEY = "dialog4";
+    private static final String DIALOG_AFFECT_TYPE_KEY = "dialogAffectType";
+    private static final String QUEST_UUID_KEY = "questUUIDKey";
+    private static final String QUEST_OBJECTIVE_KEY = "questObjectiveUUIDKey";
 
     public DialogSqlDatabase(Context context){
         super(context, DATABASE_NAME,null,1);
@@ -35,7 +38,10 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
                 DIALOG_1_KEY + " TEXT," +
                 DIALOG_2_KEY + " TEXT," +
                 DIALOG_3_KEY + " TEXT," +
-                DIALOG_4_KEY + " TEXT"
+                DIALOG_4_KEY + " TEXT," +
+                DIALOG_AFFECT_TYPE_KEY + " TEXT," +
+                QUEST_UUID_KEY + " TEXT," +
+                QUEST_OBJECTIVE_KEY + " TEXT"
                 +")");
     }
 
@@ -50,6 +56,9 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
         contentValues.put(DIALOG_2_KEY, dialog.getDialogOption2());
         contentValues.put(DIALOG_3_KEY, dialog.getDialogOption3());
         contentValues.put(DIALOG_4_KEY, dialog.getDialogOption4());
+        contentValues.put(DIALOG_AFFECT_TYPE_KEY, dialog.getDialogAffect().getDialogAffectType().toString());
+        contentValues.put(QUEST_UUID_KEY, dialog.getDialogAffect().getQuestUuid());
+        contentValues.put(QUEST_OBJECTIVE_KEY, dialog.getDialogAffect().getQuestObjectiveUuid());
 
         database.insert(TABLE_NAME, null, contentValues);
         database.close();
@@ -61,9 +70,12 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
         Dialog dialog = null;
         if(dialogCursor.moveToFirst()) {
             do {
+                DialogAffect dialogAffect = new DialogAffect(DialogAffectType.valueOf(dialogCursor.getString(8)));
+                dialogAffect.setQuestUuid(dialogCursor.getString(9));
+                dialogAffect.setQuestObjectiveUuid(dialogCursor.getString(10));
                 dialog = new Dialog(dialogCursor.getInt(0),dialogCursor.getString(1),
                         dialogCursor.getString(2), dialogCursor.getString(3), dialogCursor.getString(4),
-                        dialogCursor.getString(5),dialogCursor.getString(6), dialogCursor.getString(7));
+                        dialogCursor.getString(5),dialogCursor.getString(6), dialogCursor.getString(7), dialogAffect);
             } while(dialogCursor.moveToNext());
         }
         dialogCursor.close();
