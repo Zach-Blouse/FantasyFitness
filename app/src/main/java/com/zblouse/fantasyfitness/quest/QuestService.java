@@ -29,10 +29,10 @@ public class QuestService implements DomainService<Quest> {
         questRepository.deleteQuest(quest, mainActivity.getCurrentUser().getUid(), metadata);
     }
 
-    public static List<Quest> generateQuests(String gameLocation, int questsToGenerate){
+    public List<Quest> generateQuests(String gameLocation, int questsToGenerate){
         List<Quest> questOptions = new ArrayList<>();
         for(int i=0; i<questsToGenerate; i++){
-            questOptions.add(QuestGenerator.generateQuest(gameLocation));
+            questOptions.add(QuestGenerator.generateQuest(gameLocation,5,mainActivity.getDialogService()));
         }
 
         return questOptions;

@@ -214,6 +214,23 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
 
     private void loadLocationUi(String currentGameLocation){
         switch(currentGameLocation){
+            case GameLocationService.FARMLANDS: {
+                viewStub.setLayoutResource(R.layout.farmlands);
+                View layout = viewStub.inflate();
+                Button innButton = layout.findViewById(R.id.inn_button);
+                innButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.inn_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                break;
+            }
             case GameLocationService.THANADEL_VILLAGE: {
                 viewStub.setLayoutResource(R.layout.thanadel_village_layout);
                 View layout = viewStub.inflate();
