@@ -53,7 +53,7 @@ public class QuestGenerator {
             }
         }
 
-        questObjectiveList.add(new QuestObjective(QuestObjectiveType.VISIT, UUID.randomUUID().toString(),gameLocationId,getRandomIntegerOption(GameLocationBuildingUtil.getBuildingsInLocation(firstObjectiveLocation)),false));
+        questObjectiveList.add(new QuestObjective(QuestObjectiveType.VISIT, UUID.randomUUID().toString(),firstObjectiveLocation,getRandomIntegerOption(GameLocationBuildingUtil.getBuildingsInLocation(firstObjectiveLocation)),false));
 
 
         //generate dialogs
@@ -89,7 +89,7 @@ public class QuestGenerator {
                         questDialogOptionFlavorText = "Thank you! Could you now " + determineDialogOptionForFollowingObjectives(questObjectiveList,i);
                     }
                     Dialog questDialogOption1 = new Dialog(UUID.randomUUID().toString(), questDialogOptionFlavorText, determineOptionTextForQuestObjectiveOption(questObjectiveList,i),questObjectiveDialogAffect, true);
-                    Dialog questDialogOptionAccept = new Dialog(UUID.randomUUID().toString(),"Excellent, good luck!","I'll do it.",new DialogAffect(DialogAffectType.NONE), true);
+                    Dialog questDialogOptionAccept = new Dialog(UUID.randomUUID().toString(),"Excellent, good luck!","Thank you.",new DialogAffect(DialogAffectType.NONE), true);
                     questObjectiveRootDialog.setDialogOption1(questDialogOption1.getReferenceId());
                     dialogService.writeDialog(questObjectiveRootDialog);
                     questDialogOption1.setDialogOption1(questDialogOptionAccept.getReferenceId());

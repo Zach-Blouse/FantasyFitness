@@ -99,7 +99,11 @@ public class DialogService implements DomainService<Dialog> {
     }
 
     public void writeDialog(Dialog dialog){
-        dialogRepository.writeDialog(dialog);
+        if(dialog.isQuestDialog()){
+            dialogRepository.writeQuestDialog(dialog,mainActivity.getCurrentUser().getUid(),new HashMap<>());
+        } else {
+            dialogRepository.writeDialog(dialog);
+        }
     }
 
     public boolean hasBeenInitialized(){
@@ -128,6 +132,7 @@ public class DialogService implements DomainService<Dialog> {
 
     @Override
     public void repositoryResponse(Dialog responseBody, Map<String, Object> metadata) {
+        Log.e("DialogService","repositoryResponse");
         mainActivity.publishEvent(new BaseDialogFetchEvent(responseBody,metadata));
     }
 

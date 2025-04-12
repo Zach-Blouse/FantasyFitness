@@ -1,6 +1,7 @@
 package com.zblouse.fantasyfitness.dialog;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.zblouse.fantasyfitness.core.DomainService;
 import com.zblouse.fantasyfitness.core.Repository;
@@ -70,6 +71,7 @@ public class DialogRepository implements Repository<Dialog> {
 
     @Override
     public void readCallback(Dialog dialog, Map<String, Object> metadata) {
+        Log.e("DialogRepository","Read Callback");
         dialogService.repositoryResponse(dialog,metadata);
     }
 

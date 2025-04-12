@@ -247,7 +247,7 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 }
             });
         } else if(event.getEventType().equals(EventType.BASE_DIALOG_FETCH_EVENT)){
-
+            Log.e("UserHomeFragment","GOT BASE DIALOG FETCH EVENT");
             mainActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
