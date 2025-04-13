@@ -14,12 +14,14 @@ public class UserGameStateService implements DomainService<UserGameState> {
     public static final String CALLING_FUNCTION_KEY = "callingFunctionKey";
     public static final String LOCATION_FIELD = "userGameLocation";
     public static final String USER_DISTANCE_FIELD = "userStoredDistance";
+    public static final String USER_CURRENCY_FIELD = "userGameCurrency";
     public static final String STATE_FIELD_UPDATED = "stateFieldUpdated";
     public static final String NEW_LOCATION = "newLocation";
 
     private static final String FETCH_GAME_STATE_FUNCTION = "fetchGameState";
     private static final String INITIALIZE_GAME_STATE_FUNCTION = "initializeGameState";
     private static final String ADD_USER_GAME_DISTANCE = "addUserGameDistance";
+    private static final String ADD_USER_GAME_CURRENCY = "addUserGameCurrency";
     private static final String UPDATE_USER_GAME_LOCATION = "updateUserGameLocation";
 
     private MainActivity activity;
@@ -60,13 +62,18 @@ public class UserGameStateService implements DomainService<UserGameState> {
     public void initializeUserGameState(){
         Map<String, Object> metadata = new HashMap<>();
         metadata.put(CALLING_FUNCTION_KEY, INITIALIZE_GAME_STATE_FUNCTION);
-        userGameStateRepository.writeUserGameState(activity.getCurrentUser().getUid(), GameLocationService.THANADEL_VILLAGE,0, metadata);
+        userGameStateRepository.writeUserGameState(activity.getCurrentUser().getUid(), GameLocationService.THANADEL_VILLAGE,0, 0, metadata);
     }
 
     public void updateUserGameLocation(String userId, String newLocationName, Map<String, Object> metadata){
         metadata.put(CALLING_FUNCTION_KEY, UPDATE_USER_GAME_LOCATION);
         metadata.put(NEW_LOCATION, newLocationName);
         userGameStateRepository.updateUserGameLocation(userId, newLocationName, metadata);
+    }
+
+    public void modifyUserGameCurrency(String userId, int modifyAmount, Map<String, Object> metadata){
+        metadata.put(CALLING_FUNCTION_KEY,ADD_USER_GAME_CURRENCY);
+        userGameStateRepository.addUserCurrency(userId, modifyAmount, metadata);
     }
 
     @Override
@@ -84,6 +91,9 @@ public class UserGameStateService implements DomainService<UserGameState> {
                 activity.publishEvent(new UserGameStateUpdateEvent(metadata));
             }else if(metadata.get(CALLING_FUNCTION_KEY).equals(ADD_USER_GAME_DISTANCE)){
                 metadata.put(STATE_FIELD_UPDATED, USER_DISTANCE_FIELD);
+                activity.publishEvent(new UserGameStateUpdateEvent(metadata));
+            }else if(metadata.get(CALLING_FUNCTION_KEY).equals(ADD_USER_GAME_CURRENCY)){
+                metadata.put(STATE_FIELD_UPDATED, USER_CURRENCY_FIELD);
                 activity.publishEvent(new UserGameStateUpdateEvent(metadata));
             }
         }

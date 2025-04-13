@@ -46,6 +46,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.actions.ActionResultType;
 import com.zblouse.fantasyfitness.actions.RandomActionResultTypeGenerator;
@@ -55,6 +57,9 @@ import com.zblouse.fantasyfitness.activity.LocationEvent;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.activity.PermissionDeviceService;
 import com.zblouse.fantasyfitness.dialog.DialogService;
+import com.zblouse.fantasyfitness.quest.QuestFirestoreDatabase;
+import com.zblouse.fantasyfitness.quest.QuestRepository;
+import com.zblouse.fantasyfitness.quest.QuestService;
 import com.zblouse.fantasyfitness.user.UserFirestoreDatabase;
 import com.zblouse.fantasyfitness.user.UserGameStateFirestoreDatabase;
 import com.zblouse.fantasyfitness.user.UserGameStateRepository;
@@ -73,7 +78,9 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class UserHomeTest {
@@ -114,6 +121,7 @@ public class UserHomeTest {
         when(mockRandomActionResultTypeGenerator.getRandomActionResult(GameLocationService.WOODLANDS)).thenReturn(ActionResultType.DIALOG);
 
         UserGameStateService userGameStateService = new UserGameStateService();
+        QuestService questService = new QuestService();
 
         activityRule.getScenario().onActivity(activity -> {
 
@@ -121,12 +129,14 @@ public class UserHomeTest {
             userService.setMainActivity(activity);
             workoutService.setMainActivity(activity);
             userGameStateService.setMainActivity(activity);
+            questService.setMainActivity(activity);
             activity.setUserService(userService);
             activity.setWorkoutService(workoutService);
             activity.setDeviceService(DeviceServiceType.PERMISSION,mockPermissionDeviceService);
             activity.setDeviceService(DeviceServiceType.LOCATION,mockLocationDeviceService);
             activity.setUserGameStateService(userGameStateService);
             activity.getExploreActionService().setRandomActionResultTypeGenerator(mockRandomActionResultTypeGenerator);
+            activity.setQuestService(questService);
         });
 
         //Set up mock firestore
@@ -167,6 +177,7 @@ public class UserHomeTest {
         when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
         when(mockGameStateDocumentSnapshot.get(eq("gameLocation"), eq(String.class))).thenReturn(GameLocationService.WOODLANDS);
         when(mockGameStateDocumentSnapshot.get(eq("savedDistance"), eq(Double.class))).thenReturn(5500.0);
+        when(mockGameStateDocumentSnapshot.get(eq("userGameCurrency"), eq(Integer.class))).thenReturn(7);
         when(mockGameStateReadTask.isSuccessful()).thenReturn(true);
         when(mockGameStateReadTask.getResult()).thenReturn(mockGameStateDocumentSnapshot);
         when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
@@ -179,6 +190,28 @@ public class UserHomeTest {
         UserGameStateFirestoreDatabase userGameStateFirestoreDatabase = new UserGameStateFirestoreDatabase(mockFirestore);
         UserGameStateRepository userGameStateRepository = new UserGameStateRepository(userGameStateFirestoreDatabase, userGameStateService);
         userGameStateService.setUserGameStateRepository(userGameStateRepository);
+        //Set Up Quest Database
+
+        CollectionReference mockQuestCollectionReference = Mockito.mock(CollectionReference.class);
+        when(mockFirestore.collection(eq("quest"))).thenReturn(mockQuestCollectionReference);
+        DocumentReference mockQuestDocument = Mockito.mock(DocumentReference.class);
+        when(mockQuestCollectionReference.document(eq("testUserId"))).thenReturn(mockQuestDocument);
+
+        CollectionReference mockQuestListCollectionReference = Mockito.mock(CollectionReference.class);
+        when(mockQuestDocument.collection(eq("quests"))).thenReturn(mockQuestListCollectionReference);
+        Task<QuerySnapshot> mockQuestQueryTask = Mockito.mock(Task.class);
+        when(mockQuestListCollectionReference.get()).thenReturn(mockQuestQueryTask);
+        ArgumentCaptor<OnCompleteListener<QuerySnapshot>> onCompleteListenerArgumentCaptorQuests = ArgumentCaptor.forClass(OnCompleteListener.class);
+        when(mockQuestQueryTask.isSuccessful()).thenReturn(true);
+        List<QueryDocumentSnapshot> questSnapshots = new ArrayList<>();
+
+        QuerySnapshot querySnapshotQuest = Mockito.mock(QuerySnapshot.class);
+        when(querySnapshotQuest.iterator()).thenReturn(questSnapshots.iterator());
+        when(mockQuestQueryTask.getResult()).thenReturn(querySnapshotQuest);
+
+        QuestFirestoreDatabase questFirestoreDatabase = new QuestFirestoreDatabase(mockFirestore);
+        QuestRepository questRepository = new QuestRepository(questService, questFirestoreDatabase);
+        questService.setQuestRepository(questRepository);
 
         Instrumentation.ActivityResult firebaseResult = new Instrumentation.ActivityResult(RESULT_OK, response.toIntent());
         intending(hasComponent("com.firebase.ui.auth.KickoffActivity")).respondWith(firebaseResult);
@@ -190,7 +223,8 @@ public class UserHomeTest {
         }
         verify(mockReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorRead.capture());
         onCompleteListenerArgumentCaptorRead.getValue().onComplete(mockReadTask);
-        onView(withId(R.id.user_home_title)).check(matches(withText("Fantasy Fitness")));
+
+        onView(withId(R.id.quests_button)).check(matches(isDisplayed()));
 
         //FINISH AUTHENTICATION, TEST IS AT USER HOME
         //FOLLOWING THIS LINE IS THE BEGINNING OF THE ACTUAL TEST THIS TEST IS SUPPOSED TO BE TESTING
@@ -199,6 +233,9 @@ public class UserHomeTest {
 
         onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
         onView(withId(R.id.marsh_button)).perform(click());
+
+        verify(mockQuestQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorQuests.capture());
+        onCompleteListenerArgumentCaptorQuests.getValue().onComplete(mockQuestQueryTask);
 
         onView(withId(R.id.dialog_card_view)).check(matches(isDisplayed()));
         onView(withId(R.id.dialog_flavor_text)).check(matches(withText("You come upon an old hermit. He is clad in dirty pelts.")));

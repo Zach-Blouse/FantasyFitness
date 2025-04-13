@@ -56,7 +56,7 @@ public class UserGameStateServiceTest {
         UserGameStateService testedService = new UserGameStateService(mockActivity, mockUserGameStateRepository);
         testedService.initializeUserGameState();
         ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
-        verify(mockUserGameStateRepository).writeUserGameState(eq(userId),eq(GameLocationService.THANADEL_VILLAGE),eq(0.0),mapArgumentCaptor.capture());
+        verify(mockUserGameStateRepository).writeUserGameState(eq(userId),eq(GameLocationService.THANADEL_VILLAGE),eq(0.0),eq(0),mapArgumentCaptor.capture());
         assert(mapArgumentCaptor.getValue().containsKey(UserGameStateService.CALLING_FUNCTION_KEY));
         assertEquals("initializeGameState", mapArgumentCaptor.getValue().get(UserGameStateService.CALLING_FUNCTION_KEY));
     }
@@ -78,7 +78,7 @@ public class UserGameStateServiceTest {
 
     @Test
     public void repositoryResponseFetchGameStateTest(){
-        UserGameState responseGameState = new UserGameState("testId1", GameLocationService.ARDUWYN,1500.0);
+        UserGameState responseGameState = new UserGameState("testId1", GameLocationService.ARDUWYN,1500.0,7);
         MainActivity mockActivity = Mockito.mock(MainActivity.class);
         UserGameStateRepository mockUserGameStateRepository = Mockito.mock(UserGameStateRepository.class);
         Map<String, Object> metadata = new HashMap<>();
@@ -94,7 +94,7 @@ public class UserGameStateServiceTest {
 
     @Test
     public void repositoryResponseFetchGameStateInterDomainTest(){
-        UserGameState responseGameState = new UserGameState("testId1", GameLocationService.ARDUWYN,1500.0);
+        UserGameState responseGameState = new UserGameState("testId1", GameLocationService.ARDUWYN,1500.0,87);
         MainActivity mockActivity = Mockito.mock(MainActivity.class);
         UserGameStateRepository mockUserGameStateRepository = Mockito.mock(UserGameStateRepository.class);
         Map<String, Object> metadata = new HashMap<>();
@@ -113,7 +113,7 @@ public class UserGameStateServiceTest {
 
     @Test
     public void repositoryResponseUpdateGameStateLocationTest(){
-        UserGameState responseGameState = new UserGameState("testId1", GameLocationService.ARDUWYN,1500.0);
+        UserGameState responseGameState = new UserGameState("testId1", GameLocationService.ARDUWYN,1500.0,89);
         MainActivity mockActivity = Mockito.mock(MainActivity.class);
         UserGameStateRepository mockUserGameStateRepository = Mockito.mock(UserGameStateRepository.class);
         Map<String, Object> metadata = new HashMap<>();
@@ -130,7 +130,7 @@ public class UserGameStateServiceTest {
 
     @Test
     public void repositoryResponseUpdateGameStateDistanceTest(){
-        UserGameState responseGameState = new UserGameState("testId1", GameLocationService.ARDUWYN,1500.0);
+        UserGameState responseGameState = new UserGameState("testId1", GameLocationService.ARDUWYN,1500.0,89);
         MainActivity mockActivity = Mockito.mock(MainActivity.class);
         UserGameStateRepository mockUserGameStateRepository = Mockito.mock(UserGameStateRepository.class);
         Map<String, Object> metadata = new HashMap<>();

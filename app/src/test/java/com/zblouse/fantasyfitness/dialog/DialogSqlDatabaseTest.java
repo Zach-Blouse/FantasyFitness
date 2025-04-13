@@ -28,7 +28,7 @@ public class DialogSqlDatabaseTest {
         testedDatabase.onCreate(mockDatabase);
         ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
         verify(mockDatabase).execSQL((String)stringArgumentCaptor.capture());
-        assertEquals("CREATE TABLE IF NOT EXISTS dialog(id INTEGER PRIMARY KEY,reference_id TEXT,option_text TEXT,flavor_text TEXT,dialog1 TEXT,dialog2 TEXT,dialog3 TEXT,dialog4 TEXT)", stringArgumentCaptor.getValue());
+        assertEquals("CREATE TABLE IF NOT EXISTS dialog(id INTEGER PRIMARY KEY,reference_id TEXT,option_text TEXT,flavor_text TEXT,dialog1 TEXT,dialog2 TEXT,dialog3 TEXT,dialog4 TEXT,dialogAffectType TEXT,questUUIDKey TEXT,questObjectiveUUIDKey TEXT)", stringArgumentCaptor.getValue());
     }
 
     @Test
@@ -41,6 +41,7 @@ public class DialogSqlDatabaseTest {
         String testDialog2 = "dialog2";
         String testDialog3 = "dialog3";
         String testDialog4 = "dialog4";
+        String testDialogAffect = DialogAffectType.NONE.toString();
 
         Context mockContext = Mockito.mock(Context.class);
         SQLiteDatabase mockDatabase = Mockito.mock(SQLiteDatabase.class);
@@ -56,6 +57,7 @@ public class DialogSqlDatabaseTest {
         when(mockCursor.getString(eq(5))).thenReturn(testDialog2);
         when(mockCursor.getString(eq(6))).thenReturn(testDialog3);
         when(mockCursor.getString(eq(7))).thenReturn(testDialog4);
+        when(mockCursor.getString(eq(8))).thenReturn(testDialogAffect);
 
         when(testedDatabase.getReadableDatabase()).thenReturn(mockDatabase);
         when(mockDatabase.rawQuery(eq("SELECT * FROM dialog WHERE reference_id='" + testReferenceId+"'"), eq(null))).thenReturn(mockCursor);
@@ -69,5 +71,6 @@ public class DialogSqlDatabaseTest {
         assertEquals(testDialog2, responseDialog.getDialogOption2());
         assertEquals(testDialog3, responseDialog.getDialogOption3());
         assertEquals(testDialog4, responseDialog.getDialogOption4());
+        assertEquals(testDialogAffect, responseDialog.getDialogAffect().getDialogAffectType().toString());
     }
 }

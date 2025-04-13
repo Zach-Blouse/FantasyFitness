@@ -1,17 +1,21 @@
 package com.zblouse.fantasyfitness.actions;
 
-import com.zblouse.fantasyfitness.dialog.Dialog;
-
 public class DialogActionResult extends ActionResult {
 
-    private final Dialog initialDialog;
+    private final String initialDialogReferenceId;
+    private final boolean questDialog;
 
-    public DialogActionResult(Dialog initialDialog) {
+    public DialogActionResult(String initialDialogReferenceId, boolean questDialog) {
         super(ActionResultType.DIALOG);
-        this.initialDialog = initialDialog;
+        this.initialDialogReferenceId = initialDialogReferenceId;
+        this.questDialog = questDialog;
     }
 
-    public Dialog getInitialDialog(){
-        return this.initialDialog;
+    public String getInitialDialogReferenceId(){
+        return this.initialDialogReferenceId;
+    }
+
+    public boolean isQuestDialog(){
+        return this.questDialog;
     }
 }

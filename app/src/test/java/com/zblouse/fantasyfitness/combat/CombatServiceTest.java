@@ -15,6 +15,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.combat.cards.Ability;
 import com.zblouse.fantasyfitness.combat.cards.AbilityTarget;
@@ -34,6 +35,7 @@ import com.zblouse.fantasyfitness.combat.cards.ItemCard;
 import com.zblouse.fantasyfitness.combat.cards.ItemType;
 import com.zblouse.fantasyfitness.combat.encounter.Encounter;
 import com.zblouse.fantasyfitness.combat.encounter.EncounterDifficultyLevel;
+import com.zblouse.fantasyfitness.world.GameLocationService;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -59,7 +61,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         verify(mockDeckService).fetchDeck(eq(mockUserId), eq("userDeck"));
         assertTrue(testedService.isInSetup());
@@ -76,7 +78,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -139,7 +141,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -194,7 +196,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -264,7 +266,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -336,7 +338,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -416,7 +418,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -497,7 +499,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -580,7 +582,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -662,7 +664,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -751,7 +753,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -840,7 +842,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -939,7 +941,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -1039,7 +1041,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -1120,7 +1122,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -1201,7 +1203,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -1282,7 +1284,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -1363,7 +1365,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -1446,7 +1448,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -1517,7 +1519,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -1615,7 +1617,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -1712,7 +1714,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();
@@ -1806,7 +1808,7 @@ public class CombatServiceTest {
         when(mockMainActivity.getDeckService()).thenReturn(mockDeckService);
 
         CombatService testedService = new CombatService(mockMainActivity);
-        testedService.initializeCombat();
+        testedService.initializeCombat(GameLocationService.WOODLANDS, R.id.cave_button);
 
         Deck testUserDeck = new Deck(mockUserId,"userDeck");
         List<Card> userCards = new ArrayList<>();

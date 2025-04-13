@@ -24,6 +24,7 @@ import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.dialog.DialogService;
 import com.zblouse.fantasyfitness.dialog.DialogSqlDatabase;
 import com.zblouse.fantasyfitness.home.UserHomeFragment;
+import com.zblouse.fantasyfitness.quest.QuestService;
 import com.zblouse.fantasyfitness.settings.SettingsFragment;
 import com.zblouse.fantasyfitness.user.LoginFragment;
 import com.zblouse.fantasyfitness.user.UserGameStateService;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private DeckService deckService;
     private CombatService combatService;
     private EncounterService encounterService;
+    private QuestService questService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +102,10 @@ public class MainActivity extends AppCompatActivity {
         deckService = new DeckService(this);
         combatService = new CombatService(this);
         encounterService = new EncounterService(this);
-
+        questService = new QuestService(this);
         gameLocationService.initializeLocationDatabase();
         dialogService.initializeDialogs();
+
         currentUser = firebaseAuth.getCurrentUser();
         if(savedInstanceState == null) {
             if (currentUser == null) {
@@ -277,6 +280,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setEncounterService(EncounterService encounterService){
         this.encounterService = encounterService;
+    }
+
+    public QuestService getQuestService(){
+        return this.questService;
+    }
+
+    public void setQuestService(QuestService questService){
+        this.questService = questService;
     }
 
 }

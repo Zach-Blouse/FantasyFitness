@@ -16,7 +16,10 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zblouse.fantasyfitness.actions.ActionResult;
 import com.zblouse.fantasyfitness.actions.ActionResultType;
 import com.zblouse.fantasyfitness.actions.CombatActionResult;
@@ -29,13 +32,22 @@ import com.zblouse.fantasyfitness.activity.LocationForegroundDeviceService;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.ToastDeviceService;
+import com.zblouse.fantasyfitness.combat.CombatCardModel;
+import com.zblouse.fantasyfitness.combat.CombatCardStateViewAdapter;
 import com.zblouse.fantasyfitness.combat.CombatFragment;
 import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.core.EventType;
+import com.zblouse.fantasyfitness.dialog.BaseDialogFetchEvent;
 import com.zblouse.fantasyfitness.dialog.Dialog;
+import com.zblouse.fantasyfitness.dialog.DialogFetchEvent;
 import com.zblouse.fantasyfitness.dialog.DialogSelectedEvent;
+import com.zblouse.fantasyfitness.quest.Quest;
+import com.zblouse.fantasyfitness.quest.QuestFetchResponseEvent;
+import com.zblouse.fantasyfitness.quest.QuestObjective;
+import com.zblouse.fantasyfitness.quest.QuestObjectiveViewAdapter;
+import com.zblouse.fantasyfitness.quest.QuestViewAdapter;
 import com.zblouse.fantasyfitness.user.UserExistEvent;
 import com.zblouse.fantasyfitness.user.UserGameState;
 import com.zblouse.fantasyfitness.user.UserGameStateFetchResponseEvent;
@@ -44,7 +56,9 @@ import com.zblouse.fantasyfitness.workout.WorkoutUpdateEvent;
 import com.zblouse.fantasyfitness.world.GameLocation;
 import com.zblouse.fantasyfitness.world.GameLocationService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -61,6 +75,18 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
     private Button dialogOption2Button;
     private Button dialogOption3Button;
     private Button dialogOption4Button;
+    private String locationDisplayed;
+
+    private CardView questsCardView;
+    private RecyclerView questsRecyclerView;
+    private List<Quest> questsList;
+    private QuestViewAdapter questViewAdapter;
+    private CardView questDetailsCardView;
+    private List<QuestObjective> questObjectives;
+    private QuestObjectiveViewAdapter questObjectiveViewAdapter;
+    private RecyclerView detailedQuestObjectivesRecyclerView;
+    private TextView detailedQuestNameTextView;
+    private TextView detailedQuestDescriptionTextView;
 
     public UserHomeFragment(){
         super(R.layout.user_home_fragment);
@@ -105,6 +131,52 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
         });
 
         dialogCardView.setVisibility(View.GONE);
+        questsList = new ArrayList<>();
+        questsCardView = layout.findViewById(R.id.quests_view);
+        questsRecyclerView = layout.findViewById(R.id.quest_recyclerView);
+        questViewAdapter = new QuestViewAdapter(this, questsList);
+        questsRecyclerView.setAdapter(questViewAdapter);
+        LinearLayoutManager questLayoutManager = new LinearLayoutManager(mainActivity);
+        questLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        questsRecyclerView.setLayoutManager(questLayoutManager);
+        Button closeQuestViewButton = layout.findViewById(R.id.close_quests_button);
+        closeQuestViewButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                questsCardView.setVisibility(View.GONE);
+            }
+        });
+        questsCardView.setVisibility(View.GONE);
+
+        FloatingActionButton floatingQuestButton = layout.findViewById(R.id.quests_button);
+        floatingQuestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.getQuestService().fetchQuests(new HashMap<>());
+                questsCardView.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+        questDetailsCardView = layout.findViewById(R.id.quest_detail_view);
+        detailedQuestNameTextView = layout.findViewById(R.id.quest_name_label);
+        detailedQuestDescriptionTextView = layout.findViewById(R.id.quest_description_label);
+        detailedQuestObjectivesRecyclerView = layout.findViewById(R.id.quest_objective_recyclerView);
+        questObjectives = new ArrayList<>();
+        questObjectiveViewAdapter = new QuestObjectiveViewAdapter(questObjectives);
+        detailedQuestObjectivesRecyclerView.setAdapter(questObjectiveViewAdapter);
+        LinearLayoutManager questObjectivesLayoutManager = new LinearLayoutManager(mainActivity);
+        questObjectivesLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        detailedQuestObjectivesRecyclerView.setLayoutManager(questObjectivesLayoutManager);
+        Button closeQuestDetailButton = layout.findViewById(R.id.close_quest_detail_button);
+        closeQuestDetailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                questDetailsCardView.setVisibility(View.GONE);
+            }
+        });
+        questDetailsCardView.setVisibility(View.GONE);
+
         return layout;
     }
 
@@ -135,12 +207,12 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                         nothingFoundFlavorText.setText(((NothingFoundActionResult)actionResult).getFlavorText());
                         nothingFoundCardView.setVisibility(View.VISIBLE);
                     } else if(actionResult.getActionResultType().equals(ActionResultType.DIALOG)){
-                        Dialog baseDialog = ((DialogActionResult)actionResult).getInitialDialog();
-                        loadDialogs(baseDialog);
+                        mainActivity.getDialogService().fetchBaseDialog(((DialogActionResult)actionResult).getInitialDialogReferenceId(), ((DialogActionResult)actionResult).isQuestDialog(), new HashMap<>());
+
                     } else if(actionResult.getActionResultType().equals(ActionResultType.COMBAT)){
                         CombatActionResult combatActionResult = (CombatActionResult)actionResult;
                         mainActivity.getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container, new CombatFragment(mainActivity, combatActionResult.getEncounterName())).commit();
+                                .replace(R.id.fragment_container, new CombatFragment(mainActivity, combatActionResult.getEncounterName(), combatActionResult.getCombatLocation(), combatActionResult.getCombatBuilding())).commit();
                     }
                 }
             });
@@ -152,68 +224,119 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                     loadDialogs(((DialogSelectedEvent)event).getNewDialog());
                 }
             });
+        } else if(event.getEventType().equals(EventType.QUEST_FETCH_RESPONSE_EVENT)){
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    QuestFetchResponseEvent questFetchResponseEvent = (QuestFetchResponseEvent) event;
+                    if(questFetchResponseEvent.getMetadata().containsKey(ExploreActionService.EXPLORE_ACTION_FETCH_QUESTS)){
+                        mainActivity.getExploreActionService().exploreAction(questFetchResponseEvent.getQuests(), questFetchResponseEvent.getMetadata());
+                    } else {
+                        questsList.clear();
+                        questsList.addAll(questFetchResponseEvent.getQuests());
+                        questViewAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
+        } else if(event.getEventType().equals(EventType.DIALOG_FETCH_EVENT)){
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    DialogFetchEvent dialogFetchEvent = (DialogFetchEvent) event;
+                    dialogOptionFetchResponse(dialogFetchEvent.getDialogOption1(), dialogFetchEvent.getDialogOption2(), dialogFetchEvent.getDialogOption3(), dialogFetchEvent.getDialogOption4());
+                }
+            });
+        } else if(event.getEventType().equals(EventType.BASE_DIALOG_FETCH_EVENT)){
+            Log.e("UserHomeFragment","GOT BASE DIALOG FETCH EVENT");
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    BaseDialogFetchEvent baseDialogFetchEvent = (BaseDialogFetchEvent) event;
+                    loadDialogs(baseDialogFetchEvent.getDialog());
+                }
+            });
+
         }
     }
 
     private void loadDialogs(Dialog baseDialog){
         dialogFlavorText.setText(baseDialog.getFlavorText());
-        if(baseDialog.getDialogOption1() != null){
-            Dialog dialogOption1 = mainActivity.getDialogService().fetchDialogOption(baseDialog.getDialogOption1());
+        mainActivity.getDialogService().fetchDialogOptions(baseDialog,new HashMap<>());
+        dialogCardView.setVisibility(View.VISIBLE);
+    }
+
+    private void dialogOptionFetchResponse(Dialog dialogOption1, Dialog dialogOption2, Dialog dialogOption3, Dialog dialogOption4){
+        if(dialogOption1 != null){
             dialogOption1Button.setText(dialogOption1.getOptionText());
             dialogOption1Button.setVisibility(View.VISIBLE);
             dialogOption1Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption1(), new HashMap<>());
+                    mainActivity.getDialogService().selectDialogOption(dialogOption1, locationDisplayed, new HashMap<>());
                 }
             });
         } else {
             dialogOption1Button.setVisibility(View.GONE);
         }
-        if(baseDialog.getDialogOption2() != null){
-            Dialog dialogOption2 = mainActivity.getDialogService().fetchDialogOption(baseDialog.getDialogOption2());
+        if(dialogOption2 != null){
             dialogOption2Button.setText(dialogOption2.getOptionText());
             dialogOption2Button.setVisibility(View.VISIBLE);
             dialogOption2Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption2(), new HashMap<>());
+                    mainActivity.getDialogService().selectDialogOption(dialogOption2, locationDisplayed, new HashMap<>());
                 }
             });
         } else {
             dialogOption2Button.setVisibility(View.GONE);
         }
-        if(baseDialog.getDialogOption3() != null){
-            Dialog dialogOption3 = mainActivity.getDialogService().fetchDialogOption(baseDialog.getDialogOption3());
+        if(dialogOption3 != null){
             dialogOption3Button.setText(dialogOption3.getOptionText());
             dialogOption3Button.setVisibility(View.VISIBLE);
             dialogOption3Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption3(), new HashMap<>());
+                    mainActivity.getDialogService().selectDialogOption(dialogOption3, locationDisplayed, new HashMap<>());
                 }
             });
         } else {
             dialogOption3Button.setVisibility(View.GONE);
         }
-        if(baseDialog.getDialogOption4() != null){
-            Dialog dialogOption4 = mainActivity.getDialogService().fetchDialogOption(baseDialog.getDialogOption4());
+        if(dialogOption4 != null){
             dialogOption4Button.setText(dialogOption4.getOptionText());
             dialogOption4Button.setVisibility(View.VISIBLE);
             dialogOption4Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mainActivity.getDialogService().selectDialogOption(baseDialog.getDialogOption4(), new HashMap<>());
+                    mainActivity.getDialogService().selectDialogOption(dialogOption4, locationDisplayed, new HashMap<>());
                 }
             });
         } else {
             dialogOption4Button.setVisibility(View.GONE);
         }
-        dialogCardView.setVisibility(View.VISIBLE);
     }
 
+
     private void loadLocationUi(String currentGameLocation){
+        locationDisplayed = currentGameLocation;
         switch(currentGameLocation){
+            case GameLocationService.FARMLANDS: {
+                viewStub.setLayoutResource(R.layout.farmlands);
+                View layout = viewStub.inflate();
+                Button innButton = layout.findViewById(R.id.inn_button);
+                innButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.inn_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                break;
+            }
             case GameLocationService.THANADEL_VILLAGE: {
                 viewStub.setLayoutResource(R.layout.thanadel_village_layout);
                 View layout = viewStub.inflate();
@@ -291,5 +414,16 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
 
     public boolean actionResultDisplayed(){
         return (View.VISIBLE == dialogCardView.getVisibility()) || (View.VISIBLE == nothingFoundCardView.getVisibility());
+    }
+
+    public void displayQuestDetails(Quest quest){
+        detailedQuestNameTextView.setText(quest.getQuestName());
+        detailedQuestDescriptionTextView.setText(quest.getQuestDescription());
+        questObjectives.clear();
+        questObjectives.addAll(quest.getQuestObjectives());
+        questObjectiveViewAdapter.notifyDataSetChanged();
+
+        questsCardView.setVisibility(View.GONE);
+        questDetailsCardView.setVisibility(View.VISIBLE);
     }
 }

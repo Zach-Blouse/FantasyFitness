@@ -31,7 +31,8 @@ public class UserGameStateFirestoreDatabaseTest {
         String testUserId = "testUser1";
         String testUserLocation = GameLocationService.ARDUWYN;
         Double testUserDistance = 5.5;
-        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance);
+        int testUserGameCurrency = 6;
+        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance,testUserGameCurrency);
         FirebaseFirestore mockFirestore = Mockito.mock(FirebaseFirestore.class);
         CollectionReference mockCollectionReference = Mockito.mock(CollectionReference.class);
         when(mockFirestore.collection(eq("gameState"))).thenReturn(mockCollectionReference);
@@ -59,6 +60,8 @@ public class UserGameStateFirestoreDatabaseTest {
         assertEquals(testUserId, userGameStateArgumentCaptor.getValue().getUserId());
         assertEquals(testUserLocation, userGameStateArgumentCaptor.getValue().getCurrentGameLocationName());
         assertEquals(testUserDistance,userGameStateArgumentCaptor.getValue().getSavedWorkoutDistanceMeters(),0.0);
+        assertEquals(testUserGameCurrency, userGameStateArgumentCaptor.getValue().getUserGameCurrency());
+
     }
 
     @Test
@@ -66,7 +69,7 @@ public class UserGameStateFirestoreDatabaseTest {
         String testUserId = "testUser1";
         String testUserLocation = GameLocationService.ARDUWYN;
         Double testUserDistance = 5.5;
-        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance);
+        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance,6);
         FirebaseFirestore mockFirestore = Mockito.mock(FirebaseFirestore.class);
         CollectionReference mockCollectionReference = Mockito.mock(CollectionReference.class);
         when(mockFirestore.collection(eq("gameState"))).thenReturn(mockCollectionReference);
@@ -149,7 +152,8 @@ public class UserGameStateFirestoreDatabaseTest {
         String testUserId = "testUser1";
         String testUserLocation = GameLocationService.ARDUWYN;
         Double testUserDistance = 5.5;
-        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance);
+        int testUserCurrency = 6;
+        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance,testUserCurrency);
         FirebaseFirestore mockFirestore = Mockito.mock(FirebaseFirestore.class);
         CollectionReference mockCollectionReference = Mockito.mock(CollectionReference.class);
         when(mockFirestore.collection(eq("gameState"))).thenReturn(mockCollectionReference);
@@ -162,6 +166,7 @@ public class UserGameStateFirestoreDatabaseTest {
         when(mockDocumentSnapshot.exists()).thenReturn(true);
         when(mockDocumentSnapshot.get(eq(UserGameStateFirestoreDatabase.USER_LOCATION_FIELD), eq(String.class))).thenReturn(testUserLocation);
         when(mockDocumentSnapshot.get(eq(UserGameStateFirestoreDatabase.USER_SAVED_DISTANCE), eq(Double.class))).thenReturn(testUserDistance);
+        when(mockDocumentSnapshot.get(eq(UserGameStateFirestoreDatabase.USER_GAME_CURRENCY), eq(Integer.class))).thenReturn(testUserCurrency);
         when(mockDocument.get()).thenReturn(mockTask);
         UserGameStateRepository mockRepository = Mockito.mock(UserGameStateRepository.class);
 
@@ -176,6 +181,7 @@ public class UserGameStateFirestoreDatabaseTest {
         assertEquals(testUserId, userGameStateArgumentCaptor.getValue().getUserId());
         assertEquals(testUserLocation, userGameStateArgumentCaptor.getValue().getCurrentGameLocationName());
         assertEquals(testUserDistance, userGameStateArgumentCaptor.getValue().getSavedWorkoutDistanceMeters(),0.0);
+        assertEquals(testUserCurrency, userGameStateArgumentCaptor.getValue().getUserGameCurrency());
     }
 
     @Test
@@ -183,7 +189,8 @@ public class UserGameStateFirestoreDatabaseTest {
         String testUserId = "testUser1";
         String testUserLocation = GameLocationService.ARDUWYN;
         Double testUserDistance = 5.5;
-        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance);
+        int testUserCurrency = 6;
+        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance,testUserCurrency);
         FirebaseFirestore mockFirestore = Mockito.mock(FirebaseFirestore.class);
         CollectionReference mockCollectionReference = Mockito.mock(CollectionReference.class);
         when(mockFirestore.collection(eq("gameState"))).thenReturn(mockCollectionReference);
@@ -196,6 +203,7 @@ public class UserGameStateFirestoreDatabaseTest {
         when(mockDocumentSnapshot.exists()).thenReturn(false);
         when(mockDocumentSnapshot.get(eq(UserGameStateFirestoreDatabase.USER_LOCATION_FIELD), eq(String.class))).thenReturn(testUserLocation);
         when(mockDocumentSnapshot.get(eq(UserGameStateFirestoreDatabase.USER_SAVED_DISTANCE), eq(Double.class))).thenReturn(testUserDistance);
+        when(mockDocumentSnapshot.get(eq(UserGameStateFirestoreDatabase.USER_GAME_CURRENCY), eq(Integer.class))).thenReturn(testUserCurrency);
         when(mockDocument.get()).thenReturn(mockTask);
         UserGameStateRepository mockRepository = Mockito.mock(UserGameStateRepository.class);
 
@@ -215,7 +223,8 @@ public class UserGameStateFirestoreDatabaseTest {
         String testUserId = "testUser1";
         String testUserLocation = GameLocationService.ARDUWYN;
         Double testUserDistance = 5.5;
-        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance);
+        Integer testUserCurrency = 6;
+        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance,testUserCurrency);
         FirebaseFirestore mockFirestore = Mockito.mock(FirebaseFirestore.class);
         CollectionReference mockCollectionReference = Mockito.mock(CollectionReference.class);
         when(mockFirestore.collection(eq("gameState"))).thenReturn(mockCollectionReference);
@@ -228,6 +237,7 @@ public class UserGameStateFirestoreDatabaseTest {
         when(mockDocumentSnapshot.exists()).thenReturn(false);
         when(mockDocumentSnapshot.get(eq(UserGameStateFirestoreDatabase.USER_LOCATION_FIELD), eq(String.class))).thenReturn(testUserLocation);
         when(mockDocumentSnapshot.get(eq(UserGameStateFirestoreDatabase.USER_SAVED_DISTANCE), eq(Double.class))).thenReturn(testUserDistance);
+        when(mockDocumentSnapshot.get(eq(UserGameStateFirestoreDatabase.USER_GAME_CURRENCY), eq(Integer.class))).thenReturn(testUserCurrency);
         when(mockDocument.get()).thenReturn(mockTask);
         UserGameStateRepository mockRepository = Mockito.mock(UserGameStateRepository.class);
 

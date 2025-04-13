@@ -6,6 +6,7 @@ import com.zblouse.fantasyfitness.world.GameLocationService;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public class NothingFoundActionResultGeneratorTest {
 
         Map<String, Object> metadata = new HashMap<>();
         metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, GameLocationService.WOODLANDS);
-        ActionResult result = testedGenerator.generate(metadata);
+        ActionResult result = testedGenerator.generate(new ArrayList<>(), metadata);
         assertEquals(ActionResultType.NOTHING, result.getActionResultType());
         assertEquals("Everything seems quiet.",((NothingFoundActionResult)result).getFlavorText());
     }
@@ -28,7 +29,7 @@ public class NothingFoundActionResultGeneratorTest {
 
         Map<String, Object> metadata = new HashMap<>();
         metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, GameLocationService.FAOLYN);
-        ActionResult result = testedGenerator.generate(metadata);
+        ActionResult result = testedGenerator.generate(new ArrayList<>(), metadata);
         assertEquals(ActionResultType.NOTHING, result.getActionResultType());
         assertEquals("The city is bustling with activity, but nothing in particular catches your eye.",((NothingFoundActionResult)result).getFlavorText());
     }
@@ -39,7 +40,7 @@ public class NothingFoundActionResultGeneratorTest {
 
         Map<String, Object> metadata = new HashMap<>();
         metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, GameLocationService.THANADEL_VILLAGE);
-        ActionResult result = testedGenerator.generate(metadata);
+        ActionResult result = testedGenerator.generate(new ArrayList<>(), metadata);
         assertEquals(ActionResultType.NOTHING, result.getActionResultType());
         assertEquals("You find nothing of note. The village is peaceful.",((NothingFoundActionResult)result).getFlavorText());
     }
@@ -50,7 +51,7 @@ public class NothingFoundActionResultGeneratorTest {
 
         Map<String, Object> metadata = new HashMap<>();
         metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, GameLocationService.BRIDGETON);
-        ActionResult result = testedGenerator.generate(metadata);
+        ActionResult result = testedGenerator.generate(new ArrayList<>(), metadata);
         assertEquals(ActionResultType.NOTHING, result.getActionResultType());
         assertEquals("Nothing of note catches your attention.",((NothingFoundActionResult)result).getFlavorText());
     }

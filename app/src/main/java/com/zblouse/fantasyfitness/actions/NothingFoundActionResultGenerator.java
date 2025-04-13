@@ -1,13 +1,15 @@
 package com.zblouse.fantasyfitness.actions;
 
+import com.zblouse.fantasyfitness.quest.Quest;
 import com.zblouse.fantasyfitness.world.GameLocationService;
 
+import java.util.List;
 import java.util.Map;
 
 public class NothingFoundActionResultGenerator implements ActionResultGenerator {
 
     @Override
-    public ActionResult generate(Map<String, Object> metadata) {
+    public ActionResult generate(List<Quest> quests, Map<String, Object> metadata) {
 
         if(metadata.containsKey(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY)){
             String exploreActionLocation = (String)metadata.get(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY);

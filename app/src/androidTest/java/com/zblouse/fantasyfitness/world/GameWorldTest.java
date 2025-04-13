@@ -182,7 +182,7 @@ public class GameWorldTest {
         }
         verify(mockReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorRead.capture());
         onCompleteListenerArgumentCaptorRead.getValue().onComplete(mockReadTask);
-        onView(withId(R.id.user_home_title)).check(matches(withText("Fantasy Fitness")));
+        onView(withId(R.id.quests_button)).check(matches(isDisplayed()));
 
         //FINISH AUTHENTICATION, TEST IS AT USER HOME
         //FOLLOWING THIS LINE IS THE BEGINNING OF THE ACTUAL TEST THIS TEST IS SUPPOSED TO BE TESTING
@@ -290,7 +290,7 @@ public class GameWorldTest {
         }
         verify(mockReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorRead.capture());
         onCompleteListenerArgumentCaptorRead.getValue().onComplete(mockReadTask);
-        onView(withId(R.id.user_home_title)).check(matches(withText("Fantasy Fitness")));
+        onView(withId(R.id.quests_button)).check(matches(isDisplayed()));
 
         //FINISH AUTHENTICATION, TEST IS AT USER HOME
         //FOLLOWING THIS LINE IS THE BEGINNING OF THE ACTUAL TEST THIS TEST IS SUPPOSED TO BE TESTING
@@ -381,6 +381,7 @@ public class GameWorldTest {
         when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
         when(mockGameStateDocumentSnapshot.get(eq("gameLocation"), eq(String.class))).thenReturn(GameLocationService.LAST_TOWER);
         when(mockGameStateDocumentSnapshot.get(eq("savedDistance"), eq(Double.class))).thenReturn(25000.0);
+        when(mockGameStateDocumentSnapshot.get(eq("userGameCurrency"), eq(Integer.class))).thenReturn(7);
         when(mockGameStateReadTask.isSuccessful()).thenReturn(true);
         when(mockGameStateReadTask.getResult()).thenReturn(mockGameStateDocumentSnapshot);
         when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
@@ -404,7 +405,7 @@ public class GameWorldTest {
         }
         verify(mockReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorRead.capture());
         onCompleteListenerArgumentCaptorRead.getValue().onComplete(mockReadTask);
-        onView(withId(R.id.user_home_title)).check(matches(withText("Fantasy Fitness")));
+        onView(withId(R.id.quests_button)).check(matches(isDisplayed()));
 
         //FINISH AUTHENTICATION, TEST IS AT USER HOME
         //FOLLOWING THIS LINE IS THE BEGINNING OF THE ACTUAL TEST THIS TEST IS SUPPOSED TO BE TESTING

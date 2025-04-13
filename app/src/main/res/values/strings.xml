@@ -20,4 +20,6 @@
     <string name="end_turn">End Turn</string>
     <string name="ready">Ready</string>
     <string name="enemy_turn">Enemy Turn</string>
+    <string name="quests">Quests</string>
+    <string name="objective">objective</string>
 </resources>

@@ -17,6 +17,7 @@ public class UserGameStateFirestoreDatabase extends FirestoreDatabase {
     private static final String COLLECTION = "gameState";
     public static final String USER_LOCATION_FIELD = "gameLocation";
     public static final String USER_SAVED_DISTANCE = "savedDistance";
+    public static final String USER_GAME_CURRENCY = "userGameCurrency";
 
     public UserGameStateFirestoreDatabase(){
         super();
@@ -30,6 +31,7 @@ public class UserGameStateFirestoreDatabase extends FirestoreDatabase {
         Map<String, Object> newUserGameState = new HashMap<>();
         newUserGameState.put(USER_LOCATION_FIELD,userGameState.getCurrentGameLocationName());
         newUserGameState.put(USER_SAVED_DISTANCE,userGameState.getSavedWorkoutDistanceMeters());
+        newUserGameState.put(USER_GAME_CURRENCY,userGameState.getUserGameCurrency());
         firestore.collection(COLLECTION).document(userGameState.getUserId()).set(newUserGameState).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -64,7 +66,7 @@ public class UserGameStateFirestoreDatabase extends FirestoreDatabase {
                 if(task.isSuccessful()){
                     DocumentSnapshot result = task.getResult();
                     if(result.exists()) {
-                        UserGameState returnedUserGameState = new UserGameState(userId, result.get(USER_LOCATION_FIELD, String.class), result.get(USER_SAVED_DISTANCE, Double.class));
+                        UserGameState returnedUserGameState = new UserGameState(userId, result.get(USER_LOCATION_FIELD, String.class), result.get(USER_SAVED_DISTANCE, Double.class), result.get(USER_GAME_CURRENCY, Integer.class));
                         repository.readCallback(returnedUserGameState, metadata);
                     } else {
                         repository.readCallback(null, metadata);

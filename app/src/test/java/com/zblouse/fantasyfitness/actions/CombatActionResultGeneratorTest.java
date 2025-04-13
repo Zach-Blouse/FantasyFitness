@@ -2,10 +2,12 @@ package com.zblouse.fantasyfitness.actions;
 
 import static org.junit.Assert.assertEquals;
 
+import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.world.GameLocationService;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +19,8 @@ public class CombatActionResultGeneratorTest {
 
         Map<String, Object> metadata = new HashMap<>();
         metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, GameLocationService.WOODLANDS);
-        ActionResult result = testedGenerator.generate(metadata);
+        metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.cave_button);
+        ActionResult result = testedGenerator.generate(new ArrayList<>(), metadata);
         assertEquals(ActionResultType.COMBAT, result.getActionResultType());
         CombatActionResult combatActionResult = (CombatActionResult) result;
         assertEquals("Goblin Attack", combatActionResult.getEncounterName());
@@ -29,7 +32,8 @@ public class CombatActionResultGeneratorTest {
 
         Map<String, Object> metadata = new HashMap<>();
         metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, GameLocationService.RIVERLANDS);
-        ActionResult result = testedGenerator.generate(metadata);
+        metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.cave_button);
+        ActionResult result = testedGenerator.generate(new ArrayList<>(),metadata);
         assertEquals(ActionResultType.COMBAT, result.getActionResultType());
         CombatActionResult combatActionResult = (CombatActionResult) result;
         assertEquals("Bandit", combatActionResult.getEncounterName());

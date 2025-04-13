@@ -1,9 +1,16 @@
 package com.zblouse.fantasyfitness.actions;
 
+import android.util.Log;
+
+import com.zblouse.fantasyfitness.R;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.dialog.DialogService;
+import com.zblouse.fantasyfitness.quest.Quest;
+import com.zblouse.fantasyfitness.quest.QuestObjective;
+import com.zblouse.fantasyfitness.quest.QuestObjectiveType;
 import com.zblouse.fantasyfitness.world.GameLocationService;
 
+import java.util.List;
 import java.util.Map;
 
 public class DialogActionResultGenerator implements ActionResultGenerator {
@@ -15,13 +22,27 @@ public class DialogActionResultGenerator implements ActionResultGenerator {
     }
 
     @Override
-    public ActionResult generate(Map<String, Object> metadata) {
+    public ActionResult generate(List<Quest> quests, Map<String, Object> metadata) {
         if(metadata.containsKey(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY)) {
             String exploreActionLocation = (String) metadata.get(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY);
+            for(Quest quest: quests){
+                for(QuestObjective questObjective: quest.getQuestObjectives()){
+                   if(!questObjective.isObjectiveMet() && questObjective.getQuestObjectiveType().equals(QuestObjectiveType.VISIT) && questObjective.getGameLocation().equals(exploreActionLocation) && (questObjective.getBuildingId() == (Integer)metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED))){
+                        return new DialogActionResult(questObjective.getQuestDialogId(), true);
+                    } else if(!questObjective.isObjectiveMet()){
+                       break;
+                   }
+                }
+            }
             if (GameLocationService.isWildernessLocation(exploreActionLocation)) {
-                return new DialogActionResult(mainActivity.getDialogService().fetchDialogOption(DialogService.HERMIT_DIALOG_INIT));
+                return new DialogActionResult(DialogService.HERMIT_DIALOG_INIT, false);
+            }
+            if(metadata.containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)){
+                if(metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED).equals(R.id.inn_button)){
+                    return new DialogActionResult(DialogService.INNKEEPER_DIALOG_INIT, false);
+                }
             }
         }
-        return new DialogActionResult(mainActivity.getDialogService().fetchDialogOption(DialogService.EMPTY_DIALOG_INIT));
+        return new DialogActionResult(DialogService.EMPTY_DIALOG_INIT, false);
     }
 }

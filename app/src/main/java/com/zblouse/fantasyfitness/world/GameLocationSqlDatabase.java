@@ -60,6 +60,7 @@ public class GameLocationSqlDatabase extends SQLiteOpenHelper {
             Log.e("GAMELOCATIONDATABASE","none found that match name total count=" + getAllLocations().size());
         }
         locationCursor.close();
+        database.close();
         return foundLocation;
     }
 
@@ -75,6 +76,7 @@ public class GameLocationSqlDatabase extends SQLiteOpenHelper {
             } while(locationCursor.moveToNext());
         }
         locationCursor.close();
+        database.close();
         return foundLocation;
     }
 
@@ -91,6 +93,7 @@ public class GameLocationSqlDatabase extends SQLiteOpenHelper {
             } while(locationCursor.moveToNext());
         }
         locationCursor.close();
+        database.close();
         return locationList;
     }
 }
