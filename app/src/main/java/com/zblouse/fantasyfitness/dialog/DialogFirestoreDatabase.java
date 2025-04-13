@@ -32,7 +32,6 @@ public class DialogFirestoreDatabase extends FirestoreDatabase {
     }
 
     public void read(String userId, String dialogUuid, Repository<Dialog> dialogRepository, Map<String, Object> metadata){
-        Log.e("DialogFirestoreDatabase","Reading Single Dialog: " + dialogUuid);
         firestore.collection(COLLECTION).document(userId).collection(DIALOGS).document(dialogUuid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -42,7 +41,6 @@ public class DialogFirestoreDatabase extends FirestoreDatabase {
                         dialogRepository.readCallback(result.toObject(Dialog.class), metadata);
                     }
                 } else {
-                    Log.e("DialogFirestoreDatabase","Reading Single Dialog: " + dialogUuid + " FAILED");
                     dialogRepository.readCallback(null, metadata);
                 }
             }
@@ -58,9 +56,6 @@ public class DialogFirestoreDatabase extends FirestoreDatabase {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         List<Dialog> dialogList = task.getResult().toObjects(Dialog.class);
-                        for (Dialog dialog : dialogList) {
-                            Log.e("DialogFirestoreDatabase", "fetched dialog affect type: " + dialog.getDialogAffect().getDialogAffectType());
-                        }
                         dialogRepository.readListCallback(dialogList, metadata);
                     } else {
                         dialogRepository.readListCallback(new ArrayList<>(), metadata);

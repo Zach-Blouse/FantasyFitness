@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.zblouse.fantasyfitness.R;
@@ -31,6 +33,11 @@ import com.zblouse.fantasyfitness.dialog.DialogAffect;
 import com.zblouse.fantasyfitness.dialog.DialogAffectType;
 import com.zblouse.fantasyfitness.dialog.DialogFetchEvent;
 import com.zblouse.fantasyfitness.dialog.DialogService;
+import com.zblouse.fantasyfitness.quest.Quest;
+import com.zblouse.fantasyfitness.quest.QuestFetchResponseEvent;
+import com.zblouse.fantasyfitness.quest.QuestObjective;
+import com.zblouse.fantasyfitness.quest.QuestObjectiveType;
+import com.zblouse.fantasyfitness.quest.QuestService;
 import com.zblouse.fantasyfitness.user.UserExistEvent;
 import com.zblouse.fantasyfitness.user.UserGameState;
 import com.zblouse.fantasyfitness.user.UserGameStateFetchResponseEvent;
@@ -50,8 +57,10 @@ import org.mockito.quality.Strictness;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RunWith(RobolectricTestRunner.class)
 public class UserHomeFragmentTest {
@@ -140,6 +149,31 @@ public class UserHomeFragmentTest {
         assertEquals(View.VISIBLE, returnedView.findViewById(R.id.dark_forest_button).getVisibility());
         assertEquals(View.VISIBLE, returnedView.findViewById(R.id.cave_button).getVisibility());
         assertEquals(View.VISIBLE, returnedView.findViewById(R.id.marsh_button).getVisibility());
+    }
+
+    @Test
+    public void publishUserGameStateResponseFarmlandsEventTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.FARMLANDS,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.inn_button).getVisibility());
     }
 
     @Test
@@ -463,5 +497,69 @@ public class UserHomeFragmentTest {
         returnedView.findViewById(R.id.general_store_button).performClick();
         verify(mockExploreActionService, times(1)).exploreAction(anyMap());
 
+    }
+
+    @Test
+    public void questButtonClickedTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        QuestService questService = Mockito.mock(QuestService.class);
+        mainActivity.setQuestService(questService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+        returnedView.findViewById(R.id.quests_button).performClick();
+
+        verify(questService).fetchQuests(anyMap());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.quests_view).getVisibility());
+    }
+
+    @Test
+    public void questFetchResponseEventTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        QuestService questService = Mockito.mock(QuestService.class);
+        mainActivity.setQuestService(questService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        String testUuid = UUID.randomUUID().toString();
+        QuestObjective objective1 = new QuestObjective(QuestObjectiveType.FIGHT,"1", GameLocationService.WOODLANDS,1,false);
+        QuestObjective objective2 = new QuestObjective(QuestObjectiveType.VISIT,"2", GameLocationService.THANADEL_VILLAGE,1,false);
+
+        Quest quest1 = new Quest("testQuest", testUuid, 8, Arrays.asList(objective1, objective2));
+        String testUuid2 = UUID.randomUUID().toString();
+        QuestObjective objective3 = new QuestObjective(QuestObjectiveType.FIGHT,"3", GameLocationService.WOODLANDS,1,false);
+        QuestObjective objective4 = new QuestObjective(QuestObjectiveType.VISIT,"4", GameLocationService.THANADEL_VILLAGE,1,false);
+
+        Quest quest2 = new Quest("testQuest", testUuid2, 8, Arrays.asList(objective3, objective4));
+
+        returnedView.findViewById(R.id.quests_button).performClick();
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.quests_view).getVisibility());
+        QuestFetchResponseEvent questFetchResponseEvent = new QuestFetchResponseEvent(Arrays.asList(quest1, quest2),new HashMap<>());
+
+        testedFragment.publishEvent(questFetchResponseEvent);
+
+        RecyclerView questRecyclerView = (RecyclerView)returnedView.findViewById(R.id.quest_recyclerView);
+        assertEquals(2, questRecyclerView.getAdapter().getItemCount());
     }
 }

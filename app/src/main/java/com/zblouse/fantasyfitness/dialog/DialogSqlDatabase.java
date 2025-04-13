@@ -80,6 +80,7 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
             } while(dialogCursor.moveToNext());
         }
         dialogCursor.close();
+        database.close();
         return dialog;
     }
 
@@ -94,6 +95,7 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
         boolean initialized = dialogCursor.moveToFirst();
 
         dialogCursor.close();
+        database.close();
         return initialized;
     }
 

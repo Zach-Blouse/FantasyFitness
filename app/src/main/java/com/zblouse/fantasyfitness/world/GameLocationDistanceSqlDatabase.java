@@ -69,6 +69,7 @@ public class GameLocationDistanceSqlDatabase extends SQLiteOpenHelper {
             } while(locationDistance2Cursor.moveToNext());
         }
         locationDistance2Cursor.close();
+        database.close();
         return locationDistanceList;
     }
 }

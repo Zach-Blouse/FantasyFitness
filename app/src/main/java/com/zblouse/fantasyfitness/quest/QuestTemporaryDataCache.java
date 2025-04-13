@@ -16,7 +16,6 @@ public class QuestTemporaryDataCache {
 
     public void saveQuest(Quest quest, MainActivity mainActivity) throws IOException {
 
-
         FileOutputStream fileOutputStream = mainActivity.openFileOutput( quest.getQuestUuid() + ".tmp", Context.MODE_PRIVATE);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
         objectOutputStream.writeObject(quest);
@@ -45,5 +44,18 @@ public class QuestTemporaryDataCache {
 
         }
         return null;
+    }
+
+    public boolean deleteQuest(String questUuid, MainActivity mainActivity){
+        try{
+            File file = new File(questUuid +".tmp");
+            if(file.exists()){
+                file.delete();
+            }
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

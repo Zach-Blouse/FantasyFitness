@@ -31,8 +31,6 @@ public class QuestRepository implements Repository<Quest> {
             questTemporaryDataCache.saveQuest(quest, mainActivity);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("QuestRepository","ERROR SAVING TEMP QUEST: " + e.getMessage());
             return false;
         }
     }
@@ -43,6 +41,10 @@ public class QuestRepository implements Repository<Quest> {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public boolean deleteTempQuest(MainActivity mainActivity, String questUuid){
+        return questTemporaryDataCache.deleteQuest(questUuid, mainActivity);
     }
 
     public void getQuest(String userId, String questUuid, Map<String, Object> metadata){

@@ -202,6 +202,7 @@ public class AbilityViewAdapterTest {
 
         viewHolder.abilityCard.performClick();
         verify(mockCombatService).abilityUsed(eq(testModel),eq(damageAbility));
+
     }
 
     @Test
@@ -496,6 +497,7 @@ public class AbilityViewAdapterTest {
         CombatService mockCombatService = Mockito.mock(CombatService.class);
         FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
         FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        shadowOf(Looper.getMainLooper()).idle();
         MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
         mainActivity.setFirebaseAuth(mockAuth);
         mainActivity.setCombatService(mockCombatService);

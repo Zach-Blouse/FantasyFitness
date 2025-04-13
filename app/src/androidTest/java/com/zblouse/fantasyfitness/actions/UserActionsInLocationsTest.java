@@ -4,6 +4,7 @@ package com.zblouse.fantasyfitness.actions;
 import static android.app.Activity.RESULT_OK;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -1938,6 +1939,7 @@ public class UserActionsInLocationsTest {
         onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
 
         onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.inn_button)).perform(scrollTo());
         onView(withId(R.id.inn_button)).perform(click());
 
         verify(mockQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorQuests.capture());

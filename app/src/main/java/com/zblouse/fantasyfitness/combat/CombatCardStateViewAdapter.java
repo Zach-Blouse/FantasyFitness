@@ -61,7 +61,6 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
             holder.card.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    Log.e("CombatCardStateViewAdapter", combatCardModel.getCardName() + " has been touched");
                         switch (motionEvent.getAction()) {
                             case MotionEvent.ACTION_DOWN:
                                 holder.timeTouchStarted = Instant.now();
@@ -84,14 +83,10 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
                                     }
                                     holder.velocityTracker.addMovement(motionEvent);
                                     holder.velocityTracker.computeCurrentVelocity(100);
-                                    Log.e("VELOCITY", "X VELOCITY: " + holder.velocityTracker.getXVelocity());
-                                    Log.e("VELOCITY", "Y VELOCITY: " + holder.velocityTracker.getYVelocity());
                                     if(Math.abs(holder.velocityTracker.getYVelocity()) > Math.abs(holder.velocityTracker.getXVelocity()) && inHand && combatFragment.isPlayerTurn()) {
                                         ClipData data = ClipData.newPlainText("", "");
                                         View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
                                         view.startDragAndDrop(data, shadowBuilder, view, 0);
-                                    } else if(Instant.now().isAfter(holder.timeTouchStarted.plusMillis(350))){
-                                        combatFragment.cardHeld(combatCardModel);
                                     }
                                 }
                         }
@@ -104,7 +99,6 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
         holder.card.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Log.e("CombatCardStateViewAdapter", combatCardModel.getCardName() + " has been long clicked");
                 if(combatCardModel.isPlayerCard() || (combatCardModel.isPlayed() && !combatFragment.isInitialSetup())) {
                     combatFragment.cardHeld(combatCardModel);
                 }
@@ -114,7 +108,6 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("CombatCardStateViewAdapter", combatCardModel.getCardName() + " has been clicked");
                 if(combatFragment.isWaitingForAbilityTargeting() && !inHand){
                     combatFragment.attemptCardAbilityTarget(combatCardModel);
                 }

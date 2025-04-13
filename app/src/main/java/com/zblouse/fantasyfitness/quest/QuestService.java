@@ -44,11 +44,15 @@ public class QuestService implements DomainService<Quest> {
 
     public void startQuest(String questUuid){
         Quest quest = questRepository.loadTempQuest(mainActivity,questUuid);
-        questRepository.writeQuest(quest, mainActivity.getCurrentUser().getUid(),new HashMap<>());
+        if(quest != null) {
+            questRepository.writeQuest(quest, mainActivity.getCurrentUser().getUid(), new HashMap<>());
+            questRepository.deleteTempQuest(mainActivity, questUuid);
+        }
     }
 
     public void deleteQuest(Quest quest, Map<String, Object> metadata){
         questRepository.deleteQuest(quest, mainActivity.getCurrentUser().getUid(), metadata);
+        //TODO future improvement We should also be cleaning up the quest dialogs here
     }
 
     public List<Quest> generateQuests(String gameLocation, int questsToGenerate){
