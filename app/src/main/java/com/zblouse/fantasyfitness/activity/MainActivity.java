@@ -288,4 +288,8 @@ public class MainActivity extends AppCompatActivity {
         return this.questService;
     }
 
+    public void setQuestService(QuestService questService){
+        this.questService = questService;
+    }
+
 }

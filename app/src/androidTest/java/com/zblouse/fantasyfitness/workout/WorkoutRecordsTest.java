@@ -6,6 +6,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.mockito.ArgumentMatchers.any;
@@ -165,6 +166,7 @@ public class WorkoutRecordsTest {
         when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
         when(mockGameStateDocumentSnapshot.get(eq("gameLocation"), eq(String.class))).thenReturn(GameLocationService.ARDUWYN);
         when(mockGameStateDocumentSnapshot.get(eq("savedDistance"), eq(Double.class))).thenReturn(5500.0);
+        when(mockGameStateDocumentSnapshot.get(eq("userGameCurrency"), eq(Integer.class))).thenReturn(7);
         when(mockGameStateReadTask.isSuccessful()).thenReturn(true);
         when(mockGameStateReadTask.getResult()).thenReturn(mockGameStateDocumentSnapshot);
         when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
@@ -189,7 +191,7 @@ public class WorkoutRecordsTest {
         }
         verify(mockReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorRead.capture());
         onCompleteListenerArgumentCaptorRead.getValue().onComplete(mockReadTask);
-        onView(withId(R.id.user_home_title)).check(matches(withText("Fantasy Fitness")));
+        onView(withId(R.id.quests_button)).check(matches(isDisplayed()));
 
         //FINISH AUTHENTICATION, TEST IS AT USER HOME
         //FOLLOWING THIS LINE IS THE BEGINNING OF THE ACTUAL TEST THIS TEST IS SUPPOSED TO BE TESTING

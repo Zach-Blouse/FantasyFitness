@@ -157,7 +157,7 @@ public class GameLocationServiceTest {
         when(mockGameLocationRepository.databaseInitialized()).thenReturn(true);
         UserGameStateService mockUserGameStateService = Mockito.mock(UserGameStateService.class);
         when(mockActivity.getUserGameStateService()).thenReturn(mockUserGameStateService);
-        UserGameState testUserGameState = new UserGameState(testUserId,GameLocationService.ARDUWYN,5500);
+        UserGameState testUserGameState = new UserGameState(testUserId,GameLocationService.ARDUWYN,5500,98);
         GameLocation northRoadLocation = new GameLocation(2,GameLocationService.NORTH_ROAD,"testDescription");
         Map<Integer, GameLocation> locationMap = getTestAllLocations();
         when(mockGameLocationRepository.getAllGameLocations()).thenReturn(new ArrayList<>(getTestAllLocations().values()));
@@ -192,7 +192,7 @@ public class GameLocationServiceTest {
         when(mockGameLocationRepository.databaseInitialized()).thenReturn(true);
         UserGameStateService mockUserGameStateService = Mockito.mock(UserGameStateService.class);
         when(mockActivity.getUserGameStateService()).thenReturn(mockUserGameStateService);
-        UserGameState testUserGameState = new UserGameState(testUserId,GameLocationService.ARDUWYN,2);
+        UserGameState testUserGameState = new UserGameState(testUserId,GameLocationService.ARDUWYN,2,98);
         GameLocation northRoadLocation = new GameLocation(2,GameLocationService.NORTH_ROAD,"testDescription");
         Map<Integer, GameLocation> locationMap = getTestAllLocations();
         when(mockGameLocationRepository.getAllGameLocations()).thenReturn(new ArrayList<>(getTestAllLocations().values()));

@@ -25,6 +25,7 @@ import com.zblouse.fantasyfitness.combat.cards.DamageAbility;
 import com.zblouse.fantasyfitness.combat.cards.DamageType;
 import com.zblouse.fantasyfitness.combat.cards.HealAbility;
 import com.zblouse.fantasyfitness.user.UserService;
+import com.zblouse.fantasyfitness.world.GameLocationService;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -57,7 +58,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.CHARACTER,true,true);
@@ -87,7 +88,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.CHARACTER,true,true);
@@ -116,7 +117,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.CHARACTER,true,true);
@@ -148,7 +149,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.CHARACTER,true,true);
@@ -181,7 +182,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.CHARACTER,true,true);
@@ -216,7 +217,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.CHARACTER,true,true);
@@ -249,7 +250,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.CHARACTER,true,true);
@@ -281,7 +282,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.CHARACTER,true,true);
@@ -313,7 +314,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.CHARACTER,true,true);
@@ -345,7 +346,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.CHARACTER,true,false);
@@ -377,7 +378,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.CHARACTER,true,false);
@@ -409,7 +410,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.CHARACTER,true,true);
@@ -442,7 +443,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.ITEM,true,false);
@@ -472,7 +473,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.ITEM,true,false);
@@ -502,7 +503,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.ITEM,true,false);
@@ -532,7 +533,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.ITEM,true,false);
@@ -562,7 +563,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.ITEM,true,false);
@@ -592,7 +593,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.ITEM,true,false);
@@ -622,7 +623,7 @@ public class AbilityViewAdapterTest {
         when(mockAuth.getCurrentUser()).thenReturn(mockUser);
         LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
         Bundle mockBundle = Mockito.mock(Bundle.class);
-        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter");
+        CombatFragment testedFragment = new CombatFragment(mainActivity, "testEncounter", GameLocationService.WOODLANDS,R.id.cave_button);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
         CombatCardModel testModel = new CombatCardModel("TestCard","Card", CardType.ITEM,true,false);

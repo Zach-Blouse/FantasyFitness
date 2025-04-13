@@ -26,6 +26,18 @@ public class QuestService implements DomainService<Quest> {
         this.questRepository = new QuestRepository(this);
     }
 
+    public QuestService(){
+
+    }
+
+    public void setMainActivity(MainActivity mainActivity){
+        this.mainActivity = mainActivity;
+    }
+
+    public void setQuestRepository(QuestRepository questRepository){
+        this.questRepository = questRepository;
+    }
+
     public void fetchQuests(Map<String, Object> metadata){
         questRepository.fetchQuests(mainActivity.getCurrentUser().getUid(), metadata);
     }

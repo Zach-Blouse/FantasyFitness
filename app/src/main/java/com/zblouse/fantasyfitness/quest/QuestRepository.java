@@ -20,6 +20,12 @@ public class QuestRepository implements Repository<Quest> {
         this.questTemporaryDataCache = new QuestTemporaryDataCache();
     }
 
+    public QuestRepository(QuestService questService, QuestFirestoreDatabase questFirestoreDatabase){
+        this.questService = questService;
+        this.questFirestoreDatabase = questFirestoreDatabase;
+        this.questTemporaryDataCache = new QuestTemporaryDataCache();
+    }
+
     public boolean saveTempQuest(MainActivity mainActivity, Quest quest){
         try {
             questTemporaryDataCache.saveQuest(quest, mainActivity);

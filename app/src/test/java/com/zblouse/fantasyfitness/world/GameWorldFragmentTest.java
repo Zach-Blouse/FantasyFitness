@@ -209,7 +209,7 @@ public class GameWorldFragmentTest {
         GameWorldFragment testedFragment = new GameWorldFragment(mainActivity);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
-        UserGameState userGameState = new UserGameState(testUserId,GameLocationService.MONASTARY,150);
+        UserGameState userGameState = new UserGameState(testUserId,GameLocationService.MONASTARY,150,89);
 
         UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(userGameState, new HashMap<>());
 

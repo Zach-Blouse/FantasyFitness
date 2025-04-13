@@ -56,12 +56,13 @@ public class UserGameStateRepositoryTest {
         String testUserId = "testUser1";
         String testUserLocation = GameLocationService.ARDUWYN;
         Double testUserDistance = 5.5;
+        int testUserCurrency = 6;
         UserGameStateFirestoreDatabase mockUserGameStateFirestoreDatabase = Mockito.mock(UserGameStateFirestoreDatabase.class);
         UserGameStateService mockUserGameStateService = Mockito.mock(UserGameStateService.class);
 
         UserGameStateRepository testedRepository = new UserGameStateRepository(mockUserGameStateFirestoreDatabase,mockUserGameStateService);
 
-        testedRepository.writeUserGameState(testUserId,testUserLocation,testUserDistance,new HashMap<>());
+        testedRepository.writeUserGameState(testUserId,testUserLocation,testUserDistance,testUserCurrency, new HashMap<>());
         ArgumentCaptor<Map> mapArgumentCaptor = ArgumentCaptor.forClass(Map.class);
         ArgumentCaptor<UserGameState> userGameStateArgumentCaptor = ArgumentCaptor.forClass(UserGameState.class);
         verify(mockUserGameStateFirestoreDatabase).write(userGameStateArgumentCaptor.capture(),eq(testedRepository),mapArgumentCaptor.capture());
@@ -69,6 +70,7 @@ public class UserGameStateRepositoryTest {
         assertEquals(testUserId, userGameStateArgumentCaptor.getValue().getUserId());
         assertEquals(testUserLocation, userGameStateArgumentCaptor.getValue().getCurrentGameLocationName());
         assertEquals(testUserDistance,userGameStateArgumentCaptor.getValue().getSavedWorkoutDistanceMeters(),0.0);
+        assertEquals(testUserCurrency, userGameStateArgumentCaptor.getValue().getUserGameCurrency());
     }
 
     @Test
@@ -90,7 +92,8 @@ public class UserGameStateRepositoryTest {
         String testUserId = "testUser1";
         String testUserLocation = GameLocationService.ARDUWYN;
         Double testUserDistance = 5.5;
-        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance);
+        int testUserCurrency = 6;
+        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance, testUserCurrency);
         UserGameStateFirestoreDatabase mockUserGameStateFirestoreDatabase = Mockito.mock(UserGameStateFirestoreDatabase.class);
         UserGameStateService mockUserGameStateService = Mockito.mock(UserGameStateService.class);
         Map<String, Object> metadata = new HashMap<>();
@@ -103,6 +106,7 @@ public class UserGameStateRepositoryTest {
         assertEquals(testUserId, userGameStateArgumentCaptor.getValue().getUserId());
         assertEquals(testUserLocation, userGameStateArgumentCaptor.getValue().getCurrentGameLocationName());
         assertEquals(testUserDistance,userGameStateArgumentCaptor.getValue().getSavedWorkoutDistanceMeters(),0.0);
+        assertEquals(testUserCurrency, userGameStateArgumentCaptor.getValue().getUserGameCurrency());
     }
 
     @Test
@@ -110,7 +114,8 @@ public class UserGameStateRepositoryTest {
         String testUserId = "testUser1";
         String testUserLocation = GameLocationService.ARDUWYN;
         Double testUserDistance = 5.5;
-        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance);
+        int testUserCurrency = 6;
+        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance, testUserCurrency);
         UserGameStateFirestoreDatabase mockUserGameStateFirestoreDatabase = Mockito.mock(UserGameStateFirestoreDatabase.class);
         UserGameStateService mockUserGameStateService = Mockito.mock(UserGameStateService.class);
         Map<String, Object> metadata = new HashMap<>();
@@ -129,7 +134,8 @@ public class UserGameStateRepositoryTest {
         String testUserId = "testUser1";
         String testUserLocation = GameLocationService.ARDUWYN;
         Double testUserDistance = 5.5;
-        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance);
+        int testUserCurrency = 6;
+        UserGameState testUserGameState = new UserGameState(testUserId,testUserLocation,testUserDistance, testUserCurrency);
         UserGameStateFirestoreDatabase mockUserGameStateFirestoreDatabase = Mockito.mock(UserGameStateFirestoreDatabase.class);
         UserGameStateService mockUserGameStateService = Mockito.mock(UserGameStateService.class);
         Map<String, Object> metadata = new HashMap<>();
@@ -142,6 +148,7 @@ public class UserGameStateRepositoryTest {
         assertEquals(testUserId, userGameStateArgumentCaptor.getValue().getUserId());
         assertEquals(testUserLocation, userGameStateArgumentCaptor.getValue().getCurrentGameLocationName());
         assertEquals(testUserDistance,userGameStateArgumentCaptor.getValue().getSavedWorkoutDistanceMeters(),0.0);
+        assertEquals(testUserCurrency, userGameStateArgumentCaptor.getValue().getUserGameCurrency());
     }
 
     @Test

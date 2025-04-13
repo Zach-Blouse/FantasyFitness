@@ -73,6 +73,9 @@ import com.zblouse.fantasyfitness.combat.encounter.EncounterDifficultyLevel;
 import com.zblouse.fantasyfitness.combat.encounter.EncounterFirestoreDatabase;
 import com.zblouse.fantasyfitness.combat.encounter.EncounterRepository;
 import com.zblouse.fantasyfitness.combat.encounter.EncounterService;
+import com.zblouse.fantasyfitness.quest.QuestFirestoreDatabase;
+import com.zblouse.fantasyfitness.quest.QuestRepository;
+import com.zblouse.fantasyfitness.quest.QuestService;
 import com.zblouse.fantasyfitness.user.UserFirestoreDatabase;
 import com.zblouse.fantasyfitness.user.UserGameStateFirestoreDatabase;
 import com.zblouse.fantasyfitness.user.UserGameStateRepository;
@@ -141,6 +144,8 @@ public class CombatTest {
 
         UserGameStateService userGameStateService = new UserGameStateService();
 
+        QuestService questService = new QuestService();
+
         activityRule.getScenario().onActivity(activity -> {
 
             activity.setFirebaseAuth(mockAuth);
@@ -151,6 +156,7 @@ public class CombatTest {
             deckService.setMainActivity(activity);
             cardService.setMainActivity(activity);
             combatService.setMainActivity(activity);
+            questService.setMainActivity(activity);
             activity.setUserService(userService);
             activity.setWorkoutService(workoutService);
             activity.setDeviceService(DeviceServiceType.PERMISSION,mockPermissionDeviceService);
@@ -161,6 +167,7 @@ public class CombatTest {
             activity.setDeckService(deckService);
             activity.setCardService(cardService);
             activity.setCombatService(combatService);
+            activity.setQuestService(questService);
         });
 
         //Set up mock firestore
@@ -201,6 +208,7 @@ public class CombatTest {
         when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
         when(mockGameStateDocumentSnapshot.get(eq("gameLocation"), eq(String.class))).thenReturn(GameLocationService.WOODLANDS);
         when(mockGameStateDocumentSnapshot.get(eq("savedDistance"), eq(Double.class))).thenReturn(5500.0);
+        when(mockGameStateDocumentSnapshot.get(eq("userGameCurrency"), eq(Integer.class))).thenReturn(7);
         when(mockGameStateReadTask.isSuccessful()).thenReturn(true);
         when(mockGameStateReadTask.getResult()).thenReturn(mockGameStateDocumentSnapshot);
         when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
@@ -316,6 +324,29 @@ public class CombatTest {
         CardRepository cardRepository = new CardRepository(cardFirestoreDatabase, cardService);
         cardService.setCardRepository(cardRepository);
 
+        //Set Up Quest Database
+
+        CollectionReference mockQuestCollectionReference = Mockito.mock(CollectionReference.class);
+        when(mockFirestore.collection(eq("quest"))).thenReturn(mockQuestCollectionReference);
+        DocumentReference mockQuestDocument = Mockito.mock(DocumentReference.class);
+        when(mockQuestCollectionReference.document(eq("testUserId"))).thenReturn(mockQuestDocument);
+
+        CollectionReference mockQuestListCollectionReference = Mockito.mock(CollectionReference.class);
+        when(mockQuestDocument.collection(eq("quests"))).thenReturn(mockQuestListCollectionReference);
+        Task<QuerySnapshot> mockQuestQueryTask = Mockito.mock(Task.class);
+        when(mockQuestListCollectionReference.get()).thenReturn(mockQuestQueryTask);
+        ArgumentCaptor<OnCompleteListener<QuerySnapshot>> onCompleteListenerArgumentCaptorQuests = ArgumentCaptor.forClass(OnCompleteListener.class);
+        when(mockQuestQueryTask.isSuccessful()).thenReturn(true);
+        List<QueryDocumentSnapshot> questSnapshots = new ArrayList<>();
+
+        QuerySnapshot querySnapshotQuest = Mockito.mock(QuerySnapshot.class);
+        when(querySnapshotQuest.iterator()).thenReturn(questSnapshots.iterator());
+        when(mockQuestQueryTask.getResult()).thenReturn(querySnapshotQuest);
+
+        QuestFirestoreDatabase questFirestoreDatabase = new QuestFirestoreDatabase(mockFirestore);
+        QuestRepository questRepository = new QuestRepository(questService, questFirestoreDatabase);
+        questService.setQuestRepository(questRepository);
+
         //Setting Up Firebase
 
         Instrumentation.ActivityResult firebaseResult = new Instrumentation.ActivityResult(RESULT_OK, response.toIntent());
@@ -328,7 +359,7 @@ public class CombatTest {
         }
         verify(mockReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorRead.capture());
         onCompleteListenerArgumentCaptorRead.getValue().onComplete(mockReadTask);
-        onView(withId(R.id.user_home_title)).check(matches(withText("Fantasy Fitness")));
+        onView(withId(R.id.quests_button)).check(matches(isDisplayed()));
 
         //FINISH AUTHENTICATION, TEST IS AT USER HOME
         //FOLLOWING THIS LINE IS THE BEGINNING OF THE ACTUAL TEST THIS TEST IS SUPPOSED TO BE TESTING
@@ -337,16 +368,19 @@ public class CombatTest {
 
         onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
         onView(withId(R.id.marsh_button)).perform(click());
+        verify(mockQuestQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorQuests.capture());
+        onCompleteListenerArgumentCaptorQuests.getValue().onComplete(mockQuestQueryTask);
         //should now be in combat screen
-        verify(mockEncounterReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorReadEncounter.capture());
-        onCompleteListenerArgumentCaptorReadEncounter.getValue().onComplete(mockEncounterReadTask);
+        onView(withId(R.id.enemyHand)).check(matches(isDisplayed()));
         verify(mockDeckReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorReadDeck.capture());
         onCompleteListenerArgumentCaptorReadDeck.getValue().onComplete(mockDeckReadTask);
+        verify(mockEncounterReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorReadEncounter.capture());
+        onCompleteListenerArgumentCaptorReadEncounter.getValue().onComplete(mockEncounterReadTask);
         verify(mockQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorCards.capture());
         onCompleteListenerArgumentCaptorCards.getValue().onComplete(mockQueryTask);
 
         onView(withId(R.id.detailed_card)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.enemyHand)).check(matches(isDisplayed()));
+
     }
 
     private Map<String, Object> generateGoblinEncounter(){

@@ -25,7 +25,11 @@ import com.zblouse.fantasyfitness.actions.NothingFoundActionResult;
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.activity.ToastDeviceService;
+import com.zblouse.fantasyfitness.dialog.BaseDialogFetchEvent;
 import com.zblouse.fantasyfitness.dialog.Dialog;
+import com.zblouse.fantasyfitness.dialog.DialogAffect;
+import com.zblouse.fantasyfitness.dialog.DialogAffectType;
+import com.zblouse.fantasyfitness.dialog.DialogFetchEvent;
 import com.zblouse.fantasyfitness.dialog.DialogService;
 import com.zblouse.fantasyfitness.user.UserExistEvent;
 import com.zblouse.fantasyfitness.user.UserGameState;
@@ -103,7 +107,7 @@ public class UserHomeFragmentTest {
 
         assertNotNull(returnedView);
 
-        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.THANADEL_VILLAGE,51);
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.THANADEL_VILLAGE,51, 6);
         UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
         testedFragment.publishEvent(userGameStateFetchResponseEvent);
 
@@ -129,7 +133,7 @@ public class UserHomeFragmentTest {
 
         assertNotNull(returnedView);
 
-        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.WOODLANDS,51);
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.WOODLANDS,51, 6);
         UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
         testedFragment.publishEvent(userGameStateFetchResponseEvent);
 
@@ -158,7 +162,7 @@ public class UserHomeFragmentTest {
 
         assertNotNull(returnedView);
 
-        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.WOODLANDS,51);
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.WOODLANDS,51, 6);
         UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
         testedFragment.publishEvent(userGameStateFetchResponseEvent);
 
@@ -197,7 +201,7 @@ public class UserHomeFragmentTest {
 
         assertNotNull(returnedView);
 
-        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.WOODLANDS,51);
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.WOODLANDS,51, 6);
         UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
         testedFragment.publishEvent(userGameStateFetchResponseEvent);
 
@@ -235,7 +239,7 @@ public class UserHomeFragmentTest {
 
         assertNotNull(returnedView);
 
-        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.WOODLANDS,51);
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.WOODLANDS,51, 6);
         UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
         testedFragment.publishEvent(userGameStateFetchResponseEvent);
 
@@ -273,7 +277,7 @@ public class UserHomeFragmentTest {
 
         assertNotNull(returnedView);
 
-        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.THANADEL_VILLAGE,51);
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.THANADEL_VILLAGE,51, 6);
         UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
         testedFragment.publishEvent(userGameStateFetchResponseEvent);
 
@@ -312,7 +316,7 @@ public class UserHomeFragmentTest {
 
         assertNotNull(returnedView);
 
-        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.THANADEL_VILLAGE,51);
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.THANADEL_VILLAGE,51, 6);
         UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
         testedFragment.publishEvent(userGameStateFetchResponseEvent);
 
@@ -375,41 +379,49 @@ public class UserHomeFragmentTest {
         UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
+        UserGameState testUserGameState = new UserGameState("testId",GameLocationService.BRIDGETON,1000,2);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState, new HashMap<>());
+
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
         assertNotNull(returnedView);
-        Dialog baseDialog = new Dialog("base", "base dialog flavor text","no option text");
-        Dialog dialog1 = new Dialog("dialog1", "dialog 1 flavor text", "option 1 text");
+        Dialog baseDialog = new Dialog("base", "base dialog flavor text","no option text", new DialogAffect(DialogAffectType.NONE), false);
+        Dialog dialog1 = new Dialog("dialog1", "dialog 1 flavor text", "option 1 text", new DialogAffect(DialogAffectType.NONE), false);
         baseDialog.setDialogOption1(dialog1.getReferenceId());
-        Dialog dialog2 = new Dialog("dialog2", "dialog 2 flavor text", "option 2 text");
+        Dialog dialog2 = new Dialog("dialog2", "dialog 2 flavor text", "option 2 text", new DialogAffect(DialogAffectType.NONE), false);
         baseDialog.setDialogOption2(dialog2.getReferenceId());
-        Dialog dialog3 = new Dialog("dialog3", "dialog 3 flavor text", "option 3 text");
+        Dialog dialog3 = new Dialog("dialog3", "dialog 3 flavor text", "option 3 text", new DialogAffect(DialogAffectType.NONE), false);
         baseDialog.setDialogOption3(dialog3.getReferenceId());
-        Dialog dialog4 = new Dialog("dialog4", "dialog 4 flavor text", "option 4 text");
+        Dialog dialog4 = new Dialog("dialog4", "dialog 4 flavor text", "option 4 text", new DialogAffect(DialogAffectType.NONE), false);
         baseDialog.setDialogOption4(dialog4.getReferenceId());
 
-        when(mockDialogService.fetchDialogOption(dialog1.getReferenceId())).thenReturn(dialog1);
-        when(mockDialogService.fetchDialogOption(dialog2.getReferenceId())).thenReturn(dialog2);
-        when(mockDialogService.fetchDialogOption(dialog3.getReferenceId())).thenReturn(dialog3);
-        when(mockDialogService.fetchDialogOption(dialog4.getReferenceId())).thenReturn(dialog4);
 
-        DialogActionResult dialogActionResult = new DialogActionResult(baseDialog);
+        DialogActionResult dialogActionResult = new DialogActionResult(baseDialog.getReferenceId(),false);
         ExploreActionEvent exploreActionEvent = new ExploreActionEvent(dialogActionResult, new HashMap<>());
         testedFragment.publishEvent(exploreActionEvent);
 
+        verify(mockDialogService).fetchBaseDialog(eq(baseDialog.getReferenceId()),eq(false), anyMap());
+
+
+        BaseDialogFetchEvent baseDialogFetchEvent = new BaseDialogFetchEvent(baseDialog, new HashMap<>());
+        testedFragment.publishEvent(baseDialogFetchEvent);
+
         assertEquals(View.VISIBLE, returnedView.findViewById(R.id.dialog_card_view).getVisibility());
         assertEquals(baseDialog.getFlavorText(), ((TextView)returnedView.findViewById(R.id.dialog_flavor_text)).getText());
-        assertEquals(dialog1.getOptionText(), ((Button)returnedView.findViewById(R.id.dialog_option_1_button)).getText());
-        assertEquals(dialog2.getOptionText(), ((Button)returnedView.findViewById(R.id.dialog_option_2_button)).getText());
-        assertEquals(dialog3.getOptionText(), ((Button)returnedView.findViewById(R.id.dialog_option_3_button)).getText());
-        assertEquals(dialog4.getOptionText(), ((Button)returnedView.findViewById(R.id.dialog_option_4_button)).getText());
+
+        verify(mockDialogService).fetchDialogOptions(eq(baseDialog),anyMap());
+
+        DialogFetchEvent dialogFetchEvent = new DialogFetchEvent(dialog1, dialog2, dialog3, dialog4, new HashMap<>());
+        testedFragment.publishEvent(dialogFetchEvent);
 
         ((Button)returnedView.findViewById(R.id.dialog_option_1_button)).callOnClick();
-        verify(mockDialogService).selectDialogOption(eq(dialog1.getReferenceId()), anyMap());
+        verify(mockDialogService).selectDialogOption(eq(dialog1), eq(GameLocationService.BRIDGETON), anyMap());
         ((Button)returnedView.findViewById(R.id.dialog_option_2_button)).callOnClick();
-        verify(mockDialogService).selectDialogOption(eq(dialog2.getReferenceId()), anyMap());
+        verify(mockDialogService).selectDialogOption(eq(dialog2), eq(GameLocationService.BRIDGETON), anyMap());
         ((Button)returnedView.findViewById(R.id.dialog_option_3_button)).callOnClick();
-        verify(mockDialogService).selectDialogOption(eq(dialog3.getReferenceId()), anyMap());
+        verify(mockDialogService).selectDialogOption(eq(dialog3), eq(GameLocationService.BRIDGETON), anyMap());
         ((Button)returnedView.findViewById(R.id.dialog_option_4_button)).callOnClick();
-        verify(mockDialogService).selectDialogOption(eq(dialog4.getReferenceId()), anyMap());
+        verify(mockDialogService).selectDialogOption(eq(dialog4), eq(GameLocationService.BRIDGETON), anyMap());
 
     }
 
@@ -431,7 +443,7 @@ public class UserHomeFragmentTest {
         UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
         View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
 
-        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.THANADEL_VILLAGE,51);
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.THANADEL_VILLAGE,51,2);
         UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
         testedFragment.publishEvent(userGameStateFetchResponseEvent);
 
