@@ -3,6 +3,7 @@ package com.zblouse.fantasyfitness.home;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -87,6 +88,8 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
     private RecyclerView detailedQuestObjectivesRecyclerView;
     private TextView detailedQuestNameTextView;
     private TextView detailedQuestDescriptionTextView;
+    private ScrollView verticalScrollView;
+    private HorizontalScrollView horizontalScrollView;
 
     public UserHomeFragment(){
         super(R.layout.user_home_fragment);
@@ -115,6 +118,18 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
             }
         });
         nothingFoundCardView.setVisibility(View.GONE);
+
+        //Implementing scrolling both directions at once, since vertical is the parent, the touch is implemented there
+        verticalScrollView = layout.findViewById(R.id.world_map_vertical);
+        horizontalScrollView = layout.findViewById(R.id.world_map_horizontal);
+        horizontalScrollView.setOnTouchListener(getOnTouchListener(verticalScrollView,horizontalScrollView));
+
+        verticalScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return horizontalScrollView.onTouchEvent(motionEvent);
+            }
+        });
 
         dialogCardView = layout.findViewById(R.id.dialog_card_view);
         dialogFlavorText = layout.findViewById(R.id.dialog_flavor_text);
@@ -320,6 +335,88 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
     private void loadLocationUi(String currentGameLocation){
         locationDisplayed = currentGameLocation;
         switch(currentGameLocation){
+            case GameLocationService.BRIDGETON: {
+                viewStub.setLayoutResource(R.layout.bridgeton_layout);
+                View layout = viewStub.inflate();
+                Button innButton = layout.findViewById(R.id.inn_button);
+                innButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.inn_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                Button generalStoreButton = layout.findViewById(R.id.general_store_button);
+                generalStoreButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.general_store_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                Button blacksmithButton = layout.findViewById(R.id.blacksmith_button);
+                blacksmithButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.blacksmith_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                break;
+            }
+            case GameLocationService.FAOLYN: {
+                viewStub.setLayoutResource(R.layout.faolyn_layout);
+                View layout = viewStub.inflate();
+                Button innButton = layout.findViewById(R.id.inn_button);
+                innButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.inn_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                Button generalStoreButton = layout.findViewById(R.id.general_store_button);
+                generalStoreButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.general_store_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                Button blacksmithButton = layout.findViewById(R.id.blacksmith_button);
+                blacksmithButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.blacksmith_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                break;
+            }
             case GameLocationService.FARMLANDS: {
                 viewStub.setLayoutResource(R.layout.farmlands);
                 View layout = viewStub.inflate();
@@ -425,5 +522,40 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
 
         questsCardView.setVisibility(View.GONE);
         questDetailsCardView.setVisibility(View.VISIBLE);
+    }
+
+    private View.OnTouchListener getOnTouchListener(ScrollView verticalScrollView, HorizontalScrollView horizontalScrollView){
+        return new View.OnTouchListener() {
+
+            private float mx, my, curX, curY;
+            private boolean started = false;
+
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                curX = event.getX();
+                curY = event.getY();
+                int dx = (int) (mx - curX);
+                int dy = (int) (my - curY);
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        if (started) {
+                            verticalScrollView.scrollBy(0, dy);
+                            horizontalScrollView.scrollBy(dx, 0);
+                        } else {
+                            started = true;
+                        }
+                        mx = curX;
+                        my = curY;
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        verticalScrollView.scrollBy(0, dy);
+                        horizontalScrollView.scrollBy(dx, 0);
+                        started = false;
+                        break;
+                }
+                return false;
+            }
+        };
     }
 }

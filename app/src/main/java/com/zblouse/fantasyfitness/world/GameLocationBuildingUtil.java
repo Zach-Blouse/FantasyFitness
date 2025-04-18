@@ -18,6 +18,8 @@ public class GameLocationBuildingUtil {
             return "inn";
         }else if(buildingId == R.id.general_store_button){
             return "general store";
+        }else if(buildingId == R.id.blacksmith_button){
+            return "blacksmith";
         } else {
             return "unknown location";
         }
@@ -31,6 +33,10 @@ public class GameLocationBuildingUtil {
             return Arrays.asList(R.id.inn_button, R.id.general_store_button);
         } else if(gameLocation.equals(GameLocationService.FARMLANDS)){
             return Arrays.asList(R.id.inn_button);
+        } else if(gameLocation.equals(GameLocationService.FAOLYN)){
+            return Arrays.asList(R.id.inn_button, R.id.general_store_button, R.id.blacksmith_button);
+        } else if(gameLocation.equals(GameLocationService.BRIDGETON)){
+            return Arrays.asList(R.id.inn_button, R.id.general_store_button, R.id.blacksmith_button);
         }
         else {
             throw new UnsupportedOperationException("Game Location: " + gameLocation + " has not been implemented in GameLocationBuildingUtil");

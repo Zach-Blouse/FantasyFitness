@@ -25,13 +25,23 @@ public class QuestGenerator {
         int questReward = 10;
         if(gameLocationId.equals(GameLocationService.THANADEL_VILLAGE)){
             combatLocationOptions = Arrays.asList(GameLocationService.WOODLANDS);
-            visitLocationOptions = Arrays.asList(GameLocationService.FARMLANDS);
+            visitLocationOptions = Arrays.asList(GameLocationService.FARMLANDS, GameLocationService.BRIDGETON, GameLocationService.FAOLYN);
             questReward =  new Random().nextInt(10) + 10;
 
         }else if(gameLocationId.equals(GameLocationService.FARMLANDS)){
             combatLocationOptions = Arrays.asList(GameLocationService.WOODLANDS);
-            visitLocationOptions = Arrays.asList(GameLocationService.THANADEL_VILLAGE);
+            visitLocationOptions = Arrays.asList(GameLocationService.THANADEL_VILLAGE, GameLocationService.FAOLYN);
             questReward =  new Random().nextInt(10) + 10;
+
+        }else if(gameLocationId.equals(GameLocationService.FAOLYN)){
+            combatLocationOptions = Arrays.asList(GameLocationService.WOODLANDS);
+            visitLocationOptions = Arrays.asList(GameLocationService.THANADEL_VILLAGE, GameLocationService.BRIDGETON, GameLocationService.FARMLANDS);
+            questReward =  new Random().nextInt(10) + 100;
+
+        }else if(gameLocationId.equals(GameLocationService.BRIDGETON)){
+            combatLocationOptions = Arrays.asList(GameLocationService.WOODLANDS);
+            visitLocationOptions = Arrays.asList(GameLocationService.THANADEL_VILLAGE, GameLocationService.FAOLYN, GameLocationService.FARMLANDS);
+            questReward =  new Random().nextInt(10) + 25;
 
         } else {
             QuestObjective basicObjective = new QuestObjective(QuestObjectiveType.FIGHT, UUID.randomUUID().toString(), GameLocationService.WOODLANDS, R.id.dark_forest_button,false);

@@ -48,30 +48,44 @@
 
                 <Button
                     android:id="@+id/inn_button"
-                    android:layout_width="0dp"
-                    android:layout_height="135dp"
+                    android:layout_width="147dp"
+                    android:layout_height="147dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="83dp"
-                    android:layout_marginBottom="338dp"
+                    android:layout_marginStart="42dp"
+                    android:layout_marginBottom="37dp"
                     android:autoSizeTextType="uniform"
                     android:backgroundTint="@android:color/transparent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/general_store_button"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+                    android:contentDescription="@string/inn"
+                    app:layout_constraintBottom_toTopOf="@+id/general_store_button"
+                    app:layout_constraintStart_toEndOf="@+id/general_store_button" />
 
                 <Button
                     android:id="@+id/general_store_button"
-                    android:layout_width="81dp"
-                    android:layout_height="109dp"
+                    android:layout_width="86dp"
+                    android:layout_height="161dp"
                     android:layout_gravity="center"
-                    android:layout_marginEnd="76dp"
+                    android:layout_marginEnd="553dp"
                     android:autoSizeTextType="uniform"
                     android:backgroundTint="@android:color/transparent"
-                    app:layout_constraintBottom_toBottomOf="@+id/inn_button"
+                    android:contentDescription="@string/general_store"
+                    app:layout_constraintBottom_toBottomOf="@+id/blacksmith_button"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/inn_button" />
+                    app:layout_constraintStart_toEndOf="@+id/blacksmith_button" />
+
+                <Button
+                    android:id="@+id/blacksmith_button"
+                    android:layout_width="0dp"
+                    android:layout_height="99dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="345dp"
+                    android:layout_marginEnd="104dp"
+                    android:layout_marginBottom="260dp"
+                    android:autoSizeTextType="uniform"
+                    android:backgroundTint="@android:color/transparent"
+                    android:contentDescription="@string/blacksmith"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/general_store_button"
+                    app:layout_constraintStart_toStartOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </HorizontalScrollView>
