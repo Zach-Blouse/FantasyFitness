@@ -22,4 +22,7 @@
     <string name="enemy_turn">Enemy Turn</string>
     <string name="quests">Quests</string>
     <string name="objective">objective</string>
+    <string name="blacksmith">Blacksmith</string>
+    <string name="inn">Inn</string>
+    <string name="general_store">General Store</string>
 </resources>
