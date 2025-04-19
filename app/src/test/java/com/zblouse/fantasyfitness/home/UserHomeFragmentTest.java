@@ -27,12 +27,19 @@ import com.zblouse.fantasyfitness.actions.NothingFoundActionResult;
 import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.activity.ToastDeviceService;
+import com.zblouse.fantasyfitness.combat.cards.AbilityTarget;
+import com.zblouse.fantasyfitness.combat.cards.Card;
+import com.zblouse.fantasyfitness.combat.cards.HealAbility;
+import com.zblouse.fantasyfitness.combat.cards.ItemCard;
+import com.zblouse.fantasyfitness.combat.cards.ItemType;
 import com.zblouse.fantasyfitness.dialog.BaseDialogFetchEvent;
 import com.zblouse.fantasyfitness.dialog.Dialog;
 import com.zblouse.fantasyfitness.dialog.DialogAffect;
 import com.zblouse.fantasyfitness.dialog.DialogAffectType;
 import com.zblouse.fantasyfitness.dialog.DialogFetchEvent;
 import com.zblouse.fantasyfitness.dialog.DialogService;
+import com.zblouse.fantasyfitness.merchant.Merchant;
+import com.zblouse.fantasyfitness.merchant.MerchantDisplayEvent;
 import com.zblouse.fantasyfitness.quest.Quest;
 import com.zblouse.fantasyfitness.quest.QuestFetchResponseEvent;
 import com.zblouse.fantasyfitness.quest.QuestObjective;
@@ -99,6 +106,38 @@ public class UserHomeFragmentTest {
     }
 
     @Test
+    public void publishMerchantDisplayEventTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        Map<Card, Integer> cardMap = new HashMap<>();
+        ItemCard itemCard = new ItemCard("testUesr", "testuuid", "TestCardName","cardDescription", ItemType.EQUIPPABLE, new HealAbility("heal","heal", AbilityTarget.SINGLE_ALLY,3));
+        cardMap.put(itemCard,50);
+
+        Merchant merchant = new Merchant("merchantTag", cardMap);
+        MerchantDisplayEvent merchantDisplayEvent = new MerchantDisplayEvent(merchant);
+
+        testedFragment.publishEvent(merchantDisplayEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.merchant_card_view).getVisibility());
+        returnedView.findViewById(R.id.merchant_dismiss_button).performClick();
+        assertEquals(View.GONE, returnedView.findViewById(R.id.merchant_card_view).getVisibility());
+    }
+
+    @Test
     public void publishUserGameStateResponseThanadelEventTest() {
         UserService mockUserService = Mockito.mock(UserService.class);
         FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
@@ -122,6 +161,60 @@ public class UserHomeFragmentTest {
 
         assertEquals(View.VISIBLE, returnedView.findViewById(R.id.inn_button).getVisibility());
         assertEquals(View.VISIBLE, returnedView.findViewById(R.id.general_store_button).getVisibility());
+    }
+
+    @Test
+    public void publishUserGameStateResponseFaolynEventTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.FAOLYN,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.inn_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.general_store_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.blacksmith_button).getVisibility());
+    }
+
+    @Test
+    public void publishUserGameStateResponseRiverlandsEventTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.BRIDGETON,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.inn_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.general_store_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.blacksmith_button).getVisibility());
     }
 
     @Test

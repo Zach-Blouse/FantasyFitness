@@ -40,6 +40,21 @@ public class DialogActionResultGenerator implements ActionResultGenerator {
             if(metadata.containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)){
                 if(metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED).equals(R.id.inn_button)){
                     return new DialogActionResult(DialogService.INNKEEPER_DIALOG_INIT, false);
+                } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED).equals(R.id.general_store_button)){
+                    if(metadata.get(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY).equals(GameLocationService.FAOLYN)){
+                        return new DialogActionResult(DialogService.FAOLYN_GENERAL_STORE_DIALOG_INIT, false);
+                    } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY).equals(GameLocationService.BRIDGETON)){
+                        return new DialogActionResult(DialogService.BRIDGETON_GENERAL_STORE_DIALOG_INIT, false);
+                    } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY).equals(GameLocationService.THANADEL_VILLAGE)){
+                        return new DialogActionResult(DialogService.THANADEL_GENERAL_STORE_DIALOG_INIT, false);
+                    }
+
+                } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED).equals(R.id.blacksmith_button)){
+                    if(metadata.get(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY).equals(GameLocationService.FAOLYN)){
+                        return new DialogActionResult(DialogService.FAOLYN_BLACKSMITH_DIALOG_INIT, false);
+                    } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY).equals(GameLocationService.BRIDGETON)){
+                        return new DialogActionResult(DialogService.BRIDGETON_BLACKSMITH_DIALOG_INIT, false);
+                    }
                 }
             }
         }

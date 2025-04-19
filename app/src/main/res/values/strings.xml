@@ -25,4 +25,9 @@
     <string name="blacksmith">Blacksmith</string>
     <string name="inn">Inn</string>
     <string name="general_store">General Store</string>
+    <string name="bridgeton_general_store">bridgetonGeneralStore</string>
+    <string name="faolyn_general_store">faolynGeneralStore</string>
+    <string name="thanadel_general_store">thanadelGeneralStore</string>
+    <string name="faolyn_blacksmith">faolynBlacksmith</string>
+    <string name="bridgeton_blacksmith">bridgetonBlacksmith</string>
 </resources>

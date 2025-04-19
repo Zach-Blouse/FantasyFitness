@@ -37,6 +37,10 @@ public class CardService implements DomainService<Card> {
         cardRepository.fetchCardList(mainActivity.getCurrentUser().getUid(), cardUuids, metadata);
     }
 
+    public void writeCard(Card card){
+        cardRepository.writeCard(card,new HashMap<>());
+    }
+
     public void repositoryResponse(List<Card> cardList, Map<String, Object> metadata){
         if(metadata.containsKey(INTER_DOMAIN_SERVICE_ORIGIN_KEY)){
             metadata.put(INTER_DOMAIN_SERVICE_RESPONSE_CLASS_KEY,List.class);

@@ -5,6 +5,7 @@ public class DialogAffect {
     private DialogAffectType dialogAffectType;
     private String questUuid;
     private String questObjectiveUuid;
+    private String shopTag;
 
     public DialogAffect(DialogAffectType dialogAffectType){
         this.dialogAffectType = dialogAffectType;
@@ -32,5 +33,13 @@ public class DialogAffect {
 
     public void setQuestObjectiveUuid(String questObjectiveUuid){
         this.questObjectiveUuid = questObjectiveUuid;
+    }
+
+    public String getShopTag(){
+        return this.shopTag;
+    }
+
+    public void setShopTag(String shopTag){
+        this.shopTag = shopTag;
     }
 }

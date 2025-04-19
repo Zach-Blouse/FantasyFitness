@@ -44,7 +44,6 @@ public class CombatCardStateViewAdapter extends RecyclerView.Adapter<CombatCardS
     public void onBindViewHolder(@NonNull CombatCardStateViewAdapter.ViewHolder holder, int position) {
         CombatCardModel combatCardModel = combatCardModelList.get(position);
 
-        ContextCompat.getColor(combatFragment.getMainActivity(), R.color.fantasy_fitness_white);
         if(combatCardModel.isPlayerCard() || (combatCardModel.isPlayed() && !combatFragment.isInitialSetup())) {
             holder.cardNameTextView.setText(combatCardModel.getCardName());
             holder.cardDescriptionTextView.setText(combatCardModel.getCardDescription());

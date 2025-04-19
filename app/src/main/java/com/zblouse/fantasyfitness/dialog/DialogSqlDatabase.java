@@ -24,6 +24,7 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
     private static final String DIALOG_AFFECT_TYPE_KEY = "dialogAffectType";
     private static final String QUEST_UUID_KEY = "questUUIDKey";
     private static final String QUEST_OBJECTIVE_KEY = "questObjectiveUUIDKey";
+    private static final String SHOP_TAG_KEY = "shopTagKey";
 
     public DialogSqlDatabase(Context context){
         super(context, DATABASE_NAME,null,1);
@@ -41,7 +42,8 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
                 DIALOG_4_KEY + " TEXT," +
                 DIALOG_AFFECT_TYPE_KEY + " TEXT," +
                 QUEST_UUID_KEY + " TEXT," +
-                QUEST_OBJECTIVE_KEY + " TEXT"
+                QUEST_OBJECTIVE_KEY + " TEXT," +
+                SHOP_TAG_KEY + " TEXT"
                 +")");
     }
 
@@ -59,6 +61,7 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
         contentValues.put(DIALOG_AFFECT_TYPE_KEY, dialog.getDialogAffect().getDialogAffectType().toString());
         contentValues.put(QUEST_UUID_KEY, dialog.getDialogAffect().getQuestUuid());
         contentValues.put(QUEST_OBJECTIVE_KEY, dialog.getDialogAffect().getQuestObjectiveUuid());
+        contentValues.put(SHOP_TAG_KEY, dialog.getDialogAffect().getShopTag());
 
         database.insert(TABLE_NAME, null, contentValues);
         database.close();
@@ -74,6 +77,7 @@ public class DialogSqlDatabase extends SQLiteOpenHelper {
                 DialogAffect dialogAffect = new DialogAffect(DialogAffectType.valueOf(dialogCursor.getString(8)));
                 dialogAffect.setQuestUuid(dialogCursor.getString(9));
                 dialogAffect.setQuestObjectiveUuid(dialogCursor.getString(10));
+                dialogAffect.setShopTag(dialogCursor.getString(11));
                 dialog = new Dialog(dialogCursor.getInt(0),dialogCursor.getString(1),
                         dialogCursor.getString(2), dialogCursor.getString(3), dialogCursor.getString(4),
                         dialogCursor.getString(5),dialogCursor.getString(6), dialogCursor.getString(7), dialogAffect,false);

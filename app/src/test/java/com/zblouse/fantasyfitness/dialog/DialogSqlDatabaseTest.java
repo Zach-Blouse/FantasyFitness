@@ -28,7 +28,7 @@ public class DialogSqlDatabaseTest {
         testedDatabase.onCreate(mockDatabase);
         ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
         verify(mockDatabase).execSQL((String)stringArgumentCaptor.capture());
-        assertEquals("CREATE TABLE IF NOT EXISTS dialog(id INTEGER PRIMARY KEY,reference_id TEXT,option_text TEXT,flavor_text TEXT,dialog1 TEXT,dialog2 TEXT,dialog3 TEXT,dialog4 TEXT,dialogAffectType TEXT,questUUIDKey TEXT,questObjectiveUUIDKey TEXT)", stringArgumentCaptor.getValue());
+        assertEquals("CREATE TABLE IF NOT EXISTS dialog(id INTEGER PRIMARY KEY,reference_id TEXT,option_text TEXT,flavor_text TEXT,dialog1 TEXT,dialog2 TEXT,dialog3 TEXT,dialog4 TEXT,dialogAffectType TEXT,questUUIDKey TEXT,questObjectiveUUIDKey TEXT,shopTagKey TEXT)", stringArgumentCaptor.getValue());
     }
 
     @Test
