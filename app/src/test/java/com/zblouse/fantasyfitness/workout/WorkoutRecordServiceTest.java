@@ -18,6 +18,8 @@ import com.zblouse.fantasyfitness.activity.DeviceServiceType;
 import com.zblouse.fantasyfitness.activity.MainActivity;
 import com.zblouse.fantasyfitness.activity.NotificationDeviceService;
 import com.zblouse.fantasyfitness.core.DomainService;
+import com.zblouse.fantasyfitness.user.UserGameStateRepository;
+import com.zblouse.fantasyfitness.user.UserGameStateService;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -66,6 +68,7 @@ public class WorkoutRecordServiceTest {
         assertEquals(WorkoutRecordDistance.MILE,metadataArgumentCaptor.getValue().get("workoutRecordDistance"));
         assert(metadataArgumentCaptor.getValue().containsKey("workoutTime"));
         assertEquals(workoutTime,metadataArgumentCaptor.getValue().get("workoutTime"));
+
     }
 
     @Test
@@ -229,6 +232,8 @@ public class WorkoutRecordServiceTest {
         when(mockActivity.getDeviceService(DeviceServiceType.NOTIFICATION)).thenReturn(mockNotificationDeviceService);
         when(mockActivity.getCurrentUser()).thenReturn(mockUser);
         when(mockUser.getUid()).thenReturn(testUid);
+        UserGameStateService mockUserGameStateService = Mockito.mock(UserGameStateService.class);
+        when(mockActivity.getUserGameStateService()).thenReturn(mockUserGameStateService);
         WorkoutRecordRepository mockWorkoutRecordRepository = Mockito.mock(WorkoutRecordRepository.class);
         WorkoutRecordService testedService = new WorkoutRecordService(mockActivity, mockWorkoutRecordRepository);
         WorkoutRecord testRecord = new WorkoutRecord(testUid,9999L,9999L,9999L,9999L,9999L);
@@ -240,6 +245,7 @@ public class WorkoutRecordServiceTest {
         testedService.repositoryResponse(testRecord, metadata);
         verify(mockNotificationDeviceService).sendNotification(eq("New Record"),eq("Congratulations on your new record Mile time!"),eq(R.drawable.run));
         verify(mockWorkoutRecordRepository).updateWorkoutRecord(eq(testUid),eq(testWorkoutTime),eq(WorkoutRecordDistance.MILE),anyMap());
+        verify(mockUserGameStateService).modifyUserGameCurrency(eq(testUid),eq(250),anyMap());
     }
 
     @Test
@@ -275,6 +281,8 @@ public class WorkoutRecordServiceTest {
         when(mockActivity.getDeviceService(DeviceServiceType.NOTIFICATION)).thenReturn(mockNotificationDeviceService);
         when(mockActivity.getCurrentUser()).thenReturn(mockUser);
         when(mockUser.getUid()).thenReturn(testUid);
+        UserGameStateService mockUserGameStateService = Mockito.mock(UserGameStateService.class);
+        when(mockActivity.getUserGameStateService()).thenReturn(mockUserGameStateService);
         WorkoutRecordRepository mockWorkoutRecordRepository = Mockito.mock(WorkoutRecordRepository.class);
         WorkoutRecordService testedService = new WorkoutRecordService(mockActivity, mockWorkoutRecordRepository);
         WorkoutRecord testRecord = new WorkoutRecord(testUid,9999L,9999L,9999L,9999L,9999L);
@@ -286,6 +294,7 @@ public class WorkoutRecordServiceTest {
         testedService.repositoryResponse(testRecord, metadata);
         verify(mockNotificationDeviceService).sendNotification(eq("New Record"),eq("Congratulations on your new record 5k time!"),eq(R.drawable.run));
         verify(mockWorkoutRecordRepository).updateWorkoutRecord(eq(testUid),eq(testWorkoutTime),eq(WorkoutRecordDistance.FIVE_K),anyMap());
+        verify(mockUserGameStateService).modifyUserGameCurrency(eq(testUid),eq(500),anyMap());
     }
 
     @Test
@@ -321,6 +330,8 @@ public class WorkoutRecordServiceTest {
         when(mockActivity.getDeviceService(DeviceServiceType.NOTIFICATION)).thenReturn(mockNotificationDeviceService);
         when(mockActivity.getCurrentUser()).thenReturn(mockUser);
         when(mockUser.getUid()).thenReturn(testUid);
+        UserGameStateService mockUserGameStateService = Mockito.mock(UserGameStateService.class);
+        when(mockActivity.getUserGameStateService()).thenReturn(mockUserGameStateService);
         WorkoutRecordRepository mockWorkoutRecordRepository = Mockito.mock(WorkoutRecordRepository.class);
         WorkoutRecordService testedService = new WorkoutRecordService(mockActivity, mockWorkoutRecordRepository);
         WorkoutRecord testRecord = new WorkoutRecord(testUid,9999L,9999L,9999L,9999L,9999L);
@@ -332,6 +343,7 @@ public class WorkoutRecordServiceTest {
         testedService.repositoryResponse(testRecord, metadata);
         verify(mockNotificationDeviceService).sendNotification(eq("New Record"),eq("Congratulations on your new record 10k time!"),eq(R.drawable.run));
         verify(mockWorkoutRecordRepository).updateWorkoutRecord(eq(testUid),eq(testWorkoutTime),eq(WorkoutRecordDistance.TEN_K),anyMap());
+        verify(mockUserGameStateService).modifyUserGameCurrency(eq(testUid),eq(750),anyMap());
     }
 
     @Test
@@ -367,6 +379,8 @@ public class WorkoutRecordServiceTest {
         when(mockActivity.getDeviceService(DeviceServiceType.NOTIFICATION)).thenReturn(mockNotificationDeviceService);
         when(mockActivity.getCurrentUser()).thenReturn(mockUser);
         when(mockUser.getUid()).thenReturn(testUid);
+        UserGameStateService mockUserGameStateService = Mockito.mock(UserGameStateService.class);
+        when(mockActivity.getUserGameStateService()).thenReturn(mockUserGameStateService);
         WorkoutRecordRepository mockWorkoutRecordRepository = Mockito.mock(WorkoutRecordRepository.class);
         WorkoutRecordService testedService = new WorkoutRecordService(mockActivity, mockWorkoutRecordRepository);
         WorkoutRecord testRecord = new WorkoutRecord(testUid,9999L,9999L,9999L,9999L,9999L);
@@ -378,6 +392,7 @@ public class WorkoutRecordServiceTest {
         testedService.repositoryResponse(testRecord, metadata);
         verify(mockNotificationDeviceService).sendNotification(eq("New Record"),eq("Congratulations on your new record 25k time!"),eq(R.drawable.run));
         verify(mockWorkoutRecordRepository).updateWorkoutRecord(eq(testUid),eq(testWorkoutTime),eq(WorkoutRecordDistance.TWENTY_FIVE_K),anyMap());
+        verify(mockUserGameStateService).modifyUserGameCurrency(eq(testUid),eq(1000),anyMap());
     }
 
     @Test
@@ -413,6 +428,8 @@ public class WorkoutRecordServiceTest {
         when(mockActivity.getDeviceService(DeviceServiceType.NOTIFICATION)).thenReturn(mockNotificationDeviceService);
         when(mockActivity.getCurrentUser()).thenReturn(mockUser);
         when(mockUser.getUid()).thenReturn(testUid);
+        UserGameStateService mockUserGameStateService = Mockito.mock(UserGameStateService.class);
+        when(mockActivity.getUserGameStateService()).thenReturn(mockUserGameStateService);
         WorkoutRecordRepository mockWorkoutRecordRepository = Mockito.mock(WorkoutRecordRepository.class);
         WorkoutRecordService testedService = new WorkoutRecordService(mockActivity, mockWorkoutRecordRepository);
         WorkoutRecord testRecord = new WorkoutRecord(testUid,9999L,9999L,9999L,9999L,9999L);
@@ -424,6 +441,8 @@ public class WorkoutRecordServiceTest {
         testedService.repositoryResponse(testRecord, metadata);
         verify(mockNotificationDeviceService).sendNotification(eq("New Record"),eq("Congratulations on your new record Marathon time!"),eq(R.drawable.run));
         verify(mockWorkoutRecordRepository).updateWorkoutRecord(eq(testUid),eq(testWorkoutTime),eq(WorkoutRecordDistance.MARATHON),anyMap());
+        verify(mockUserGameStateService).modifyUserGameCurrency(eq(testUid),eq(2500),anyMap());
+
     }
 
     @Test
