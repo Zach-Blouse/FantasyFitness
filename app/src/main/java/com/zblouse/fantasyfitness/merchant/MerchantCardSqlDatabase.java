@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.zblouse.fantasyfitness.combat.cards.Ability;
 import com.zblouse.fantasyfitness.combat.cards.AbilityType;
@@ -58,6 +59,7 @@ public class MerchantCardSqlDatabase extends SQLiteOpenHelper {
     public void write(Merchant merchant){
         SQLiteDatabase database = getWritableDatabase();
         for(Card card: merchant.getCardPriceMap().keySet()) {
+            Log.e("MerchantCardSqlDatabase", "Writing card: " + card.getCardName() + " ability name: " + ((ItemCard)card).getAbility().getAbilityName());
             ContentValues contentValues = new ContentValues();
             contentValues.put(TAG_KEY, merchant.getMerchantTag());
             contentValues.put(CARD_NAME_KEY, card.getCardName());
@@ -73,7 +75,7 @@ public class MerchantCardSqlDatabase extends SQLiteOpenHelper {
     public Merchant getMerchantByTag(String tag, MerchantAbilityRepository merchantAbilityRepository){
         SQLiteDatabase database = getReadableDatabase();
         Map<Card,Integer> merchantCardPriceMap = new HashMap<>();
-        Cursor merchantCursor = database.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + TAG_KEY + "=" + tag, null);
+        Cursor merchantCursor = database.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + TAG_KEY + "='" + tag +"'", null);
         if(merchantCursor.moveToFirst()) {
             do {
                 Ability cardAbility = merchantAbilityRepository.getMerchantAbilityByName(merchantCursor.getString(5), AbilityType.valueOf(merchantCursor.getString(6)));

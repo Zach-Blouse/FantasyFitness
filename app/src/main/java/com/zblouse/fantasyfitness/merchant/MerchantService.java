@@ -28,16 +28,24 @@ public class MerchantService implements DomainService<Merchant> {
         this.merchantRepository = new MerchantRepository(mainActivity);
     }
 
+    public void setMerchantRepository(MerchantRepository merchantRepository){
+        this.merchantRepository = merchantRepository;
+    }
+
     public Merchant getMerchantByTag(String tag){
         return merchantRepository.getMerchantByTag(tag);
     }
 
     public void buyCard(String merchantTag, Card card){
         Merchant merchant = getMerchantByTag(merchantTag);
-        int price = merchant.getCardPriceMap().get(card);
-        mainActivity.getUserGameStateService().modifyUserGameCurrency(mainActivity.getCurrentUser().getUid(),(-1)*price,new HashMap<>());
-        ItemCard userCard = new ItemCard(mainActivity.getCurrentUser().getUid(), UUID.randomUUID().toString(), card.getCardName(),card.getCardDescription(),((ItemCard)card).getItemType(), ((ItemCard)card).getAbility());
-        mainActivity.getCardService().writeCard(userCard);
+        for(Card merchantCard: merchant.getCardPriceMap().keySet()){
+            if(merchantCard.getCardName().equals(card.getCardName())){
+                int price = merchant.getCardPriceMap().get(merchantCard);
+                mainActivity.getUserGameStateService().modifyUserGameCurrency(mainActivity.getCurrentUser().getUid(),(-1)*price,new HashMap<>());
+                ItemCard userCard = new ItemCard(mainActivity.getCurrentUser().getUid(), UUID.randomUUID().toString(), card.getCardName(),card.getCardDescription(),((ItemCard)card).getItemType(), ((ItemCard)card).getAbility());
+                mainActivity.getCardService().writeCard(userCard);
+            }
+        }
     }
 
     @Override

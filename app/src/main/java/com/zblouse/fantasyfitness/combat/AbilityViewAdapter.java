@@ -136,7 +136,7 @@ public class AbilityViewAdapter extends RecyclerView.Adapter<AbilityViewAdapter.
         }
     }
 
-    private String getImpactText(Ability ability){
+    public static String getImpactText(Ability ability){
         String impactText = "";
         if(ability.getAbilityType().equals(AbilityType.HEAL)){
 

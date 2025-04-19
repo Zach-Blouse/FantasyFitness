@@ -50,7 +50,7 @@ public class MerchantDamageAbilitySqlDatabase extends SQLiteOpenHelper {
 
     public void write(DamageAbility damageAbility){
         SQLiteDatabase database = getWritableDatabase();
-
+        Log.e("MerchantDamageAbilitySqlDatabase","Writing Damage Ability: " + damageAbility.getAbilityName());
         ContentValues contentValues = new ContentValues();
         contentValues.put(ABILITY_NAME_KEY, damageAbility.getAbilityName());
         contentValues.put(ABILITY_DESCRIPTION_KEY, damageAbility.getAbilityDescription());
@@ -68,6 +68,7 @@ public class MerchantDamageAbilitySqlDatabase extends SQLiteOpenHelper {
         DamageAbility foundAbility = null;
         if(abilityCursor.moveToFirst()) {
             do {
+                Log.e("MerchantDamageAbilitySqlDatabase","Damage Ability Found: " + abilityName);
                 foundAbility = new DamageAbility(abilityCursor.getString(1),
                         abilityCursor.getString(2), AbilityTarget.valueOf(abilityCursor.getString(3)), DamageType.valueOf(abilityCursor.getString(4)), AttackType.valueOf(abilityCursor.getString(5)), abilityCursor.getInt(6));
             } while(abilityCursor.moveToNext());

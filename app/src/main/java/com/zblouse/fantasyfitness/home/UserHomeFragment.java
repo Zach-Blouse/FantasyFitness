@@ -36,6 +36,7 @@ import com.zblouse.fantasyfitness.activity.ToastDeviceService;
 import com.zblouse.fantasyfitness.combat.CombatCardModel;
 import com.zblouse.fantasyfitness.combat.CombatCardStateViewAdapter;
 import com.zblouse.fantasyfitness.combat.CombatFragment;
+import com.zblouse.fantasyfitness.combat.cards.Card;
 import com.zblouse.fantasyfitness.core.AuthenticationRequiredFragment;
 import com.zblouse.fantasyfitness.core.Event;
 import com.zblouse.fantasyfitness.core.EventListener;
@@ -44,6 +45,8 @@ import com.zblouse.fantasyfitness.dialog.BaseDialogFetchEvent;
 import com.zblouse.fantasyfitness.dialog.Dialog;
 import com.zblouse.fantasyfitness.dialog.DialogFetchEvent;
 import com.zblouse.fantasyfitness.dialog.DialogSelectedEvent;
+import com.zblouse.fantasyfitness.merchant.MerchantDisplayEvent;
+import com.zblouse.fantasyfitness.merchant.MerchantViewAdaper;
 import com.zblouse.fantasyfitness.quest.Quest;
 import com.zblouse.fantasyfitness.quest.QuestFetchResponseEvent;
 import com.zblouse.fantasyfitness.quest.QuestObjective;
@@ -52,6 +55,7 @@ import com.zblouse.fantasyfitness.quest.QuestViewAdapter;
 import com.zblouse.fantasyfitness.user.UserExistEvent;
 import com.zblouse.fantasyfitness.user.UserGameState;
 import com.zblouse.fantasyfitness.user.UserGameStateFetchResponseEvent;
+import com.zblouse.fantasyfitness.user.UserGameStateUpdateEvent;
 import com.zblouse.fantasyfitness.workout.WorkoutRecordsFragment;
 import com.zblouse.fantasyfitness.workout.WorkoutUpdateEvent;
 import com.zblouse.fantasyfitness.world.GameLocation;
@@ -77,6 +81,12 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
     private Button dialogOption3Button;
     private Button dialogOption4Button;
     private String locationDisplayed;
+    private int lastKnowPlayerGold;
+    private TextView playerGoldTextView;
+    private CardView merchantCardView;
+    private List<Card> merchantCards;
+    private RecyclerView merchantRecyclerView;
+    private MerchantViewAdaper merchantViewAdapter;
 
     private CardView questsCardView;
     private RecyclerView questsRecyclerView;
@@ -192,6 +202,23 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
         });
         questDetailsCardView.setVisibility(View.GONE);
 
+        merchantCards = new ArrayList<>();
+        merchantCardView = layout.findViewById(R.id.merchant_card_view);
+        merchantRecyclerView = layout.findViewById(R.id.merchant_recycler_view);
+        merchantViewAdapter = new MerchantViewAdaper(merchantCards,mainActivity.getMerchantService(), this);
+        merchantRecyclerView.setAdapter(merchantViewAdapter);
+        LinearLayoutManager merchantLayoutManager = new LinearLayoutManager(mainActivity);
+        merchantLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        merchantRecyclerView.setLayoutManager(merchantLayoutManager);
+        Button closeMerchantButton = layout.findViewById(R.id.merchant_dismiss_button);
+        closeMerchantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                merchantCardView.setVisibility(View.GONE);
+            }
+        });
+        playerGoldTextView = layout.findViewById(R.id.player_gold_text);
+
         return layout;
     }
 
@@ -208,12 +235,26 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 public void run() {
                     UserGameState userGameState = ((UserGameStateFetchResponseEvent)event).getUserGameState();
                     if(userGameState != null) {
-                        loadLocationUi(userGameState.getCurrentGameLocationName());
+                        lastKnowPlayerGold = userGameState.getUserGameCurrency();
+                        playerGoldTextView.setText("Player Gold: " + lastKnowPlayerGold);
+                        try {
+                            loadLocationUi(userGameState.getCurrentGameLocationName());
+                        } catch (Exception e){
+                            //this throws an exception after the first time the view is inflated, there is not currently a good way to detect this in Android.
+                        }
                     }
                 }
             });
 
-        } else if(event.getEventType().equals(EventType.EXPLORE_ACTION_EVENT)){
+        }else if(event.getEventType().equals(EventType.USER_GAME_STATE_UPDATE_EVENT)){
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mainActivity.getUserGameStateService().fetchUserGameState(mainActivity.getCurrentUser().getUid(),new HashMap<>());
+                }
+            });
+
+        }  else if(event.getEventType().equals(EventType.EXPLORE_ACTION_EVENT)){
             mainActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -271,6 +312,21 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 }
             });
 
+        } else if(event.getEventType().equals(EventType.MERCHANT_DISPLAY_EVENT)){
+            mainActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    MerchantDisplayEvent merchantDisplayEvent = (MerchantDisplayEvent)event;
+                    merchantViewAdapter.setMerchant(merchantDisplayEvent.getMerchant());
+                    merchantViewAdapter.setLastKnownUserGold(lastKnowPlayerGold);
+                    merchantCards.clear();
+                    merchantCards.addAll(merchantDisplayEvent.getMerchant().getCardPriceMap().keySet());
+                    Log.e("UserHomeFragment","Number of Cards: " + merchantCards.size());
+                    merchantViewAdapter.notifyDataSetChanged();
+                    mainActivity.getUserGameStateService().fetchUserGameState(mainActivity.getCurrentUser().getUid(),new HashMap<>());
+                    merchantCardView.setVisibility(View.VISIBLE);
+                }
+            });
         }
     }
 
@@ -557,5 +613,9 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 return false;
             }
         };
+    }
+
+    public MainActivity getMainActivity(){
+        return this.mainActivity;
     }
 }

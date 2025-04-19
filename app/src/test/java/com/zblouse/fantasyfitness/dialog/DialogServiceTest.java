@@ -101,7 +101,7 @@ public class DialogServiceTest {
         DialogRepository mockDialogRepository = Mockito.mock(DialogRepository.class);
         DialogService testedDialogService = new DialogService(mockMainActivity, mockDialogRepository);
         testedDialogService.initializeDialogs();
-        verify(mockDialogRepository,times(25)).writeDialog(any());
+        verify(mockDialogRepository,times(35)).writeDialog(any());
     }
 
     @Test

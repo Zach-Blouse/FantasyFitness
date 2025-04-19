@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         deleteDatabase(MerchantHealAbilitySqlDatabase.DATABASE_NAME);
         deleteDatabase(MerchantBuffAbilitySqlDatabase.DATABASE_NAME);
         merchantService = new MerchantService(this);
+        merchantService.initializeMerchants();
         gameLocationService = new GameLocationService(this);
         userGameStateService = new UserGameStateService(this);
         workoutRecordService = new WorkoutRecordService(this);

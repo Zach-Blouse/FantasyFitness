@@ -21,7 +21,14 @@ public class MerchantAbilityRepository {
         merchantHealAbilitySqlDatabase = new MerchantHealAbilitySqlDatabase(context);
     }
 
+    public MerchantAbilityRepository(MerchantBuffAbilitySqlDatabase merchantBuffAbilitySqlDatabase, MerchantDamageAbilitySqlDatabase merchantDamageAbilitySqlDatabase, MerchantHealAbilitySqlDatabase merchantHealAbilitySqlDatabase){
+        this.merchantBuffAbilitySqlDatabase = merchantBuffAbilitySqlDatabase;
+        this.merchantDamageAbilitySqlDatabase = merchantDamageAbilitySqlDatabase;
+        this.merchantHealAbilitySqlDatabase = merchantHealAbilitySqlDatabase;
+    }
+
     public Ability getMerchantAbilityByName(String name, AbilityType abilityType){
+        Log.e("MerchantAbilityRepository","Getting merchant by name: " + name + " with ability type: " + abilityType.toString());
         if(abilityType.equals(AbilityType.DAMAGE)){
             return merchantDamageAbilitySqlDatabase.readByAbilityName(name);
         } else if(abilityType.equals(AbilityType.HEAL)){

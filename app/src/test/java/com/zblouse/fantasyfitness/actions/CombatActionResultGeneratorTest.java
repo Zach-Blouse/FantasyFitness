@@ -24,6 +24,8 @@ public class CombatActionResultGeneratorTest {
         assertEquals(ActionResultType.COMBAT, result.getActionResultType());
         CombatActionResult combatActionResult = (CombatActionResult) result;
         assertEquals("Goblin Attack", combatActionResult.getEncounterName());
+        assertEquals(GameLocationService.WOODLANDS, combatActionResult.getCombatLocation());
+        assertEquals(R.id.cave_button,combatActionResult.getCombatBuilding());
     }
 
     @Test
@@ -37,5 +39,7 @@ public class CombatActionResultGeneratorTest {
         assertEquals(ActionResultType.COMBAT, result.getActionResultType());
         CombatActionResult combatActionResult = (CombatActionResult) result;
         assertEquals("Bandit", combatActionResult.getEncounterName());
+        assertEquals(GameLocationService.RIVERLANDS, combatActionResult.getCombatLocation());
+        assertEquals(R.id.cave_button,combatActionResult.getCombatBuilding());
     }
 }

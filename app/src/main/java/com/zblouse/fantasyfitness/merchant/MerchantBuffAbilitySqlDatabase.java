@@ -13,8 +13,8 @@ import com.zblouse.fantasyfitness.combat.cards.HealAbility;
 
 public class MerchantBuffAbilitySqlDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "merchantHealAbility";
-    private static final String TABLE_NAME = "merchantHealAbility";
+    public static final String DATABASE_NAME = "merchantBuffAbility";
+    private static final String TABLE_NAME = "merchantBuffAbility";
     private static final String ID_KEY = "id";
     private static final String ABILITY_NAME_KEY = "abilityName";
     private static final String ABILITY_DESCRIPTION_KEY = "abilityDescription";
