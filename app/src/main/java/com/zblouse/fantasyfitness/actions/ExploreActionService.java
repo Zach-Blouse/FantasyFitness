@@ -49,6 +49,9 @@ public class ExploreActionService {
         } else if(((Integer)metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)).equals(R.id.general_store_button)){
             Log.e("ExploreActionService", "General Store Button");
             actionResultType = ActionResultType.DIALOG;
+        } else if(((Integer)metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)).equals(R.id.blacksmith_button)){
+            Log.e("ExploreActionService", "Blacksmith Button");
+            actionResultType = ActionResultType.DIALOG;
         } else {
             Log.e("ExploreActionService", GameLocationBuildingUtil.getPrintableStringForBuilding((Integer)metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)));
             actionResultType = randomActionResultTypeGenerator.getRandomActionResult((String)metadata.get(EXPLORE_ACTION_LOCATION_KEY));

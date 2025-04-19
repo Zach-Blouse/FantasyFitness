@@ -70,7 +70,8 @@
                     android:contentDescription="@string/general_store"
                     app:layout_constraintBottom_toBottomOf="@+id/blacksmith_button"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/blacksmith_button" />
+                    app:layout_constraintStart_toEndOf="@+id/blacksmith_button"
+                    android:tag="@string/faolyn_general_store"/>
 
                 <Button
                     android:id="@+id/blacksmith_button"
@@ -85,7 +86,8 @@
                     android:contentDescription="@string/blacksmith"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/general_store_button"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:tag="@string/faolyn_blacksmith"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </HorizontalScrollView>

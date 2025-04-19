@@ -24,6 +24,11 @@ import com.zblouse.fantasyfitness.core.EventListener;
 import com.zblouse.fantasyfitness.dialog.DialogService;
 import com.zblouse.fantasyfitness.dialog.DialogSqlDatabase;
 import com.zblouse.fantasyfitness.home.UserHomeFragment;
+import com.zblouse.fantasyfitness.merchant.MerchantBuffAbilitySqlDatabase;
+import com.zblouse.fantasyfitness.merchant.MerchantCardSqlDatabase;
+import com.zblouse.fantasyfitness.merchant.MerchantDamageAbilitySqlDatabase;
+import com.zblouse.fantasyfitness.merchant.MerchantHealAbilitySqlDatabase;
+import com.zblouse.fantasyfitness.merchant.MerchantService;
 import com.zblouse.fantasyfitness.quest.QuestService;
 import com.zblouse.fantasyfitness.settings.SettingsFragment;
 import com.zblouse.fantasyfitness.user.LoginFragment;
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private CombatService combatService;
     private EncounterService encounterService;
     private QuestService questService;
+    private MerchantService merchantService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +101,11 @@ public class MainActivity extends AppCompatActivity {
         deleteDatabase(GameLocationSqlDatabase.GAME_LOCATION_DATABASE_NAME);
         deleteDatabase(GameLocationDistanceSqlDatabase.GAME_LOCATION_DISTANCE_DATABASE_NAME);
         deleteDatabase(DialogSqlDatabase.DATABASE_NAME);
+        deleteDatabase(MerchantCardSqlDatabase.DATABASE_NAME);
+        deleteDatabase(MerchantDamageAbilitySqlDatabase.DATABASE_NAME);
+        deleteDatabase(MerchantHealAbilitySqlDatabase.DATABASE_NAME);
+        deleteDatabase(MerchantBuffAbilitySqlDatabase.DATABASE_NAME);
+        merchantService = new MerchantService(this);
         gameLocationService = new GameLocationService(this);
         userGameStateService = new UserGameStateService(this);
         workoutRecordService = new WorkoutRecordService(this);
@@ -290,4 +301,7 @@ public class MainActivity extends AppCompatActivity {
         this.questService = questService;
     }
 
+    public MerchantService getMerchantService(){
+        return this.merchantService;
+    }
 }

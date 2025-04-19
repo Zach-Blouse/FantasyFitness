@@ -40,6 +40,10 @@ public class DialogActionResultGenerator implements ActionResultGenerator {
             if(metadata.containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)){
                 if(metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED).equals(R.id.inn_button)){
                     return new DialogActionResult(DialogService.INNKEEPER_DIALOG_INIT, false);
+                } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED).equals(R.id.general_store_button)){
+                    return new DialogActionResult(DialogService.GENERAL_STORE_DIALOG_INIT, false);
+                } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED).equals(R.id.blacksmith_button)){
+                    return new DialogActionResult(DialogService.BLACKSMITH_DIALOG_INIT, false);
                 }
             }
         }

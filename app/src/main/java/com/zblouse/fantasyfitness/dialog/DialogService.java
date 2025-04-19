@@ -16,6 +16,8 @@ public class DialogService implements DomainService<Dialog> {
     public static final String EMPTY_DIALOG_INIT = "emptyDialog";
     public static final String HERMIT_DIALOG_INIT = "hermitInit";
     public static final String INNKEEPER_DIALOG_INIT = "innKeeperDialogInit";
+    public static final String GENERAL_STORE_DIALOG_INIT = "generalStoreDialogInit";
+    public static final String BLACKSMITH_DIALOG_INIT = "blacksmithDialogInit";
     private final DialogRepository dialogRepository;
     private final MainActivity mainActivity;
 
@@ -231,6 +233,18 @@ public class DialogService implements DomainService<Dialog> {
 
         Dialog innkeeperDialog3_2_2_1 = new Dialog("innkeeper3_2_2_1", "The cloak flies back as three kobolds burst out of it and run out of the inn. The innkeeper says to you, \"Dammit, they were my best customers. You get out of my inn too! You aren't allowed to bother my patrons.\"","\"No they need to show me who they are.\"", new DialogAffect(DialogAffectType.NONE), false);
         dialogRepository.writeDialog(innkeeperDialog3_2_2_1);
+
+        Dialog generalStoreDialogInit = new Dialog(GENERAL_STORE_DIALOG_INIT,"As you walk in you see a well organized shop selling all manner of goods. The shopkeeper says, \"Hello adventurer, can I interest you in any of my wares?\"","none",new DialogAffect(DialogAffectType.NONE),false);
+        generalStoreDialogInit.setDialogOption1("generalStoreDialog1");
+        dialogRepository.writeDialog(generalStoreDialogInit);
+        Dialog generalStoreDialog1 = new Dialog("generalStoreDialog1","Will not be displayed","\"Yes please\"",new DialogAffect(DialogAffectType.SHOP_OPEN), false);
+        dialogRepository.writeDialog(generalStoreDialog1);
+
+        Dialog blacksmithDialogInit = new Dialog(BLACKSMITH_DIALOG_INIT,"As you approach the blacksmith's shop you can hear the sounds of a hammer on metal. As you walk around the side you see the burly blacksmith hammering on a lump of metal while his young apprentice holds the tongs. He finishes hammering, puts the metal back in the forge and asks, \"What do you need?\"","none",new DialogAffect(DialogAffectType.NONE),false);
+        blacksmithDialogInit.setDialogOption1("blacksmithDialog1");
+        dialogRepository.writeDialog(blacksmithDialogInit);
+        Dialog blackSmithDialog1 = new Dialog("blacksmithDialog1","Will not be displayed","\"I would like to see what you have available for purchase\"",new DialogAffect(DialogAffectType.SHOP_OPEN), false);
+        dialogRepository.writeDialog(blackSmithDialog1);
     }
 
     private void cleanUpQuestStartDialogs(){
