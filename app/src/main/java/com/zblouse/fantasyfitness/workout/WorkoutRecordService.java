@@ -88,30 +88,35 @@ public class WorkoutRecordService implements DomainService<WorkoutRecord> {
                             if (workoutTime < workoutRecord.getMileRecord()){
                                 ((NotificationDeviceService)mainActivity.getDeviceService(DeviceServiceType.NOTIFICATION)).sendNotification("New Record","Congratulations on your new record Mile time!", R.drawable.run);
                                 workoutRecordRepository.updateWorkoutRecord(mainActivity.getCurrentUser().getUid(),workoutTime,WorkoutRecordDistance.MILE,new HashMap<>());
+                                mainActivity.getUserGameStateService().modifyUserGameCurrency(mainActivity.getCurrentUser().getUid(),250, new HashMap<>());
                             }
                             break;
                         case FIVE_K:
                             if (workoutTime < workoutRecord.getFiveKRecord()){
                                 ((NotificationDeviceService)mainActivity.getDeviceService(DeviceServiceType.NOTIFICATION)).sendNotification("New Record","Congratulations on your new record 5k time!", R.drawable.run);
                                 workoutRecordRepository.updateWorkoutRecord(mainActivity.getCurrentUser().getUid(),workoutTime,WorkoutRecordDistance.FIVE_K,new HashMap<>());
+                                mainActivity.getUserGameStateService().modifyUserGameCurrency(mainActivity.getCurrentUser().getUid(),500, new HashMap<>());
                             }
                             break;
                         case TEN_K:
                             if (workoutTime < workoutRecord.getTenKRecord()){
                                 ((NotificationDeviceService)mainActivity.getDeviceService(DeviceServiceType.NOTIFICATION)).sendNotification("New Record","Congratulations on your new record 10k time!", R.drawable.run);
                                 workoutRecordRepository.updateWorkoutRecord(mainActivity.getCurrentUser().getUid(),workoutTime,WorkoutRecordDistance.TEN_K,new HashMap<>());
+                                mainActivity.getUserGameStateService().modifyUserGameCurrency(mainActivity.getCurrentUser().getUid(),750, new HashMap<>());
                             }
                             break;
                         case TWENTY_FIVE_K:
                             if (workoutTime < workoutRecord.getTwentyFiveKRecord()){
                                 ((NotificationDeviceService)mainActivity.getDeviceService(DeviceServiceType.NOTIFICATION)).sendNotification("New Record","Congratulations on your new record 25k time!", R.drawable.run);
                                 workoutRecordRepository.updateWorkoutRecord(mainActivity.getCurrentUser().getUid(),workoutTime,WorkoutRecordDistance.TWENTY_FIVE_K,new HashMap<>());
+                                mainActivity.getUserGameStateService().modifyUserGameCurrency(mainActivity.getCurrentUser().getUid(),1000, new HashMap<>());
                             }
                             break;
                         case MARATHON:
                             if (workoutTime < workoutRecord.getMarathonRecord()){
                                 ((NotificationDeviceService)mainActivity.getDeviceService(DeviceServiceType.NOTIFICATION)).sendNotification("New Record","Congratulations on your new record Marathon time!", R.drawable.run);
                                 workoutRecordRepository.updateWorkoutRecord(mainActivity.getCurrentUser().getUid(),workoutTime,WorkoutRecordDistance.MARATHON,new HashMap<>());
+                                mainActivity.getUserGameStateService().modifyUserGameCurrency(mainActivity.getCurrentUser().getUid(),2500, new HashMap<>());
                             }
                             break;
                     }
