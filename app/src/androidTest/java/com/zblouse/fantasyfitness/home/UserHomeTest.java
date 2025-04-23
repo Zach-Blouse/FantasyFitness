@@ -258,5 +258,152 @@ public class UserHomeTest {
         onView(withId(R.id.dialog_exit_button)).perform(click());
         onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
     }
+
+    @Test
+    public void merchantTest() throws InterruptedException {
+
+        //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
+        com.firebase.ui.auth.data.model.User user = new User.Builder("google", "test@test.com")
+                .setName("Test user")
+                .build();
+        IdpResponse response = new IdpResponse.Builder(user).build();
+        FirebaseUser mockFirebaseUser = Mockito.mock(FirebaseUser.class);
+        when(mockFirebaseUser.getUid()).thenReturn("testUserId");
+
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        when(mockAuth.getCurrentUser()).thenReturn(mockFirebaseUser);
+        UserService userService = new UserService();
+        PermissionDeviceService mockPermissionDeviceService = Mockito.mock(PermissionDeviceService.class);
+        when(mockPermissionDeviceService.hasPermission(any())).thenReturn(true);
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
+        WorkoutService workoutService = new WorkoutService();
+
+        LocationDeviceService mockLocationDeviceService = Mockito.mock(LocationDeviceService.class);
+        RandomActionResultTypeGenerator mockRandomActionResultTypeGenerator = Mockito.mock(RandomActionResultTypeGenerator.class);
+        when(mockRandomActionResultTypeGenerator.getRandomActionResult(GameLocationService.THANADEL_VILLAGE)).thenReturn(ActionResultType.NOTHING);
+
+        UserGameStateService userGameStateService = new UserGameStateService();
+
+        QuestService questService = new QuestService();
+
+        activityRule.getScenario().onActivity(activity -> {
+
+            activity.setFirebaseAuth(mockAuth);
+            userService.setMainActivity(activity);
+            workoutService.setMainActivity(activity);
+            userGameStateService.setMainActivity(activity);
+            questService.setMainActivity(activity);
+            activity.setUserService(userService);
+            activity.setWorkoutService(workoutService);
+            activity.setDeviceService(DeviceServiceType.PERMISSION,mockPermissionDeviceService);
+            activity.setDeviceService(DeviceServiceType.LOCATION,mockLocationDeviceService);
+            activity.setUserGameStateService(userGameStateService);
+            activity.getExploreActionService().setRandomActionResultTypeGenerator(mockRandomActionResultTypeGenerator);
+            activity.setQuestService(questService);
+        });
+
+        //Set up mock firestore
+        FirebaseFirestore mockFirestore = Mockito.mock(FirebaseFirestore.class);
+
+        CollectionReference mockCollectionReference = Mockito.mock(CollectionReference.class);
+        when(mockFirestore.collection(eq("users"))).thenReturn(mockCollectionReference);
+        DocumentReference mockDocument = Mockito.mock(DocumentReference.class);
+        when(mockCollectionReference.document(eq("testUserId"))).thenReturn(mockDocument);
+
+        Task<DocumentSnapshot> mockReadTask = Mockito.mock(Task.class);
+        when(mockDocument.get()).thenReturn(mockReadTask);
+        ArgumentCaptor<OnCompleteListener<DocumentSnapshot>> onCompleteListenerArgumentCaptorRead = ArgumentCaptor.forClass(OnCompleteListener.class);
+        DocumentSnapshot mockDocumentSnapshot = Mockito.mock(DocumentSnapshot.class);
+
+        when(mockReadTask.isSuccessful()).thenReturn(true);
+        when(mockReadTask.getResult()).thenReturn(mockDocumentSnapshot);
+        when(mockDocumentSnapshot.exists()).thenReturn(true);
+        when(mockDocumentSnapshot.get("UID")).thenReturn("testUid");
+        when(mockDocumentSnapshot.get("USERNAME")).thenReturn("testUsername");
+
+        UserFirestoreDatabase userFirestoreDatabase = new UserFirestoreDatabase(mockFirestore);
+        UserRepository userRepository = new UserRepository(userService, userFirestoreDatabase);
+        userService.setUserRepository(userRepository);
+
+        CollectionReference mockGameStateCollectionReference = Mockito.mock(CollectionReference.class);
+        when(mockFirestore.collection(eq("gameState"))).thenReturn(mockGameStateCollectionReference);
+        DocumentReference mockGameStateDocument = Mockito.mock(DocumentReference.class);
+        when(mockGameStateCollectionReference.document(eq("testUserId"))).thenReturn(mockGameStateDocument);
+
+        Task<DocumentSnapshot> mockGameStateReadTask = Mockito.mock(Task.class);
+        when(mockGameStateDocument.get()).thenReturn(mockGameStateReadTask);
+        ArgumentCaptor<OnCompleteListener<DocumentSnapshot>> onCompleteListenerArgumentCaptorReadGameState = ArgumentCaptor.forClass(OnCompleteListener.class);
+        DocumentSnapshot mockGameStateDocumentSnapshot = Mockito.mock(DocumentSnapshot.class);
+
+        when(mockGameStateReadTask.isSuccessful()).thenReturn(true);
+        when(mockGameStateReadTask.getResult()).thenReturn(mockGameStateDocumentSnapshot);
+        when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
+        when(mockGameStateDocumentSnapshot.get(eq("gameLocation"), eq(String.class))).thenReturn(GameLocationService.THANADEL_VILLAGE);
+        when(mockGameStateDocumentSnapshot.get(eq("savedDistance"), eq(Double.class))).thenReturn(5500.0);
+        when(mockGameStateDocumentSnapshot.get(eq("userGameCurrency"), eq(Integer.class))).thenReturn(7);
+        when(mockGameStateReadTask.isSuccessful()).thenReturn(true);
+        when(mockGameStateReadTask.getResult()).thenReturn(mockGameStateDocumentSnapshot);
+        when(mockGameStateDocumentSnapshot.exists()).thenReturn(true);
+
+        Task<Void> mockGameStateUpdateTask = Mockito.mock(Task.class);
+        when(mockGameStateDocument.update(anyString(), any())).thenReturn(mockGameStateUpdateTask);
+        ArgumentCaptor<OnCompleteListener<Void>> onCompleteListenerArgumentCaptorUpdateGameState = ArgumentCaptor.forClass(OnCompleteListener.class);
+        when(mockGameStateUpdateTask.isSuccessful()).thenReturn(true);
+
+        UserGameStateFirestoreDatabase userGameStateFirestoreDatabase = new UserGameStateFirestoreDatabase(mockFirestore);
+        UserGameStateRepository userGameStateRepository = new UserGameStateRepository(userGameStateFirestoreDatabase, userGameStateService);
+        userGameStateService.setUserGameStateRepository(userGameStateRepository);
+
+        //Set Up Quest Database
+
+        CollectionReference mockQuestCollectionReference = Mockito.mock(CollectionReference.class);
+        when(mockFirestore.collection(eq("quest"))).thenReturn(mockQuestCollectionReference);
+        DocumentReference mockQuestDocument = Mockito.mock(DocumentReference.class);
+        when(mockQuestCollectionReference.document(eq("testUserId"))).thenReturn(mockQuestDocument);
+
+        CollectionReference mockQuestListCollectionReference = Mockito.mock(CollectionReference.class);
+        when(mockQuestDocument.collection(eq("quests"))).thenReturn(mockQuestListCollectionReference);
+        Task<QuerySnapshot> mockQueryTask = Mockito.mock(Task.class);
+        when(mockQuestListCollectionReference.get()).thenReturn(mockQueryTask);
+        ArgumentCaptor<OnCompleteListener<QuerySnapshot>> onCompleteListenerArgumentCaptorQuests = ArgumentCaptor.forClass(OnCompleteListener.class);
+        when(mockQueryTask.isSuccessful()).thenReturn(true);
+        List<QueryDocumentSnapshot> snapshots = new ArrayList<>();
+
+        QuerySnapshot querySnapshot = Mockito.mock(QuerySnapshot.class);
+        when(querySnapshot.iterator()).thenReturn(snapshots.iterator());
+        when(mockQueryTask.getResult()).thenReturn(querySnapshot);
+
+        QuestFirestoreDatabase questFirestoreDatabase = new QuestFirestoreDatabase(mockFirestore);
+        QuestRepository questRepository = new QuestRepository(questService, questFirestoreDatabase);
+        questService.setQuestRepository(questRepository);
+
+        Instrumentation.ActivityResult firebaseResult = new Instrumentation.ActivityResult(RESULT_OK, response.toIntent());
+        intending(hasComponent("com.firebase.ui.auth.KickoffActivity")).respondWith(firebaseResult);
+
+        onView(withId(R.id.app_title)).check(matches(withText("Fantasy Fitness")));
+        onView(withId(R.id.login_button)).perform(click());
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
+        verify(mockReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorRead.capture());
+        onCompleteListenerArgumentCaptorRead.getValue().onComplete(mockReadTask);
+        onView(withId(R.id.quests_button)).check(matches(isDisplayed()));
+        //FINISH AUTHENTICATION, TEST IS AT USER HOME
+        //FOLLOWING THIS LINE IS THE BEGINNING OF THE ACTUAL TEST THIS TEST IS SUPPOSED TO BE TESTING
+        verify(mockGameStateReadTask).addOnCompleteListener(onCompleteListenerArgumentCaptorReadGameState.capture());
+        onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
+
+        onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.general_store_button)).perform(click());
+
+        verify(mockQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorQuests.capture());
+        onCompleteListenerArgumentCaptorQuests.getValue().onComplete(mockQueryTask);
+        onView(withId(R.id.dialog_card_view)).check(matches(isDisplayed()));
+        onView(withId(R.id.dialog_option_1_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.dialog_option_1_button)).perform(click());
+        onView(withId(R.id.merchant_card_view)).check(matches(isDisplayed()));
+    }
 }
 

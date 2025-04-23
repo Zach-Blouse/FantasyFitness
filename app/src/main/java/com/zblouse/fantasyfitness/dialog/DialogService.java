@@ -247,7 +247,7 @@ public class DialogService implements DomainService<Dialog> {
         Dialog thandelGeneralStoreDialogInit = new Dialog(THANADEL_GENERAL_STORE_DIALOG_INIT,"As you walk in you see a well organized shop selling all manner of goods. The shopkeeper says, \"Hello adventurer, can I interest you in any of my wares?\"","none",new DialogAffect(DialogAffectType.NONE),false);
         thandelGeneralStoreDialogInit.setDialogOption1("thanadelGeneralStoreDialog1");
         dialogRepository.writeDialog(thandelGeneralStoreDialogInit);
-        Dialog thanadelGeneralStoreDialog1 = new Dialog("thandelGeneralStoreDialog1","Will not be displayed","\"Yes please\"",thanadelGeneralStoreAffect, false);
+        Dialog thanadelGeneralStoreDialog1 = new Dialog("thanadelGeneralStoreDialog1","Will not be displayed","\"Yes please\"",thanadelGeneralStoreAffect, false);
         dialogRepository.writeDialog(thanadelGeneralStoreDialog1);
 
         DialogAffect bridgetonGeneralStoreAffect = new DialogAffect(DialogAffectType.SHOP_OPEN);
