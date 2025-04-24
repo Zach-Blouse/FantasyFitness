@@ -22,16 +22,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="11dp"
-                    android:text="test"
-                    app:layout_constraintBottom_toTopOf="@+id/dark_forest_button"
-                    app:layout_constraintStart_toStartOf="@+id/imageView"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
 
                 <ImageView
                     android:id="@+id/imageView"
@@ -47,33 +37,31 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <Button
-                    android:id="@+id/dark_forest_button"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:id="@+id/beach_button"
+                    android:layout_width="180dp"
+                    android:layout_height="324dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="9dp"
                     android:layout_marginTop="51dp"
-                    android:layout_marginEnd="37dp"
-                    android:layout_marginBottom="190dp"
+                    android:layout_marginEnd="109dp"
+                    android:layout_marginBottom="119dp"
                     android:autoSizeTextType="uniform"
                     android:backgroundTint="@android:color/transparent"
-                    app:layout_constraintBottom_toTopOf="@+id/marsh_button"
-                    app:layout_constraintEnd_toStartOf="@+id/marsh_button"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/bandit_camp_button"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/marsh_button"
-                    android:layout_width="246dp"
+                    android:id="@+id/bandit_camp_button"
+                    android:layout_width="119dp"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="98dp"
-                    android:layout_marginBottom="113dp"
+                    android:layout_marginEnd="135dp"
+                    android:layout_marginBottom="97dp"
                     android:autoSizeTextType="uniform"
                     android:backgroundTint="@android:color/transparent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dark_forest_button" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/beach_button" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </HorizontalScrollView>

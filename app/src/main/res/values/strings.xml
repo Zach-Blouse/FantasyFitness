@@ -30,4 +30,6 @@
     <string name="thanadel_general_store">thanadelGeneralStore</string>
     <string name="faolyn_blacksmith">faolynBlacksmith</string>
     <string name="bridgeton_blacksmith">bridgetonBlacksmith</string>
+    <string name="dwarven_tents">dwarvenTents</string>
+    <string name="tower">tower</string>
 </resources>

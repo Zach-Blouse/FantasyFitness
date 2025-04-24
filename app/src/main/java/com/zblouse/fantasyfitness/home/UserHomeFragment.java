@@ -490,6 +490,139 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 });
                 break;
             }
+            case GameLocationService.HILLS: {
+                viewStub.setLayoutResource(R.layout.mountain_pass_layout);
+                View layout = viewStub.inflate();
+                Button darkForestButton = layout.findViewById(R.id.cave_button);
+                darkForestButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.cave_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                Button cavesButton = layout.findViewById(R.id.copse_of_trees_button);
+                cavesButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.copse_of_trees_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                break;
+            }
+            case GameLocationService.MONASTARY: {
+                viewStub.setLayoutResource(R.layout.monastery_layout);
+                View layout = viewStub.inflate();
+                Button darkForestButton = layout.findViewById(R.id.monastery_button);
+                darkForestButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.monastery_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                break;
+            }
+            case GameLocationService.MOUNTAIN_PASS: {
+                viewStub.setLayoutResource(R.layout.mountain_pass_layout);
+                View layout = viewStub.inflate();
+                Button darkForestButton = layout.findViewById(R.id.tower_button);
+                darkForestButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.tower_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                Button cavesButton = layout.findViewById(R.id.dwarven_tents_button);
+                cavesButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.dwarven_tents_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                break;
+            }
+            case GameLocationService.NORTH_ROAD: {
+                viewStub.setLayoutResource(R.layout.north_road_layout);
+                View layout = viewStub.inflate();
+                Button darkForestButton = layout.findViewById(R.id.beach_button);
+                darkForestButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.beach_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                Button cavesButton = layout.findViewById(R.id.bandit_camp_button);
+                cavesButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.bandit_camp_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                break;
+            }
+            case GameLocationService.RIVERLANDS: {
+                viewStub.setLayoutResource(R.layout.riverlands_layout);
+                View layout = viewStub.inflate();
+                Button darkForestButton = layout.findViewById(R.id.dark_forest_button);
+                darkForestButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.dark_forest_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                Button cavesButton = layout.findViewById(R.id.river_button);
+                cavesButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.river_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                break;
+            }
             case GameLocationService.THANADEL_VILLAGE: {
                 viewStub.setLayoutResource(R.layout.thanadel_village_layout);
                 View layout = viewStub.inflate();

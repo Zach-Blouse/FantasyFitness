@@ -44,13 +44,16 @@ public class ExploreActionService {
         ActionResult actionResult;
         ActionResultType actionResultType;
         if(((Integer)metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)).equals(R.id.inn_button)){
-            Log.e("ExploreActionService", "Inn Button");
             actionResultType = ActionResultType.DIALOG;
         } else if(((Integer)metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)).equals(R.id.general_store_button)){
-            Log.e("ExploreActionService", "General Store Button");
             actionResultType = ActionResultType.DIALOG;
         } else if(((Integer)metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)).equals(R.id.blacksmith_button)){
-            Log.e("ExploreActionService", "Blacksmith Button");
+            actionResultType = ActionResultType.DIALOG;
+        } else if(((Integer)metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)).equals(R.id.dwarven_tents_button)){
+            actionResultType = ActionResultType.DIALOG;
+        } else if(((Integer)metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)).equals(R.id.tower_button)){
+            actionResultType = ActionResultType.DIALOG;
+        } else if(((Integer)metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)).equals(R.id.monastery_button)){
             actionResultType = ActionResultType.DIALOG;
         } else {
             Log.e("ExploreActionService", GameLocationBuildingUtil.getPrintableStringForBuilding((Integer)metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED)));

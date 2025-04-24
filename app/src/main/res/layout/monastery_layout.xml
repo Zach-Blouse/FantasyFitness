@@ -22,56 +22,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginBottom="11dp"
-                    android:text="test"
-                    app:layout_constraintBottom_toTopOf="@+id/dark_forest_button"
-                    app:layout_constraintStart_toStartOf="@+id/imageView"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
-
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/map_descriptor"
-                    android:src="@drawable/riverlands"
+                    android:src="@drawable/monastery"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <Button
-                    android:id="@+id/dark_forest_button"
-                    android:layout_width="283dp"
-                    android:layout_height="217dp"
+                    android:id="@+id/monastery_button"
+                    android:layout_width="237dp"
+                    android:layout_height="117dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="51dp"
-                    android:layout_marginBottom="248dp"
+                    android:layout_marginTop="76dp"
                     android:autoSizeTextType="uniform"
                     android:backgroundTint="@android:color/transparent"
-                    app:layout_constraintBottom_toTopOf="@+id/river_button"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/river_button"
-                    android:layout_width="310dp"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="69dp"
-                    android:layout_marginBottom="103dp"
-                    android:autoSizeTextType="uniform"
-                    android:backgroundTint="@android:color/transparent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dark_forest_button" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </HorizontalScrollView>
