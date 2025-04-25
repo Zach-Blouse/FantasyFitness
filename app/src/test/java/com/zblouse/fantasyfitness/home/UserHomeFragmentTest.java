@@ -191,7 +191,7 @@ public class UserHomeFragmentTest {
     }
 
     @Test
-    public void publishUserGameStateResponseRiverlandsEventTest() {
+    public void publishUserGameStateResponseBridgetonEventTest() {
         UserService mockUserService = Mockito.mock(UserService.class);
         FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
         FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
@@ -215,6 +215,84 @@ public class UserHomeFragmentTest {
         assertEquals(View.VISIBLE, returnedView.findViewById(R.id.inn_button).getVisibility());
         assertEquals(View.VISIBLE, returnedView.findViewById(R.id.general_store_button).getVisibility());
         assertEquals(View.VISIBLE, returnedView.findViewById(R.id.blacksmith_button).getVisibility());
+    }
+
+    @Test
+    public void publishUserGameStateResponseRiverlandsEventTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.RIVERLANDS,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.river_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.dark_forest_button).getVisibility());
+    }
+
+    @Test
+    public void publishUserGameStateResponseMountainPassEventTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.MOUNTAIN_PASS,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.tower_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.dwarven_tents_button).getVisibility());
+    }
+
+    @Test
+    public void publishUserGameStateResponseHillsEventTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.HILLS,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.cave_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.copse_of_trees_button).getVisibility());
     }
 
     @Test
@@ -242,6 +320,57 @@ public class UserHomeFragmentTest {
         assertEquals(View.VISIBLE, returnedView.findViewById(R.id.dark_forest_button).getVisibility());
         assertEquals(View.VISIBLE, returnedView.findViewById(R.id.cave_button).getVisibility());
         assertEquals(View.VISIBLE, returnedView.findViewById(R.id.marsh_button).getVisibility());
+    }
+
+    @Test
+    public void publishUserGameStateResponseMonasteryEventTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.MONASTARY,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.monastery_button).getVisibility());
+    }
+
+    @Test
+    public void publishUserGameStateResponseNorthRoadEventTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.NORTH_ROAD,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.beach_button).getVisibility());
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.bandit_camp_button).getVisibility());
     }
 
     @Test
@@ -459,6 +588,576 @@ public class UserHomeFragmentTest {
         assertEquals(GameLocationService.THANADEL_VILLAGE, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
         assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
         assertEquals(R.id.general_store_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void faolynInnClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.FAOLYN,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.inn_button).getVisibility());
+
+        returnedView.findViewById(R.id.inn_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.FAOLYN, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.inn_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void faolynBlacksmithClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.FAOLYN,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.blacksmith_button).getVisibility());
+
+        returnedView.findViewById(R.id.blacksmith_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.FAOLYN, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.blacksmith_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void faolynGeneralStoreClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.FAOLYN,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.general_store_button).getVisibility());
+
+        returnedView.findViewById(R.id.general_store_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.FAOLYN, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.general_store_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void bridgetonInnClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.BRIDGETON,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.inn_button).getVisibility());
+
+        returnedView.findViewById(R.id.inn_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.BRIDGETON, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.inn_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void bridgetonBlacksmithClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.BRIDGETON,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.blacksmith_button).getVisibility());
+
+        returnedView.findViewById(R.id.blacksmith_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.BRIDGETON, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.blacksmith_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void bridgetonGeneralStoreClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.BRIDGETON,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.general_store_button).getVisibility());
+
+        returnedView.findViewById(R.id.general_store_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.BRIDGETON, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.general_store_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void monasteryClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.MONASTARY,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.monastery_button).getVisibility());
+
+        returnedView.findViewById(R.id.monastery_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.MONASTARY, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.monastery_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void mountainPassTowerClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.MOUNTAIN_PASS,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.tower_button).getVisibility());
+
+        returnedView.findViewById(R.id.tower_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.MOUNTAIN_PASS, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.tower_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void mountainDwarvenTentsClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.MOUNTAIN_PASS,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.dwarven_tents_button).getVisibility());
+
+        returnedView.findViewById(R.id.dwarven_tents_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.MOUNTAIN_PASS, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.dwarven_tents_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void riverlandsDarkForestClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.RIVERLANDS,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.dark_forest_button).getVisibility());
+
+        returnedView.findViewById(R.id.dark_forest_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.RIVERLANDS, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.dark_forest_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void riverlandsRiversideClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.RIVERLANDS,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.river_button).getVisibility());
+
+        returnedView.findViewById(R.id.river_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.RIVERLANDS, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.river_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void hillsCaveClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.HILLS,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.cave_button).getVisibility());
+
+        returnedView.findViewById(R.id.cave_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.HILLS, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.cave_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void hillsTreesClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.HILLS,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.copse_of_trees_button).getVisibility());
+
+        returnedView.findViewById(R.id.copse_of_trees_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.HILLS, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.copse_of_trees_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void northRoadBeachClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.NORTH_ROAD,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.beach_button).getVisibility());
+
+        returnedView.findViewById(R.id.beach_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.NORTH_ROAD, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.beach_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+    }
+
+    @Test
+    public void northRoadBanditCampClickTest() {
+        UserService mockUserService = Mockito.mock(UserService.class);
+        FirebaseUser mockUser = Mockito.mock(FirebaseUser.class);
+        FirebaseAuth mockAuth = Mockito.mock(FirebaseAuth.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+        mainActivity.setFirebaseAuth(mockAuth);
+        mainActivity.setUserService(mockUserService);
+        UserGameStateService mockuserGameStateService = Mockito.mock(UserGameStateService.class);
+        ExploreActionService exploreActionService = Mockito.mock(ExploreActionService.class);
+        mainActivity.setExploreActionService(exploreActionService);
+        mainActivity.setUserGameStateService(mockuserGameStateService);
+        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
+        LayoutInflater layoutInflater = LayoutInflater.from(mainActivity);
+        Bundle mockBundle = Mockito.mock(Bundle.class);
+        UserHomeFragment testedFragment = new UserHomeFragment(mainActivity);
+        View returnedView = testedFragment.onCreateView(layoutInflater, null, mockBundle);
+
+        assertNotNull(returnedView);
+
+        UserGameState testUserGameState = new UserGameState("testuser", GameLocationService.NORTH_ROAD,51, 6);
+        UserGameStateFetchResponseEvent userGameStateFetchResponseEvent = new UserGameStateFetchResponseEvent(testUserGameState,new HashMap<>());
+        testedFragment.publishEvent(userGameStateFetchResponseEvent);
+
+        assertEquals(View.VISIBLE, returnedView.findViewById(R.id.bandit_camp_button).getVisibility());
+
+        returnedView.findViewById(R.id.bandit_camp_button).performClick();
+
+        ArgumentCaptor<Map> metadataCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(exploreActionService).exploreAction(metadataCaptor.capture());
+
+        assertNotNull(metadataCaptor.getValue());
+        assert(metadataCaptor.getValue().containsKey(EXPLORE_ACTION_LOCATION_KEY));
+        assertEquals(GameLocationService.NORTH_ROAD, metadataCaptor.getValue().get(EXPLORE_ACTION_LOCATION_KEY));
+        assert(metadataCaptor.getValue().containsKey(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
+        assertEquals(R.id.bandit_camp_button, metadataCaptor.getValue().get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED));
     }
 
     @Test

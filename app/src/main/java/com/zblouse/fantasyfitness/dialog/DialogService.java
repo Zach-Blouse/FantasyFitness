@@ -23,6 +23,9 @@ public class DialogService implements DomainService<Dialog> {
     public static final String THANADEL_GENERAL_STORE_DIALOG_INIT = "thanadelGeneralStoreDialogInit";
     public static final String FAOLYN_BLACKSMITH_DIALOG_INIT = "faolynBlacksmithDialogInit";
     public static final String BRIDGETON_BLACKSMITH_DIALOG_INIT = "bridgetonBlacksmithDialogInit";
+    public static final String DWARVEN_TENTS_DIALOG_INIT = "dwarvenTentsDialogInit";
+    public static final String TOWER_DIALOG_INIT = "towerDialogInit";
+    public static final String MONASTERY_DIALOG_INIT = "monasteryDialogInit";
     private final DialogRepository dialogRepository;
     private final MainActivity mainActivity;
 
@@ -281,6 +284,20 @@ public class DialogService implements DomainService<Dialog> {
         dialogRepository.writeDialog(bridgetonBlacksmithDialogInit);
         Dialog bridgetonBlackSmithDialog1 = new Dialog("bridgetonBlacksmithDialog1","Will not be displayed","\"I would like to see what you have available for purchase\"",bridgetonBlacksmithAffect, false);
         dialogRepository.writeDialog(bridgetonBlackSmithDialog1);
+
+        DialogAffect dwarvenMerchantsAffect = new DialogAffect(DialogAffectType.SHOP_OPEN);
+        dwarvenMerchantsAffect.setShopTag(mainActivity.getString(R.string.dwarven_tents));
+        Dialog dwarvenMerchantsDialogInit = new Dialog(DWARVEN_TENTS_DIALOG_INIT,"You see several dwarven merchants with their wares set up in front of their colorful tents.","none",new DialogAffect(DialogAffectType.NONE),false);
+        dwarvenMerchantsDialogInit.setDialogOption1("dwarvenTentDialog1");
+        dialogRepository.writeDialog(dwarvenMerchantsDialogInit);
+        Dialog dwarvenTentDialog1 = new Dialog("dwarvenTentDialog1","Will not be displayed","\"I would like to see what you have available for purchase\"",dwarvenMerchantsAffect, false);
+        dialogRepository.writeDialog(dwarvenTentDialog1);
+
+        Dialog towerDialogInit = new Dialog(TOWER_DIALOG_INIT,"There is no answer when you knock on the door of the tower.","none",new DialogAffect(DialogAffectType.NONE),false);
+        dialogRepository.writeDialog(towerDialogInit);
+
+        Dialog monasteryDialogInit = new Dialog(MONASTERY_DIALOG_INIT,"There is no answer when you knock on the door of the monastery.","none",new DialogAffect(DialogAffectType.NONE),false);
+        dialogRepository.writeDialog(monasteryDialogInit);
     }
 
     private void cleanUpQuestStartDialogs(){
