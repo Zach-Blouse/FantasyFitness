@@ -37,8 +37,8 @@
 
                 <Button
                     android:id="@+id/tower_button"
-                    android:layout_width="0dp"
-                    android:layout_height="139dp"
+                    android:layout_width="64dp"
+                    android:layout_height="134dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="217dp"
                     android:autoSizeTextType="uniform"
@@ -50,8 +50,8 @@
 
                 <Button
                     android:id="@+id/dwarven_tents_button"
-                    android:layout_width="93dp"
-                    android:layout_height="57dp"
+                    android:layout_width="100dp"
+                    android:layout_height="69dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="103dp"
                     android:layout_marginTop="86dp"

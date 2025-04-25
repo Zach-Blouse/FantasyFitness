@@ -289,7 +289,7 @@ public class DialogService implements DomainService<Dialog> {
         dwarvenMerchantsAffect.setShopTag(mainActivity.getString(R.string.dwarven_tents));
         Dialog dwarvenMerchantsDialogInit = new Dialog(DWARVEN_TENTS_DIALOG_INIT,"You see several dwarven merchants with their wares set up in front of their colorful tents.","none",new DialogAffect(DialogAffectType.NONE),false);
         dwarvenMerchantsDialogInit.setDialogOption1("dwarvenTentDialog1");
-        dialogRepository.writeDialog(bridgetonBlacksmithDialogInit);
+        dialogRepository.writeDialog(dwarvenMerchantsDialogInit);
         Dialog dwarvenTentDialog1 = new Dialog("dwarvenTentDialog1","Will not be displayed","\"I would like to see what you have available for purchase\"",dwarvenMerchantsAffect, false);
         dialogRepository.writeDialog(dwarvenTentDialog1);
 

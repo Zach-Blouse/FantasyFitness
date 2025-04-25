@@ -656,6 +656,7 @@ public class UserActionsInLocationsTest {
         onView(withId(R.id.dialog_card_view)).check(matches(isDisplayed()));
     }
 
+    @Test
     public void monasteryTest() throws InterruptedException {
 
         //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
@@ -792,7 +793,8 @@ public class UserActionsInLocationsTest {
         onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
 
         onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.marsh_button)).perform(click());
+        onView(withId(R.id.monastery_button)).perform(scrollTo());
+        onView(withId(R.id.monastery_button)).perform(click());
 
         verify(mockQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorQuests.capture());
         onCompleteListenerArgumentCaptorQuests.getValue().onComplete(mockQueryTask);
@@ -942,6 +944,7 @@ public class UserActionsInLocationsTest {
         onView(withId(R.id.dialog_card_view)).check(matches(isDisplayed()));
     }
 
+    @Test
     public void northRoadTest() throws InterruptedException {
 
         //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
@@ -1078,7 +1081,8 @@ public class UserActionsInLocationsTest {
         onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
 
         onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.marsh_button)).perform(click());
+        onView(withId(R.id.beach_button)).perform(scrollTo());
+        onView(withId(R.id.beach_button)).perform(click());
 
         verify(mockQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorQuests.capture());
         onCompleteListenerArgumentCaptorQuests.getValue().onComplete(mockQueryTask);
@@ -1230,6 +1234,7 @@ public class UserActionsInLocationsTest {
         onView(withId(R.id.dialog_card_view)).check(matches(isDisplayed()));
     }
 
+    @Test
     public void riverlandsTest() throws InterruptedException {
         //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
         com.firebase.ui.auth.data.model.User user = new User.Builder("google", "test@test.com")
@@ -1365,7 +1370,8 @@ public class UserActionsInLocationsTest {
         onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
 
         onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.marsh_button)).perform(click());
+        onView(withId(R.id.river_button)).perform(scrollTo());
+        onView(withId(R.id.river_button)).perform(click());
 
         verify(mockQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorQuests.capture());
         onCompleteListenerArgumentCaptorQuests.getValue().onComplete(mockQueryTask);
@@ -1517,7 +1523,7 @@ public class UserActionsInLocationsTest {
         onView(withId(R.id.dialog_card_view)).check(matches(isDisplayed()));
     }
 
-
+    @Test
     public void hillsTest() throws InterruptedException {
 
         //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
@@ -1654,14 +1660,15 @@ public class UserActionsInLocationsTest {
         onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
 
         onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.marsh_button)).perform(click());
+        onView(withId(R.id.cave_button)).perform(scrollTo());
+        onView(withId(R.id.cave_button)).perform(click());
 
         verify(mockQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorQuests.capture());
         onCompleteListenerArgumentCaptorQuests.getValue().onComplete(mockQueryTask);
         onView(withId(R.id.nothing_found_card_view)).check(matches(isDisplayed()));
     }
 
-
+    @Test
     public void mountainPassTest() throws InterruptedException {
 
         //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
@@ -1798,11 +1805,12 @@ public class UserActionsInLocationsTest {
         onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
 
         onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.marsh_button)).perform(click());
+        onView(withId(R.id.dwarven_tents_button)).perform(scrollTo());
+        onView(withId(R.id.dwarven_tents_button)).perform(click());
 
         verify(mockQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorQuests.capture());
         onCompleteListenerArgumentCaptorQuests.getValue().onComplete(mockQueryTask);
-        onView(withId(R.id.nothing_found_card_view)).check(matches(isDisplayed()));
+        onView(withId(R.id.dialog_card_view)).check(matches(isDisplayed()));
     }
 
     @Test

@@ -491,13 +491,14 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                 break;
             }
             case GameLocationService.HILLS: {
-                viewStub.setLayoutResource(R.layout.mountain_pass_layout);
+                viewStub.setLayoutResource(R.layout.hills_layout);
                 View layout = viewStub.inflate();
                 Button darkForestButton = layout.findViewById(R.id.cave_button);
                 darkForestButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(!actionResultDisplayed()) {
+                            Log.e("UserHomeFragment","Cave Button clicked");
                             Map<String, Object> metadata = new HashMap<>();
                             metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
                             metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.cave_button);

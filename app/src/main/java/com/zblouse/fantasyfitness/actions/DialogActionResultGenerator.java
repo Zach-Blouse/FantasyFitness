@@ -56,6 +56,7 @@ public class DialogActionResultGenerator implements ActionResultGenerator {
                         return new DialogActionResult(DialogService.BRIDGETON_BLACKSMITH_DIALOG_INIT, false);
                     }
                 } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED).equals(R.id.dwarven_tents_button)){
+                    Log.e("DIALOG ACTION RESULTS GENREATOR", "tents");
                     return new DialogActionResult(DialogService.DWARVEN_TENTS_DIALOG_INIT, false);
                 } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED).equals(R.id.tower_button)){
                     return new DialogActionResult(DialogService.TOWER_DIALOG_INIT, false);

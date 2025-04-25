@@ -96,6 +96,14 @@ public class MerchantService implements DomainService<Merchant> {
         Card slingCard = new ItemCard("merchantId", "merchantId", "Sling", "A basic sling", ItemType.EQUIPPABLE, new DamageAbility("Sling Pebble","Sling a pebble at an enemy. Does 1 damage to an enemy", AbilityTarget.SINGLE_ENEMY, DamageType.NORMAL, AttackType.RANGED,1));
         thanadelGeneralStoreCardmap.put(slingCard,25);
         merchantRepository.writeMerchant(thanadelGeneralStore);
+
+        Map<Card, Integer> dwarvenMerchantsStoreCardMap = new HashMap<>();
+        Card dwarvenHammerCard = new ItemCard("merchantId", "merchantId", "Dwarven War Hammer", "A masterfully crafted dwarven war hammer.",ItemType.EQUIPPABLE,new DamageAbility("Hammer","Bring the hammer", AbilityTarget.SINGLE_ENEMY, DamageType.NORMAL, AttackType.MELEE,8));
+        dwarvenMerchantsStoreCardMap.put(dwarvenHammerCard,1000);
+        Card dwarvenPlateMailCard = new ItemCard("merchantId", "merchantId", "Dwarven Plate Mail","Sturdy Plate Mail that is sure to protect you in battle.",ItemType.EQUIPPABLE,new BuffAbility("Plate Mail","Increases Max HP of the character equipping this by 8",AbilityTarget.SINGLE_ALLY, BuffType.HEALTH,8));
+        dwarvenMerchantsStoreCardMap.put(dwarvenPlateMailCard,1000);
+        Merchant dwarvenMerchant = new Merchant(mainActivity.getString(R.string.dwarven_tents),dwarvenMerchantsStoreCardMap);
+        merchantRepository.writeMerchant(dwarvenMerchant);
     }
 
 }

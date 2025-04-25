@@ -39,22 +39,29 @@
                 <Button
                     android:id="@+id/cave_button"
                     android:layout_width="174dp"
-                    android:layout_height="104dp"
+                    android:layout_height="0dp"
                     android:layout_gravity="center"
+                    android:layout_marginStart="145dp"
+                    android:layout_marginTop="208dp"
+                    android:layout_marginBottom="326dp"
                     android:autoSizeTextType="uniform"
                     android:backgroundTint="@android:color/transparent"
-                    tools:layout_editor_absoluteX="145dp"
-                    tools:layout_editor_absoluteY="208dp" />
+                    app:layout_constraintBottom_toTopOf="@+id/copse_of_trees_button"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/copse_of_trees_button"
                     android:layout_width="134dp"
-                    android:layout_height="155dp"
+                    android:layout_height="0dp"
                     android:layout_gravity="center"
+                    android:layout_marginStart="46dp"
+                    android:layout_marginBottom="20dp"
                     android:autoSizeTextType="uniform"
                     android:backgroundTint="@android:color/transparent"
-                    tools:layout_editor_absoluteX="46dp"
-                    tools:layout_editor_absoluteY="638dp" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cave_button" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </HorizontalScrollView>
