@@ -21,8 +21,10 @@ public class DialogService implements DomainService<Dialog> {
     public static final String FAOLYN_GENERAL_STORE_DIALOG_INIT = "faolynGeneralStoreDialogInit";
     public static final String BRIDGETON_GENERAL_STORE_DIALOG_INIT = "bridgetonGeneralStoreDialogInit";
     public static final String THANADEL_GENERAL_STORE_DIALOG_INIT = "thanadelGeneralStoreDialogInit";
+    public static final String ARDUWYN_GENERAL_STORE_DIALOG_INIT = "arduwynGeneralStoreDialogInit";
     public static final String FAOLYN_BLACKSMITH_DIALOG_INIT = "faolynBlacksmithDialogInit";
     public static final String BRIDGETON_BLACKSMITH_DIALOG_INIT = "bridgetonBlacksmithDialogInit";
+    public static final String ARDUWYN_BLACKSMITH_DIALOG_INIT = "arduwynBlacksmithDialogInit";
     public static final String DWARVEN_TENTS_DIALOG_INIT = "dwarvenTentsDialogInit";
     public static final String TOWER_DIALOG_INIT = "towerDialogInit";
     public static final String MONASTERY_DIALOG_INIT = "monasteryDialogInit";
@@ -269,6 +271,14 @@ public class DialogService implements DomainService<Dialog> {
         Dialog faolynGeneralStoreDialog1 = new Dialog("faolynGeneralStoreDialog1","Will not be displayed","\"Yes please\"",faolynGeneralStoreAffect, false);
         dialogRepository.writeDialog(faolynGeneralStoreDialog1);
 
+        DialogAffect arduwynGeneralStoreAffect = new DialogAffect(DialogAffectType.SHOP_OPEN);
+        arduwynGeneralStoreAffect.setShopTag(mainActivity.getString(R.string.arduwyn_general_store));
+        Dialog arduwynGeneralStoreDialogInit = new Dialog(ARDUWYN_GENERAL_STORE_DIALOG_INIT,"As you walk in you see a well organized shop selling all manner of goods. The shopkeeper says, \"Hello adventurer, can I interest you in any of my wares?\"","none",new DialogAffect(DialogAffectType.NONE),false);
+        arduwynGeneralStoreDialogInit.setDialogOption1("arduwynGeneralStoreDialog1");
+        dialogRepository.writeDialog(arduwynGeneralStoreDialogInit);
+        Dialog arduwynGeneralStoreDialog1 = new Dialog("arduwynGeneralStoreDialog1","Will not be displayed","\"Yes please\"",arduwynGeneralStoreAffect, false);
+        dialogRepository.writeDialog(arduwynGeneralStoreDialog1);
+
         DialogAffect faolynBlacksmithAffect = new DialogAffect(DialogAffectType.SHOP_OPEN);
         faolynBlacksmithAffect.setShopTag(mainActivity.getString(R.string.faolyn_blacksmith));
         Dialog faolynBlacksmithDialogInit = new Dialog(FAOLYN_BLACKSMITH_DIALOG_INIT,"As you approach the blacksmith's shop you can hear the sounds of a hammer on metal. As you walk around the side you see the burly blacksmith hammering on a lump of metal while his young apprentice holds the tongs. He finishes hammering, puts the metal back in the forge and asks, \"What do you need?\"","none",new DialogAffect(DialogAffectType.NONE),false);
@@ -276,6 +286,14 @@ public class DialogService implements DomainService<Dialog> {
         dialogRepository.writeDialog(faolynBlacksmithDialogInit);
         Dialog faolynBlackSmithDialog1 = new Dialog("faolynBlacksmithDialog1","Will not be displayed","\"I would like to see what you have available for purchase\"",faolynBlacksmithAffect, false);
         dialogRepository.writeDialog(faolynBlackSmithDialog1);
+
+        DialogAffect arduwynBlacksmithAffect = new DialogAffect(DialogAffectType.SHOP_OPEN);
+        arduwynBlacksmithAffect.setShopTag(mainActivity.getString(R.string.arduwyn_blacksmith));
+        Dialog arduwynBlacksmithDialogInit = new Dialog(ARDUWYN_BLACKSMITH_DIALOG_INIT,"As you approach the blacksmith's shop you can hear the sounds of a hammer on metal. As you walk around the side you see the burly blacksmith hammering on a lump of metal while his young apprentice holds the tongs. He finishes hammering, puts the metal back in the forge and asks, \"What do you need?\"","none",new DialogAffect(DialogAffectType.NONE),false);
+        arduwynBlacksmithDialogInit.setDialogOption1("arduwynBlacksmithDialog1");
+        dialogRepository.writeDialog(arduwynBlacksmithDialogInit);
+        Dialog arduwynBlackSmithDialog1 = new Dialog("arduwynBlacksmithDialog1","Will not be displayed","\"I would like to see what you have available for purchase\"",arduwynBlacksmithAffect, false);
+        dialogRepository.writeDialog(arduwynBlackSmithDialog1);
 
         DialogAffect bridgetonBlacksmithAffect = new DialogAffect(DialogAffectType.SHOP_OPEN);
         bridgetonBlacksmithAffect.setShopTag(mainActivity.getString(R.string.bridgeton_blacksmith));

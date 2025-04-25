@@ -104,6 +104,18 @@ public class MerchantService implements DomainService<Merchant> {
         dwarvenMerchantsStoreCardMap.put(dwarvenPlateMailCard,1000);
         Merchant dwarvenMerchant = new Merchant(mainActivity.getString(R.string.dwarven_tents),dwarvenMerchantsStoreCardMap);
         merchantRepository.writeMerchant(dwarvenMerchant);
+
+        Map<Card, Integer> arduwynGeneralStoreCardmap = new HashMap<>();
+        arduwynGeneralStoreCardmap.put(healthPotionCard,50);
+        Merchant arduwynGeneralStore = new Merchant(mainActivity.getString(R.string.arduwyn_general_store), arduwynGeneralStoreCardmap);
+        merchantRepository.writeMerchant(arduwynGeneralStore);
+
+        Map<Card, Integer> arduwynBlacksmithCardMap = new HashMap<>();
+        arduwynBlacksmithCardMap.put(axCard,100);
+        arduwynBlacksmithCardMap.put(chainMailCard,150);
+
+        Merchant arduwynBlacksmith = new Merchant(mainActivity.getString(R.string.arduwyn_blacksmith), arduwynBlacksmithCardMap);
+        merchantRepository.writeMerchant(arduwynBlacksmith);
     }
 
 }

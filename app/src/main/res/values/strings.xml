@@ -28,8 +28,10 @@
     <string name="bridgeton_general_store">bridgetonGeneralStore</string>
     <string name="faolyn_general_store">faolynGeneralStore</string>
     <string name="thanadel_general_store">thanadelGeneralStore</string>
+    <string name="arduwyn_general_store">arduwynGeneralStore</string>
     <string name="faolyn_blacksmith">faolynBlacksmith</string>
     <string name="bridgeton_blacksmith">bridgetonBlacksmith</string>
+    <string name="arduwyn_blacksmith">arduwynBlacksmith</string>
     <string name="dwarven_tents">dwarvenTents</string>
     <string name="tower">tower</string>
 </resources>
