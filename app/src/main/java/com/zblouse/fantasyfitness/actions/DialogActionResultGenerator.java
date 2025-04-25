@@ -47,6 +47,8 @@ public class DialogActionResultGenerator implements ActionResultGenerator {
                         return new DialogActionResult(DialogService.BRIDGETON_GENERAL_STORE_DIALOG_INIT, false);
                     } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY).equals(GameLocationService.THANADEL_VILLAGE)){
                         return new DialogActionResult(DialogService.THANADEL_GENERAL_STORE_DIALOG_INIT, false);
+                    } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY).equals(GameLocationService.ARDUWYN)){
+                        return new DialogActionResult(DialogService.ARDUWYN_GENERAL_STORE_DIALOG_INIT, false);
                     }
 
                 } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED).equals(R.id.blacksmith_button)){
@@ -54,7 +56,10 @@ public class DialogActionResultGenerator implements ActionResultGenerator {
                         return new DialogActionResult(DialogService.FAOLYN_BLACKSMITH_DIALOG_INIT, false);
                     } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY).equals(GameLocationService.BRIDGETON)){
                         return new DialogActionResult(DialogService.BRIDGETON_BLACKSMITH_DIALOG_INIT, false);
+                    } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY).equals(GameLocationService.ARDUWYN)){
+                        return new DialogActionResult(DialogService.ARDUWYN_BLACKSMITH_DIALOG_INIT, false);
                     }
+
                 } else if(metadata.get(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED).equals(R.id.dwarven_tents_button)){
                     Log.e("DIALOG ACTION RESULTS GENREATOR", "tents");
                     return new DialogActionResult(DialogService.DWARVEN_TENTS_DIALOG_INIT, false);

@@ -391,6 +391,47 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
     private void loadLocationUi(String currentGameLocation){
         locationDisplayed = currentGameLocation;
         switch(currentGameLocation){
+            case GameLocationService.ARDUWYN: {
+                viewStub.setLayoutResource(R.layout.arduwyn_layout);
+                View layout = viewStub.inflate();
+                Button innButton = layout.findViewById(R.id.inn_button);
+                innButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.inn_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                Button generalStoreButton = layout.findViewById(R.id.general_store_button);
+                generalStoreButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.general_store_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                Button blacksmithButton = layout.findViewById(R.id.blacksmith_button);
+                blacksmithButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.blacksmith_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                break;
+            }
             case GameLocationService.BRIDGETON: {
                 viewStub.setLayoutResource(R.layout.bridgeton_layout);
                 View layout = viewStub.inflate();
@@ -514,6 +555,23 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
                             Map<String, Object> metadata = new HashMap<>();
                             metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
                             metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.copse_of_trees_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                break;
+            }
+            case GameLocationService.LAST_TOWER: {
+                viewStub.setLayoutResource(R.layout.last_tower_layout);
+                View layout = viewStub.inflate();
+                Button darkForestButton = layout.findViewById(R.id.tower_button);
+                darkForestButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.tower_button);
                             mainActivity.getExploreActionService().exploreAction(metadata);
                         }
                     }
@@ -655,6 +713,47 @@ public class UserHomeFragment extends AuthenticationRequiredFragment implements 
             }
             case GameLocationService.WOODLANDS: {
                 viewStub.setLayoutResource(R.layout.woodlands_layout);
+                View layout = viewStub.inflate();
+                Button darkForestButton = layout.findViewById(R.id.dark_forest_button);
+                darkForestButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.dark_forest_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                Button cavesButton = layout.findViewById(R.id.cave_button);
+                cavesButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.cave_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                Button marshlandsButton = layout.findViewById(R.id.marsh_button);
+                marshlandsButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!actionResultDisplayed()) {
+                            Map<String, Object> metadata = new HashMap<>();
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_LOCATION_KEY, currentGameLocation);
+                            metadata.put(ExploreActionService.EXPLORE_ACTION_BUTTON_PRESSED, R.id.marsh_button);
+                            mainActivity.getExploreActionService().exploreAction(metadata);
+                        }
+                    }
+                });
+                break;
+            }
+            case GameLocationService.VALLEY_OF_MONSTERS: {
+                viewStub.setLayoutResource(R.layout.valley_of_monsters_layout);
                 View layout = viewStub.inflate();
                 Button darkForestButton = layout.findViewById(R.id.dark_forest_button);
                 darkForestButton.setOnClickListener(new View.OnClickListener() {

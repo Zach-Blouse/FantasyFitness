@@ -370,6 +370,7 @@ public class UserActionsInLocationsTest {
         onView(withId(R.id.dialog_card_view)).check(matches(isDisplayed()));
     }
 
+    @Test
     public void valleyOfMonstersTest() throws InterruptedException {
 
         //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
@@ -506,6 +507,7 @@ public class UserActionsInLocationsTest {
         onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
 
         onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.marsh_button)).perform(scrollTo());
         onView(withId(R.id.marsh_button)).perform(click());
 
         verify(mockQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorQuests.capture());
@@ -513,6 +515,7 @@ public class UserActionsInLocationsTest {
         onView(withId(R.id.nothing_found_card_view)).check(matches(isDisplayed()));
     }
 
+    @Test
     public void lastTowerTest() throws InterruptedException {
 
         //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
@@ -649,7 +652,8 @@ public class UserActionsInLocationsTest {
         onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
 
         onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.marsh_button)).perform(click());
+        onView(withId(R.id.tower_button)).perform(scrollTo());
+        onView(withId(R.id.tower_button)).perform(click());
 
         verify(mockQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorQuests.capture());
         onCompleteListenerArgumentCaptorQuests.getValue().onComplete(mockQueryTask);
@@ -801,6 +805,7 @@ public class UserActionsInLocationsTest {
         onView(withId(R.id.dialog_card_view)).check(matches(isDisplayed()));
     }
 
+    @Test
     public void arduwynTest() throws InterruptedException {
 
         //THIS TEST SETUP IS NEEDED TO AUTHENTICATE WITH THE APPLICATION
@@ -937,7 +942,8 @@ public class UserActionsInLocationsTest {
         onCompleteListenerArgumentCaptorReadGameState.getValue().onComplete(mockGameStateReadTask);
 
         onView(withId(R.id.dialog_card_view)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.marsh_button)).perform(click());
+        onView(withId(R.id.inn_button)).perform(scrollTo());
+        onView(withId(R.id.inn_button)).perform(click());
 
         verify(mockQueryTask).addOnCompleteListener(onCompleteListenerArgumentCaptorQuests.capture());
         onCompleteListenerArgumentCaptorQuests.getValue().onComplete(mockQueryTask);
